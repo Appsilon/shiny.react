@@ -4,17 +4,19 @@
 [![R build status](https://github.com/Appsilon/shiny.react/workflows/R-CMD-check/badge.svg)](https://github.com/Appsilon/shiny.react/actions)
 <!-- badges: end -->
 
-This R package is used by the generated wrapper packages.
+This R package enables using React in Shiny apps and is used e.g. by the shiny.fluent package.
+It contains R and JS code which is independent from the React library (e.g. Fluent UI) that is being wrapped.
 
-It contains R and JS code which is independent from the React library being wrapped.
+To install the package, run `devtools::install_github("Appsilon/shiny.react")`.
+### Development
 
-To build and install it, run:
+To build and install the package, run:
 ```sh
 yarn && yarn webpack
 Rscript -e 'devtools::document(); devtools::install()'
 ```
-
 ### Testing
+
 * `yarn lint` lints the JS code
 * `yarn test` runs the unit tests for the JS code
 * `Rscript -e "lintr::lint_package()"` runs linter for the R code
