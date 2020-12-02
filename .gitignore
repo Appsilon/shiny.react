@@ -1,0 +1,4 @@
+/node_modules/
+
+# R CMD CHECK output
+/check/

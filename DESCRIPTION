@@ -1,0 +1,33 @@
+Package: shiny.react
+Title: Tools for Using React in Shiny
+Version: 0.0.1
+Authors@R:
+    c(person(given = "Marek",
+             family = "Rogala",
+             role = c("aut", "cre"),
+             email = "marek@appsilon.com"),
+      person(given = "Kamil",
+             family = "Zyla",
+             role = "aut",
+             email = "kamil@appsilon.com"),
+      person(given = "Appsilon sp. z o.o.",
+             role = "cph"))
+Description: Use React components in Shiny apps.
+License: file LICENSE
+Imports:
+    glue,
+    htmltools,
+    jsonlite,
+    rlang,
+    shiny,
+    htmlwidgets
+Suggests:
+    lintr,
+    styler,
+    testthat,
+    leaflet,
+    mockery (>= 0.4.2)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
