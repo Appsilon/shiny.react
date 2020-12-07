@@ -22,7 +22,8 @@ function makeStandardInput(packageName, componentName, propsMapping, options = {
     };
     return React.createElement(window[packageName][componentName], props);
   };
-  reactShinyInput(selector, component, options);
+  // eslint-disable-next-line no-use-before-define
+  reactShinyInput(selector, component, options, processAttributes);
 }
 
 function makeButtonInput(packageName, componentName) {
@@ -66,15 +67,13 @@ ShinyComponentWrapper.propTypes = {
 // expected by html-react-parser's domToReact function.
 function tagsToDom(tag) {
   if (typeof tag === 'string') return { type: 'text', data: tag };
+
+  if (tag.$$shiny_react_type === 'list') {
+    return tag.content.map(tagsToDom).flat();
+  }
+
   if (tag.name !== undefined) {
-    const fromChildren = tag.children.flat();
-    const children = [];
-    for (let i = 0; i < fromChildren.length; i += 1) {
-      const child = tagsToDom(fromChildren[i]);
-      if (child !== null) {
-        children.push(child);
-      }
-    }
+    const children = tag.children.flat().map(tagsToDom).filter((x) => x !== null).flat();
 
     return {
       type: 'tag',
@@ -85,6 +84,31 @@ function tagsToDom(tag) {
     };
   }
   return null;
+}
+
+function objectMap(obj, fn) {
+  const entries = Object.entries(obj).map(([k, v], i) => [k, fn(v, k, i)]);
+  return Object.fromEntries(entries);
+}
+
+function processAttribute(attrib) {
+  if (typeof attrib === 'object') {
+    if (attrib.$$shiny_react_type === 'javascript') {
+      // The attribute may be a JS object.
+      // eslint-disable-next-line no-new-func
+      return Function(`return ${attrib.content}`)();
+    }
+    if (attrib.$$shiny_react_type !== undefined) {
+      // If the attribute is a React component, we need to recursively hydrate it.
+      // eslint-disable-next-line no-use-before-define
+      return hydrateJsxAndHtmlTags(attrib);
+    }
+  }
+  return attrib;
+}
+
+function processAttributes(attribs) {
+  return objectMap(attribs, processAttribute);
 }
 
 // Converts DOM representation of HTML tags into React elements,
@@ -99,8 +123,9 @@ function jsxAndHtmlDomToReact(dom) {
         // React needs to get undefined if there are no children,
         // because empty list has a different behavior for some components.
         const childrenOrUndefined = (children.length !== 0) ? children : undefined;
+        const attribs = processAttributes(domNode.attribs);
 
-        return React.createElement(component, domNode.attribs, childrenOrUndefined);
+        return React.createElement(component, attribs, childrenOrUndefined);
       }
       return undefined;
     },
@@ -109,7 +134,9 @@ function jsxAndHtmlDomToReact(dom) {
 
 // Converts JSX and HTML tags representation serialized from R into React components.
 export function hydrateJsxAndHtmlTags(jsonJsxAndHtmlTags) {
-  return jsxAndHtmlDomToReact([tagsToDom(jsonJsxAndHtmlTags)]);
+  const tagList = (Array.isArray(jsonJsxAndHtmlTags)) ? jsonJsxAndHtmlTags : [jsonJsxAndHtmlTags];
+  const domTags = tagList.map(tagsToDom).flat();
+  return jsxAndHtmlDomToReact(domTags);
 }
 
 // Renders nodes representation into DOM element with id = targetId.

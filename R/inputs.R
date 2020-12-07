@@ -55,10 +55,14 @@ make_input <- function(html_dependencies, package_name, component_name, default_
       class = input_class_name(package_name, component_name),
       dependencies = shiny::tagList(html_dependency_shiny_react(), html_dependencies),
       default = value,
-      configuration = configuration,
+      configuration = prepare_input_configuration(configuration),
       container = htmltools::tags$span
     )
   }
+}
+
+prepare_input_configuration <- function(configuration) {
+  mark_js_attribs_as_raw_json(configuration)
 }
 
 #' Update Shiny input
@@ -75,6 +79,6 @@ update_input <- function(session, input_id, value = NULL, ...) {
   configuration <- rlang::dots_list(...)
   message <- list()
   if (!is.null(value)) message$value <- value
-  if (length(configuration) > 0) message$configuration <- configuration
+  if (length(configuration) > 0) message$configuration <- prepare_input_configuration(configuration)
   session$sendInputMessage(input_id, message)
 }
