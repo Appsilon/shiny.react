@@ -10,10 +10,12 @@
 \item Add ShinyComponentWrapper around Shiny inputs and outputs
 }}
 \usage{
-prepare_tags_for_serialization(tags)
+prepare_tags_for_serialization(tags, is_in_attribute = FALSE)
 }
 \arguments{
 \item{tags}{tags to be processed.}
+
+\item{is_in_attribute}{should be set to true if the processed tags are inside another components attribute}
 }
 \description{
 This function does several things needed before a tag tree can be transformed into JSON:

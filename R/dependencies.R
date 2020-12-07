@@ -1,3 +1,6 @@
+#' Shiny React JS dependency.
+#'
+#' @export
 html_dependency_shiny_react <- function() {
   htmltools::htmlDependency(
     name = "shiny.react",
@@ -8,6 +11,11 @@ html_dependency_shiny_react <- function() {
   )
 }
 
+#' Shiny React dependency adding React libs.
+#'
+#' @param use_cdn If true, will load React from CDN instead of serving locally.
+#' @param dev If true, will load a dev version of React (useful for debugging).
+#' @export
 html_dependency_react <- function(use_cdn = FALSE, dev = FALSE) {
   file_version_infix <- if (dev) "development" else "production.min" # nolint
   local_paths <- c(
@@ -39,4 +47,11 @@ html_dependency_react <- function(use_cdn = FALSE, dev = FALSE) {
 #' @keywords internal
 react_version <- function() {
   "16.13.1"
+}
+
+all_shiny_react_dependencies <- function() {
+  list(
+    html_dependency_react(),
+    html_dependency_shiny_react()
+  )
 }

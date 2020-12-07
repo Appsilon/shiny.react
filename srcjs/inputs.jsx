@@ -71,7 +71,7 @@ const defaultOptions = {
  *     input component.
  *
  */
-export function reactShinyInput(selector, component, additionalOptions) {
+export function reactShinyInput(selector, component, additionalOptions, processAttributes) {
   const options = { ...defaultOptions, ...additionalOptions };
   Shiny.inputBindings.register(new class extends Shiny.InputBinding {
     /*
@@ -168,7 +168,7 @@ export function reactShinyInput(selector, component, additionalOptions) {
 
     render(el) {
       const element = React.createElement(component, {
-        configuration: this.getInputConfiguration(el),
+        configuration: processAttributes(this.getInputConfiguration(el)),
         value: this.getValue(el),
         setValue: this.setValue.bind(this, el),
         el,

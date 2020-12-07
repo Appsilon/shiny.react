@@ -106,13 +106,17 @@ test_that("prepare_tags_for_serialization does not add a second ShinyComponentWr
   expect_equal(result, tag)
 })
 
-test_that("serialize_shiny_react_tags renders attributes wrapped in JS(...) as raw JS code", {
+test_that("serialize_shiny_react_tags renders attributes wrapped in JS(...) as object with JS code", {
   a_js_code <- "abc"
   tag <- htmltools::tags$div(onClick = JS(a_js_code))
 
   result <- serialize_shiny_react_tags(tag, pretty_print = FALSE)
 
-  expected <- paste0('{"name":"div","attribs":{"onClick":', a_js_code, '},"children":[]}')
+  expected <- paste0(
+    '{"name":"div","attribs":{"onClick":{"$$shiny_react_type":"javascript","content":"',
+    a_js_code,
+    '"}},"children":[]}'
+  )
   expect_equal(as.character(result), expected)
 })
 
@@ -157,6 +161,25 @@ test_that("withReact adds a ShinyComponentWrapper around tags", {
   # then
   serialized_text <- serialize_shiny_react_tags(ShinyComponentWrapper(a_tag))
   expected_serialized <- structure(serialized_text, class = "json")
-  expect_args(make_react_render_tags_mock, 1, expected_serialized, NULL, an_id)
+  expect_args(make_react_render_tags_mock, 1, expected_serialized, all_shiny_react_dependencies(), an_id)
   expect_equal(result, a_result)
+})
+
+test_that("mark_js_attribs_as_raw_json marks the entire attribute if it is JS", {
+  a_content <- "abc"
+  attribs <- list(attribute = JS(a_content))
+
+  result <- mark_js_attribs_as_raw_json(attribs)
+
+  expected <- list("$$shiny_react_type" = "javascript", content = a_content)
+  expect_equal(result, list(attribute = expected))
+})
+
+test_that("mark_js_attribs_as_raw_json makes no changes if argument is not JS", {
+  an_attribute_value <- list(a = "abc", b = "cde")
+  attribs <- list(attribute = an_attribute_value)
+
+  result <- mark_js_attribs_as_raw_json(attribs)
+
+  expect_equal(result, attribs)
 })

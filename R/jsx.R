@@ -32,18 +32,33 @@ rename_attribs_to_uncontrolled <- function(tag) {
   tag
 }
 
-mark_js_attribs_as_raw_json <- function(tag) {
+prepare_tag_attribs <- function(tag) {
   fix_attribute <- function(attribute) {
-    # htmlwidgets::JS sets a 'JS_EVAL' class.
-    if (inherits(attribute, "JS_EVAL")) {
-      # jsonlite::toJSON treats 'json' class as already processed part that can be serialized verbatim.
-      structure(attribute, class = "json")
+    if (inherits(attribute, "shiny.tag") || inherits(attribute, "shiny.tag.list")) {
+      prepare_tags_for_serialization(attribute, is_in_attribute = TRUE)
     } else {
       attribute
     }
   }
   tag$attribs <- lapply(tag$attribs, fix_attribute)
   tag
+}
+
+make_custom_shiny_react_tag <- function(type, content) {
+  list("$$shiny_react_type" = type, content = content)
+}
+
+mark_js_attribs_as_raw_json <- function(attribs_list) {
+  fix_attribute <- function(attribute) {
+    # htmlwidgets::JS sets a 'JS_EVAL' class.
+    if (inherits(attribute, "JS_EVAL")) {
+      # Pass the JS code as a string inside a special tag marked as "javascript" type, that will be run on the client.
+      make_custom_shiny_react_tag("javascript", attribute[[1]])
+    } else {
+      attribute
+    }
+  }
+  lapply(attribs_list, fix_attribute)
 }
 
 #' Should return TRUE iff a tag should be wrapped in a ShinyComponentWrapper
@@ -66,16 +81,21 @@ needs_shiny_component_wrapper <- function(tag) {
 #' 4. Add ShinyComponentWrapper around Shiny inputs and outputs
 #'
 #' @param tags tags to be processed.
-prepare_tags_for_serialization <- function(tags) {
+#' @param is_in_attribute should be set to true if the processed tags are inside another components attribute
+prepare_tags_for_serialization <- function(tags, is_in_attribute = FALSE) { # nolint
   fix_tags <- function(tag, parent = NULL) {
+    if (inherits(tag, shiny_react_tag_class)) {
+      tag <- prepare_tag_attribs(tag)
+    }
     if (inherits(tag, "shiny.tag")) {
       if (!inherits(tag, shiny_react_tag_class) & !inherits(tag, shiny_react_tag_list_class)) {
         tag <- rename_attribs_to_uncontrolled(tag)
-        if (needs_shiny_component_wrapper(tag) && (is.null(parent) || parent$name != "ShinyComponentWrapper")) {
+        not_yet_wrapped <- is.null(parent) || parent$name != "ShinyComponentWrapper"
+        if (!is_in_attribute && needs_shiny_component_wrapper(tag) && not_yet_wrapped) {
           tag <- ShinyComponentWrapper(tag)
         }
       }
-      tag <- mark_js_attribs_as_raw_json(tag)
+      tag$attribs <- mark_js_attribs_as_raw_json(tag$attribs)
       tag$children <- lapply(tag$children, function(t) {
         fix_tags(t, tag)
       })
@@ -89,6 +109,7 @@ prepare_tags_for_serialization <- function(tags) {
       })
       tag <- Filter(Negate(is.null), tag)
       names(tag) <- NULL # Needed for lists to serialize into arrays not objects with numeric keys.
+      tag <- make_custom_shiny_react_tag("list", tag)
     }
 
     if (inherits(tag, "html_dependency")) { # Dependencies are collected in a separate pass.
@@ -125,12 +146,22 @@ make_react_render_tags <- function(serialized_tags, dependencies, target_id) {
   )
 
   shiny::tagList(
-    html_dependency_react(),
-    html_dependency_shiny_react(),
     dependencies,
     shiny::tags$div(id = target_id),
     shiny::tags$script(htmltools::HTML(code))
   )
+}
+
+prepare_for_rendering <- function(mixed_tags, pretty_print = FALSE) {
+  mixed_tags <- ShinyComponentWrapper(mixed_tags)
+  dependencies <- c(
+    all_shiny_react_dependencies(),
+    htmltools::findDependencies(mixed_tags)
+  )
+
+  serialized <- serialize_shiny_react_tags(mixed_tags, pretty_print) # nolint
+
+  list(tags_json = serialized, dependencies = dependencies)
 }
 
 #' Use arbitrary React components and props in R.
@@ -152,11 +183,8 @@ withReact <- function( # nolint
                       pretty_print = FALSE) {
   id <- generate_random_container_id()
 
-  mixed_tags <- ShinyComponentWrapper(mixed_tags)
-  dependencies <- htmltools::findDependencies(mixed_tags)
-  serialized <- serialize_shiny_react_tags(mixed_tags, pretty_print) # nolint
-
-  make_react_render_tags(serialized, dependencies, id)
+  serialized <- prepare_for_rendering(mixed_tags, pretty_print)
+  make_react_render_tags(serialized$tags_json, serialized$dependencies, id)
 }
 
 rename_attrib_if_present <- function(tag, from_name, to_name) {
@@ -182,6 +210,7 @@ rename_attrib_if_present <- function(tag, from_name, to_name) {
 #' @export
 mark_as_react_tag <- function(package_name, component) {
   component$packageName <- package_name # nolint
+  component[["$$shiny_react_type"]] <- "react_tag"
   structure(component, class = c(shiny_react_tag_class, oldClass(component)))
 }
 
