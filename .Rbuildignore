@@ -10,3 +10,5 @@
 ^__mocks__$
 ^\.github$
 ^\.eslintrc\.js$
+^lint\.R$
+
