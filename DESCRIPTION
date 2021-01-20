@@ -12,7 +12,9 @@ Authors@R:
              email = "kamil@appsilon.com"),
       person(given = "Appsilon sp. z o.o.",
              role = "cph"))
-Description: Use React components in Shiny apps.
+Description: This package enables using React in Shiny apps.
+     It contains R and JS code which is independent from the React library
+     (e.g. Fluent UI) that is being wrapped.
 License: file LICENSE
 Imports:
     glue,

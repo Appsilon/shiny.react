@@ -8,3 +8,5 @@
 ^\.pre-commit-config\.yaml$
 ^\.lintr$
 ^__mocks__$
+^\.github$
+^\.eslintrc\.js$
