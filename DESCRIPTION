@@ -15,7 +15,7 @@ Authors@R:
 Description: This package enables using React in Shiny apps.
      It contains R and JS code which is independent from the React library
      (e.g. Fluent UI) that is being wrapped.
-License: file LICENSE
+License: LGPL-3 + file LICENSE
 Imports:
     glue,
     htmltools,
