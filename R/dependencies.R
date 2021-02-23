@@ -11,13 +11,27 @@ html_dependency_shiny_react <- function() {
   )
 }
 
+#' Sets shiny.react into DEBUG mode.
+#'
+#' Sets the `shiny.react_DEBUG` option to `value`. In DEBUG mode, shiny.react will load a dev version of React,
+#' which is useful for debugging.
+#'
+#' @param value TRUE (default) to enable debug mode
+#' @export
+set_react_debug_mode <- function(value = TRUE){
+  options(`shiny.react_DEBUG` = value)
+}
+
+is_debug_mode <- function(){
+  getOption("shiny.react_DEBUG", default = FALSE)
+}
+
 #' Shiny React dependency adding React libs.
 #'
 #' @param use_cdn If true, will load React from CDN instead of serving locally.
-#' @param dev If true, will load a dev version of React (useful for debugging).
 #' @export
-html_dependency_react <- function(use_cdn = FALSE, dev = FALSE) {
-  file_version_infix <- if (dev) "development" else "production.min" # nolint
+html_dependency_react <- function(use_cdn = FALSE) {
+  file_version_infix <- if (is_debug_mode()) "development" else "production.min" # nolint
   local_paths <- c(
     glue::glue("react.{file_version_infix}.js"),
     glue::glue("react-dom.{file_version_infix}.js")
