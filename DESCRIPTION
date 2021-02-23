@@ -22,7 +22,8 @@ Imports:
     jsonlite,
     rlang,
     shiny,
-    htmlwidgets
+    htmlwidgets,
+    logger
 Suggests:
     lintr,
     styler,

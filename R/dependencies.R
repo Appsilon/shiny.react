@@ -13,13 +13,13 @@ html_dependency_shiny_react <- function() {
 
 #' Sets shiny.react into DEBUG mode.
 #'
-#' Sets the `shiny.react_DEBUG` option to `value`. In DEBUG mode, shiny.react will load a dev version of React,
-#' which is useful for debugging.
+#' Sets the `shiny.react_DEBUG` option to `value`. In DEBUG mode, shiny.react will load a dev version of JS code including React,
+#' which is useful for debugging. It will also set a DEBUG logging level and pretty print tags representation sent to client.
 #'
-#' @param value TRUE (default) to enable debug mode
 #' @export
-set_react_debug_mode <- function(value = TRUE){
-  options(`shiny.react_DEBUG` = value)
+enable_react_debug_mode <- function(){
+  options(`shiny.react_DEBUG` = TRUE)
+  logger::log_threshold(logger::DEBUG, namespace="shiny.react")
 }
 
 is_debug_mode <- function(){

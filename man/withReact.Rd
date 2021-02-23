@@ -4,12 +4,10 @@
 \alias{withReact}
 \title{Use arbitrary React components and props in R.}
 \usage{
-withReact(mixed_tags, pretty_print = FALSE)
+withReact(mixed_tags)
 }
 \arguments{
 \item{mixed_tags}{A htmltools tag object that can also contain React tags. tagLists are not currently supported.}
-
-\item{pretty_print}{If TRUE, the tags representation will be sent to the client in a readable format.}
 }
 \description{
 Wrap your tags with this function to enable using a mix of HTML and React tags.
