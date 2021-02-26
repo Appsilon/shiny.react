@@ -2,6 +2,7 @@
 
 export(JS)
 export(ShinyComponentWrapper)
+export(enable_react_debug_mode)
 export(html_dependency_react)
 export(html_dependency_shiny_react)
 export(make_input)

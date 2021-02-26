@@ -152,14 +152,16 @@ make_react_render_tags <- function(serialized_tags, dependencies, target_id) {
   )
 }
 
-prepare_for_rendering <- function(mixed_tags, pretty_print = FALSE) {
+prepare_for_rendering <- function(mixed_tags) {
   mixed_tags <- ShinyComponentWrapper(mixed_tags)
   dependencies <- c(
     all_shiny_react_dependencies(),
     htmltools::findDependencies(mixed_tags)
   )
 
-  serialized <- serialize_shiny_react_tags(mixed_tags, pretty_print) # nolint
+  serialized <- serialize_shiny_react_tags(mixed_tags, pretty_print = is_debug_mode()) # nolint
+
+  logger::log_debug("Tags representation prepared for rendering:\n\n{serialized}")
 
   list(tags_json = serialized, dependencies = dependencies)
 }
@@ -175,15 +177,13 @@ prepare_for_rendering <- function(mixed_tags, pretty_print = FALSE) {
 #' This function is named in camelCase for consistency with Shiny naming convention.
 #'
 #' @param mixed_tags A htmltools tag object that can also contain React tags. tagLists are not currently supported.
-#' @param pretty_print If TRUE, the tags representation will be sent to the client in a readable format.
 #'
 #' @export
 withReact <- function( # nolint
-                      mixed_tags,
-                      pretty_print = FALSE) {
+                      mixed_tags) {
   id <- generate_random_container_id()
 
-  serialized <- prepare_for_rendering(mixed_tags, pretty_print)
+  serialized <- prepare_for_rendering(mixed_tags)
   make_react_render_tags(serialized$tags_json, serialized$dependencies, id)
 }
 

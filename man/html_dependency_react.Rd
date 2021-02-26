@@ -4,12 +4,10 @@
 \alias{html_dependency_react}
 \title{Shiny React dependency adding React libs.}
 \usage{
-html_dependency_react(use_cdn = FALSE, dev = FALSE)
+html_dependency_react(use_cdn = FALSE)
 }
 \arguments{
 \item{use_cdn}{If true, will load React from CDN instead of serving locally.}
-
-\item{dev}{If true, will load a dev version of React (useful for debugging).}
 }
 \description{
 Shiny React dependency adding React libs.
