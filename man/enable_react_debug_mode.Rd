@@ -7,6 +7,6 @@
 enable_react_debug_mode()
 }
 \description{
-Sets the \code{shiny.react_DEBUG} option to \code{value}. In DEBUG mode, shiny.react will load a dev version of JS code including React,
-which is useful for debugging. It will also set a DEBUG logging level and pretty print tags representation sent to client.
+Sets the \code{shiny.react_DEBUG} option to \code{value}. In DEBUG mode, shiny.react will load a dev version of React,
+which is useful for debugging. It will also set a DEBUG logging level and pretty print tags sent to client.
 }

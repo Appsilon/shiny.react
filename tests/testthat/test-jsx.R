@@ -165,6 +165,27 @@ test_that("withReact adds a ShinyComponentWrapper around tags", {
   expect_equal(result, a_result)
 })
 
+test_that("withReact accepts multiple arguments", {
+  # given
+  a_result <- "result"
+  an_id <- "some_id"
+  first_tag <- htmltools::tags$div("a")
+  second_tag <- htmltools::tags$div("b")
+
+  make_react_render_tags_mock <- mock(a_result)
+  stub(withReact, "make_react_render_tags", make_react_render_tags_mock)
+  stub(withReact, "generate_random_container_id", an_id)
+
+  # when
+  result <- withReact(first_tag, second_tag)
+
+  # then
+  serialized_text <- serialize_shiny_react_tags(ShinyComponentWrapper(first_tag, second_tag))
+  expected_serialized <- structure(serialized_text, class = "json")
+  expect_args(make_react_render_tags_mock, 1, expected_serialized, all_shiny_react_dependencies(), an_id)
+  expect_equal(result, a_result)
+})
+
 test_that("mark_js_attribs_as_raw_json marks the entire attribute if it is JS", {
   a_content <- "abc"
   attribs <- list(attribute = JS(a_content))
