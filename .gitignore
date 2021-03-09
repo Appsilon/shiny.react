@@ -3,3 +3,4 @@
 # R CMD CHECK output
 /check/
 .Rproj.user
+docs
