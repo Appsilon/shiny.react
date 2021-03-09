@@ -12,3 +12,6 @@
 ^\.eslintrc\.js$
 ^lint\.R$
 
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
