@@ -1,6 +1,9 @@
-/node_modules/
+.RData
+.Renviron
+.Rhistory
+.Rproj.user
+.Ruserdata
 
 # R CMD CHECK output
 /check/
-.Rproj.user
-docs
+/docs/
