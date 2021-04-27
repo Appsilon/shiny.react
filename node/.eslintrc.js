@@ -20,9 +20,9 @@ module.exports = {
   plugins: [
     'react',
   ],
-  rules: {
-  },
+  rules: {},
   settings: {
     'import/resolver': 'webpack',
+    react: { version: '17' }
   },
 };
