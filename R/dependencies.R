@@ -1,71 +1,71 @@
 #' Shiny React JS dependency.
 #'
 #' @export
-html_dependency_shiny_react <- function() {
+shinyReactDependency <- function() {
   htmltools::htmlDependency(
     name = "shiny.react",
-    src = "www/shiny.react",
     version = "0.1.0",
-    script = c("shiny-react.js"),
-    package = "shiny.react"
+    package = "shiny.react",
+    src = "www/shiny.react",
+    script = "shiny-react.js"
   )
 }
 
 #' Sets shiny.react into DEBUG mode.
 #'
-#' Sets the `shiny.react_DEBUG` option to `value`. In DEBUG mode, shiny.react will load a dev version of React,
-#' which is useful for debugging. It will also set a DEBUG logging level and pretty print tags sent to client.
+#' Sets the `shiny.react_DEBUG` option to `value`. In DEBUG mode, shiny.react will load a dev
+#' version of React, which is useful for debugging. It will also set a DEBUG logging level.
 #'
 #' @export
-enable_react_debug_mode <- function() {
+enableReactDebugMode <- function() {
   options(`shiny.react_DEBUG` = TRUE)
   logger::log_threshold(logger::DEBUG, namespace = "shiny.react")
 }
 
-is_debug_mode <- function() {
+isDebugMode <- function() {
   getOption("shiny.react_DEBUG", default = FALSE)
 }
 
 #' Shiny React dependency adding React libs.
 #'
-#' @param use_cdn If true, will load React from CDN instead of serving locally.
+#' @param useCdn If true, will load React from CDN instead of serving locally.
 #' @export
-html_dependency_react <- function(use_cdn = FALSE) {
-  file_version_infix <- if (is_debug_mode()) "development" else "production.min" # nolint
-  local_paths <- c(
-    glue::glue("react.{file_version_infix}.js"),
-    glue::glue("react-dom.{file_version_infix}.js")
+reactDependency <- function(useCdn = FALSE) {
+  fileVersionInfix <- if (isDebugMode()) "development" else "production.min" # nolint
+  localPaths <- c(
+    glue::glue("react.{fileVersionInfix}.js"),
+    glue::glue("react-dom.{fileVersionInfix}.js")
   )
-  cdn_paths <- c(
-    glue::glue("react@16/umd/react.{file_version_infix}.js"),
-    glue::glue("react-dom@16/umd/react-dom.{file_version_infix}.js")
+  cdnPaths <- c(
+    glue::glue("react@17.0.1/umd/react.{fileVersionInfix}.js"),
+    glue::glue("react-dom@17.0.1/umd/react-dom.{fileVersionInfix}.js")
   )
 
-  dep_sources <- if (use_cdn) {
-    list(src = list(href = "//unpkg.com"), script = cdn_paths)
+  depSources <- if (useCdn) {
+    list(src = list(href = "//unpkg.com"), script = cdnPaths)
   } else {
     list(
       src = system.file("www/react", package = "shiny.react"),
-      script = local_paths
+      script = localPaths
     )
   }
 
   htmltools::htmlDependency(
     name = "react",
-    version = react_version(),
-    src = dep_sources$src,
-    script = dep_sources$script
+    version = reactVersion(),
+    src = depSources$src,
+    script = depSources$script
   )
 }
 
 #' @keywords internal
-react_version <- function() {
-  "16.13.1"
+reactVersion <- function() {
+  "17.0.1"
 }
 
-all_shiny_react_dependencies <- function() {
+allShinyReactDependencies <- function() {
   list(
-    html_dependency_react(),
-    html_dependency_shiny_react()
+    reactDependency(),
+    shinyReactDependency()
   )
 }
