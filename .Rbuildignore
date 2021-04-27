@@ -1,17 +1,13 @@
 ^\.Rproj\.user$
-^node_modules$
-^srcjs$
-^package\.json$
-^webpack\.config\.js$
-^yarn\.lock$
 ^.*\.Rproj$
 ^\.pre-commit-config\.yaml$
 ^\.lintr$
 ^__mocks__$
 ^\.github$
-^\.eslintrc\.js$
 ^lint\.R$
 
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+
+^node$
