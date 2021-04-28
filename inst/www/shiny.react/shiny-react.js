@@ -1302,7 +1302,9 @@ function InputAdapter(Component, valueProps) {
       };
     }, [inputId]);
 
-    var props = _objectSpread(_objectSpread({}, otherProps), updatedProps);
+    var props = _objectSpread(_objectSpread({
+      id: inputId
+    }, otherProps), updatedProps);
 
     props = _objectSpread(_objectSpread({}, valueProps(value, setValue, props)), props);
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Component, props);
@@ -1330,6 +1332,7 @@ function ButtonAdapter(Component) {
     }, [value]);
 
     var props = _objectSpread({
+      id: inputId,
       onClick: function onClick() {
         return setValue(value + 1);
       }

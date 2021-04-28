@@ -30,7 +30,7 @@ export function InputAdapter(Component, valueProps) {
       };
     }, [inputId]);
 
-    let props = { ...otherProps, ...updatedProps };
+    let props = { id: inputId, ...otherProps, ...updatedProps };
     props = { ...valueProps(value, setValue, props), ...props };
     return React.createElement(Component, props);
   }
@@ -49,6 +49,7 @@ export function ButtonAdapter(Component) {
       ShinyProxy.setInputValue(inputId, value);
     }, [value]);
     const props = {
+      id: inputId,
       onClick: () => setValue(value + 1),
       ...otherProps,
     };
