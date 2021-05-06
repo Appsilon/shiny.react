@@ -11,21 +11,25 @@ binding.renderValue = (container, { data, deps }) => {
 };
 Shiny.outputBindings.register(binding);
 
-new MutationObserver((mutations) => {
-  mutations.forEach(({ removedNodes }) => {
-    removedNodes.forEach((node) => {
-      if (node instanceof Element) {
-        [].forEach.call(node.getElementsByClassName('react-container'), (container) => {
-          ReactDOM.unmountComponentAtNode(container);
-        });
-        // The getElementsByClassName() method only returns descendants - check the node itself too.
-        if (node.classList.contains('react-container')) {
-          ReactDOM.unmountComponentAtNode(node);
-        }
-      }
+function unmountContainersAtNode(node) {
+  if (node instanceof Element) {
+    [].forEach.call(node.getElementsByClassName('react-container'), (container) => {
+      ReactDOM.unmountComponentAtNode(container);
     });
+    // The getElementsByClassName() method only returns descendants - check the node itself too.
+    if (node.classList.contains('react-container')) {
+      ReactDOM.unmountComponentAtNode(node);
+    }
+  }
+}
+
+function cleanupRemovedNodes(mutations) {
+  mutations.forEach(({ removedNodes }) => {
+    removedNodes.forEach(unmountContainersAtNode);
   });
-}).observe(document, { childList: true, subtree: true });
+}
+
+new MutationObserver(cleanupRemovedNodes).observe(document, { childList: true, subtree: true });
 
 export default function findAndRenderReactData() {
   [].forEach.call(document.getElementsByClassName('react-data'), (dataElement) => {
