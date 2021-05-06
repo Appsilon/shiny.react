@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+
+import ShinyBindingWrapper from './ShinyBindingWrapper';
 import ShinyProxy from './ShinyProxy';
 
 const dataMappers = {};
@@ -56,21 +57,6 @@ function needsBindingWrapper(className) {
   const regex = /(shiny-input-container|html-widget-output|shiny-\w*-output)/;
   return regex.test(className);
 }
-
-function ShinyBindingWrapper({ children }) {
-  const ref = useRef();
-  useEffect(() => {
-    const wrapper = ref.current;
-    ShinyProxy.initializeInputs(wrapper);
-    ShinyProxy.bindAll(wrapper);
-    return () => ShinyProxy.unbindAll(wrapper);
-  }, []);
-  return React.createElement('div', { ref }, children);
-}
-
-ShinyBindingWrapper.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 dataMappers.raw = ({ value }) => value;
 dataMappers.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
