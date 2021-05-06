@@ -42,7 +42,8 @@
   
 
 <meta property="og:title" content="Update React input — updateReactInput" />
-<meta property="og:description" content="Update React input" />
+<meta property="og:description" content="Updates inputs created with the help of InputAdapter function (part of the JavaScript
+interface). Analogous to shiny::updateX() family of functions, but generic." />
 
 
 
@@ -111,7 +112,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Update React input</p>
+    <p>Updates inputs created with the help of <code>InputAdapter</code> function (part of the JavaScript
+interface). Analogous to <code>shiny::updateX()</code> family of functions, but generic.</p>
     </div>
 
     <pre class="usage"><span class='fu'>updateReactInput</span><span class='op'>(</span>session <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>inputId</span>, <span class='va'>...</span><span class='op'>)</span></pre>
@@ -133,6 +135,10 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If you're creating a wrapper package for a React library, you'll probably want to provide
+a dedicated update function for each input to imitate Shiny interface.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
