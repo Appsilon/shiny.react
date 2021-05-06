@@ -19,6 +19,9 @@ function mapValues(object, func) {
   ));
 }
 
+// This function maps an inline CSS string to an object understood by React. It relies on the
+// undocumented behavior of React: it accepts CSS property names with dashes and lower case letters.
+// For example, `style: { 'background-color': 'red' }` works.
 function styleStringToObject(styleString) {
   const style = {};
   styleString.split(';').forEach((attribute) => {
@@ -39,6 +42,16 @@ function renameKey(object, from, to) {
   return object;
 }
 
+// There are a number of attributes that work differently between React and HTML. This function
+// does not provide full compatibility, but does a fairly good job. To some extent this relies
+// on the undocumented behavior of react: the tag / attribute names which are renamed in React
+// (usually to camelCase), actually work just fine withhout renaming. For example, these work:
+//   * `React.createElement('font-size')`
+//   * `React.createElement('label', { 'for': 'target', 'class': 'nice' })`
+//
+// This function should be improved in the future, probably using some external library to do
+// the translation. Full list of differences between React and HTML is available here:
+// https://reactjs.org/docs/dom-elements.html
 function prepareProps(elementName, propsData) {
   const props = mapReactData(propsData);
   renameKey(props, 'class', 'className');

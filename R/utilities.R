@@ -8,7 +8,7 @@ toJson <- function(
   Date = Date, POSIXt = POSIXt, null = null, na = na
 )
 
-addChildren <- function(props, children) {
+addChildrenToProps <- function(props, children) {
   if (length(children) > 0) {
     if ("children" %in% names(props))
       stop("Do not use the 'children' argument and unnamed arguments at the same time")

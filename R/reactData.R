@@ -62,9 +62,12 @@ asReactData.list <- function(x) {
 
 #' @export
 asReactData.shiny.tag <- function(x) { # nolint
+  # A `shiny.tag` created with `reactContainer()` will have a `reactData` attribute attached
+  # with a ReactData representation of whatever was supposed to be rendered in the container.
+  # This way a whole tree of React components is rendered using just a single container / render.
   data <- attr(x, "reactData", exact = TRUE)
   if (is.null(data)) {
-    props <- asReactData(addChildren(x$attribs, x$children))
+    props <- asReactData(addChildrenToProps(x$attribs, x$children))
     ReactData(
       type = "element",
       name = x$name,

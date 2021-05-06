@@ -36,7 +36,7 @@ reactElement <- function(module, name, props, deps = NULL) {
 asProps <- function(...) {
   args <- rlang::dots_list(..., .homonyms = "error")
   named <- nzchar(names(args))
-  addChildren(props = args[named], children = unname(args[!named]))
+  addChildrenToProps(props = args[named], children = unname(args[!named]))
 }
 
 #' React output
