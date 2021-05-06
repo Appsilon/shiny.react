@@ -10,5 +10,6 @@ triggerEvent(inputId)
 \item{inputId}{Shiny input ID to trigger the event on.}
 }
 \description{
-Trigger event
+Creates a handler which can be used for \code{onClick} and similar props of React components
+to trigger an event in Shiny.
 }

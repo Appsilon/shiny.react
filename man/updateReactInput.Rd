@@ -14,5 +14,10 @@ updateReactInput(session = shiny::getDefaultReactiveDomain(), inputId, ...)
 \item{...}{Props to modify.}
 }
 \description{
-Update React input
+Updates inputs created with the help of \code{InputAdapter} function (part of the JavaScript
+interface). Analogous to \code{shiny::updateX()} family of functions, but generic.
+}
+\details{
+If you're creating a wrapper package for a React library, you'll probably want to provide
+a dedicated update function for each input to imitate Shiny interface.
 }

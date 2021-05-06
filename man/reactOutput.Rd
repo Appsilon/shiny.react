@@ -10,5 +10,6 @@ reactOutput(outputId)
 \item{outputId}{Id that can be used to render React on the server}
 }
 \description{
-React output
+Creates a Shiny output which can be used analogously to \code{shiny::uiOutput()} but preserves
+React state on re-renders.
 }

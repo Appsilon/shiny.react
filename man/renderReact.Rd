@@ -14,5 +14,6 @@ renderReact(expr, env = parent.frame(), quoted = FALSE)
 \item{quoted}{Is expr a quoted expression?}
 }
 \description{
-Render React
+Renders HTML and/or React in outputs created with \code{reactOutput()} (analogously to
+\code{shiny::renderUI()}).
 }

@@ -10,5 +10,5 @@ asProps(...)
 \item{...}{Arguments to prepare for passing as props to a React component}
 }
 \description{
-Parse arguments as props
+Converts arguments to a list which can be passed as the \code{props} argument to \code{reactElement()}.
 }

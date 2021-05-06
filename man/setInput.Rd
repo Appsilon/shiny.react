@@ -12,5 +12,6 @@ setInput(inputId, argIdx = 1)
 \item{argIdx}{Index of the argument to use as value.}
 }
 \description{
-Set input
+Creates a handler which can be used for \code{onChange} and similar props of React components
+to set the value of a Shiny input to one of the arguments passed to the handler.
 }
