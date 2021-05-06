@@ -27,7 +27,7 @@ new MutationObserver((mutations) => {
   });
 }).observe(document, { childList: true, subtree: true });
 
-export default function renderReact() {
+export default function findAndRenderReactData() {
   [].forEach.call(document.getElementsByClassName('react-data'), (dataElement) => {
     const data = JSON.parse(dataElement.innerHTML);
     const container = dataElement.parentElement;

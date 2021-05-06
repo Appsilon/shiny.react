@@ -37,7 +37,7 @@ reactContainer <- function(..., data = NULL) {
   if (!is.null(data)) {
     tag <- htmltools::tagAppendChildren(tag,
       reactDataTag(data),
-      htmltools::tags$script("jsmodule['@/shiny.react'].renderReact()")
+      htmltools::tags$script("jsmodule['@/shiny.react'].findAndRenderReactData()")
     )
   }
   structure(tag, reactData = data)
