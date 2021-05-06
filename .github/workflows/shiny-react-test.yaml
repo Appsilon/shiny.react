@@ -16,10 +16,13 @@ jobs:
           node-version: 14
 
       - name: yarn install
-        run: cd node && yarn install
+        run: yarn install
+        working-directory: js
 
       - name: yarn lint
-        run: cd node && yarn lint
+        run: yarn lint
+        working-directory: js
 
       - name: yarn test
-        run: cd node && yarn test
+        run: yarn test
+        working-directory: js

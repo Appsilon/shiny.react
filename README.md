@@ -19,13 +19,13 @@ Rscript -e 'devtools::install_cran("git2r", force = TRUE)'
 
 To build and install the package, run:
 ```sh
-(cd node && yarn && yarn webpack)
+(cd js && yarn && yarn webpack)
 Rscript -e 'devtools::document(); devtools::install()'
 ```
 
 ### Testing
 
-* `cd node && yarn lint` lints the JS code
-* `cd node && yarn test` runs the unit tests for the JS code
+* `cd js && yarn lint` lints the JS code
+* `cd js && yarn test` runs the unit tests for the JS code
 * `Rscript -e "lintr::lint_package()"` runs linter for the R code
 * `Rscript -e "devtools::test()"` runs unit tests for the R code
