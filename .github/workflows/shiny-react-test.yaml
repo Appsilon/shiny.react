@@ -17,9 +17,12 @@ jobs:
 
       - name: yarn install
         run: yarn install
+        working-directory: js
 
       - name: yarn lint
         run: yarn lint
+        working-directory: js
 
       - name: yarn test
         run: yarn test
+        working-directory: js
