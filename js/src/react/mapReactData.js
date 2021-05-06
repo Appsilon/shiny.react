@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ShinyProxy from './ShinyProxy';
 
-const dataMapper = {};
+const dataMappers = {};
 
 export default function mapReactData(data) {
   const { type } = data;
-  if (type in dataMapper) {
-    return dataMapper[type](data);
+  if (type in dataMappers) {
+    return dataMappers[type](data);
   }
   throw new TypeError(`Unknown React data type '${type}'`);
 }
@@ -72,13 +72,13 @@ ShinyBindingWrapper.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-dataMapper.raw = ({ value }) => value;
-dataMapper.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
-dataMapper.array = ({ value }) => value.map(mapReactData);
-dataMapper.object = ({ value }) => mapValues(value, mapReactData);
+dataMappers.raw = ({ value }) => value;
+dataMappers.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
+dataMappers.array = ({ value }) => value.map(mapReactData);
+dataMappers.object = ({ value }) => mapValues(value, mapReactData);
 
 // eslint-disable-next-line react/prop-types
-dataMapper.element = ({ module, name, props: propsData }) => {
+dataMappers.element = ({ module, name, props: propsData }) => {
   const component = module ? window.jsmodule[module][name] : name;
   const props = prepareProps(name, propsData);
   let element = React.createElement(component, props);
@@ -88,8 +88,12 @@ dataMapper.element = ({ module, name, props: propsData }) => {
   return element;
 };
 
-dataMapper.input = ({ id, argIdx }) => (
+// Used to implement `setInput()` and `triggerEvent()` R functions. In case of `triggerEvent()`,
+// we have `argIdx === null` and the returned function just sets the Shiny input to `TRUE`
+// on every call (this works thanks to `priority: 'event'`).
+dataMappers.input = ({ id, argIdx }) => (
   (...args) => {
-    ShinyProxy.setInputValue(id, argIdx === null || args[argIdx], { priority: 'event' });
+    const value = argIdx === null ? true : args[argIdx];
+    ShinyProxy.setInputValue(id, value, { priority: 'event' });
   }
 );
