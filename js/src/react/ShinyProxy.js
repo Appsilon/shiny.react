@@ -23,7 +23,7 @@ function waitForInit(target, name, queues) {
   setTimeout(check, delay);
 }
 
-const proxy = new Proxy(Shiny, {
+const ShinyProxy = new Proxy(Shiny, {
   queues: {},
   get(target, name) {
     if (this.queues[name]) return this.queues[name].wait;
@@ -36,4 +36,4 @@ const proxy = new Proxy(Shiny, {
   },
 });
 
-export default proxy;
+export default ShinyProxy;

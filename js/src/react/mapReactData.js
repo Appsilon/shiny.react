@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ShinyProxy from './ShinyProxy';
 
-const map = {};
+const dataMapper = {};
 
 export default function mapReactData(data) {
   const { type } = data;
-  if (type in map) {
-    return map[type](data);
+  if (type in dataMapper) {
+    return dataMapper[type](data);
   }
   throw new TypeError(`Unknown React data type '${type}'`);
 }
@@ -38,6 +38,20 @@ function renameKey(object, from, to) {
   return object;
 }
 
+function prepareProps(elementName, propsData) {
+  const props = mapReactData(propsData);
+  renameKey(props, 'class', 'className');
+  // https://reactjs.org/docs/uncontrolled-components.html#default-values
+  if (['input', 'select', 'textarea'].includes(elementName)) {
+    renameKey(props, 'value', 'defaultValue');
+    renameKey(props, 'checked', 'defaultChecked');
+  }
+  if (typeof props.style === 'string') {
+    props.style = styleStringToObject(props.style);
+  }
+  return props;
+}
+
 function needsBindingWrapper(className) {
   const regex = /(shiny-input-container|html-widget-output|shiny-\w*-output)/;
   return regex.test(className);
@@ -51,9 +65,6 @@ function ShinyBindingWrapper({ children }) {
     ShinyProxy.bindAll(wrapper);
     return () => ShinyProxy.unbindAll(wrapper);
   }, []);
-  // useEffect(() => {
-  //   wrapper.dispatchEvent(new Event('resize'));
-  // })
   return React.createElement('div', { ref }, children);
 }
 
@@ -61,23 +72,15 @@ ShinyBindingWrapper.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-map.raw = ({ value }) => value;
-map.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
-map.array = ({ value }) => value.map(mapReactData);
-map.object = ({ value }) => mapValues(value, mapReactData);
+dataMapper.raw = ({ value }) => value;
+dataMapper.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
+dataMapper.array = ({ value }) => value.map(mapReactData);
+dataMapper.object = ({ value }) => mapValues(value, mapReactData);
 
-map.element = ({ module, name, props: propsData }) => { // eslint-disable-line react/prop-types
+// eslint-disable-next-line react/prop-types
+dataMapper.element = ({ module, name, props: propsData }) => {
   const component = module ? window.jsmodule[module][name] : name;
-  const props = mapReactData(propsData);
-  renameKey(props, 'class', 'className');
-  // https://reactjs.org/docs/uncontrolled-components.html#default-values
-  if (['input', 'select', 'textarea'].includes(name)) {
-    renameKey(props, 'value', 'defaultValue');
-    renameKey(props, 'checked', 'defaultChecked');
-  }
-  if (typeof props.style === 'string') {
-    props.style = styleStringToObject(props.style);
-  }
+  const props = prepareProps(name, propsData);
   let element = React.createElement(component, props);
   if (needsBindingWrapper(props.className)) {
     element = React.createElement(ShinyBindingWrapper, {}, element);
@@ -85,7 +88,7 @@ map.element = ({ module, name, props: propsData }) => { // eslint-disable-line r
   return element;
 };
 
-map.input = ({ id, argIdx }) => (
+dataMapper.input = ({ id, argIdx }) => (
   (...args) => {
     ShinyProxy.setInputValue(id, argIdx === null || args[argIdx], { priority: 'event' });
   }

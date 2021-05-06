@@ -1188,7 +1188,7 @@ function waitForInit(target, name, queues) {
   setTimeout(check, delay);
 }
 
-var proxy = new Proxy((_shiny__WEBPACK_IMPORTED_MODULE_0___default()), {
+var ShinyProxy = new Proxy((_shiny__WEBPACK_IMPORTED_MODULE_0___default()), {
   queues: {},
   get: function get(target, name) {
     if (this.queues[name]) return this.queues[name].wait;
@@ -1211,7 +1211,7 @@ var proxy = new Proxy((_shiny__WEBPACK_IMPORTED_MODULE_0___default()), {
     return this.queues[name].wait;
   }
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (proxy);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ShinyProxy);
 
 /***/ }),
 
@@ -1258,6 +1258,12 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 
 
+ // The higher-level components in this file can be used to adapt the interface of React components
+// to make it in line with what is expected from Shiny inputs / buttons. The adapters add
+// an `inputId` prop and use `Shiny.setInputValue()` to send value / clicks to the R backend.
+// Each input adapter instance registers an update handler with its `inputId` so it can be updated
+// using Shiny's `session$sendCustomMessage()` mechanism. The wrapped component is used
+// in a controlled manner, which allows also for the value to be updated from R.
 
 var updateHandlers = {};
 _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.addCustomMessageHandler('updateReactInput', function (_ref) {
@@ -1286,9 +1292,10 @@ function InputAdapter(Component, valueProps) {
 
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
       _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.setInputValue(inputId, value);
-    }, [value]);
+    }, [inputId, value]); // Register / cleanup update handlers (used to implement updateX.shinyInput functions).
+
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-      var update = function update(_ref3) {
+      var updateHandler = function updateHandler(_ref3) {
         var newValue = _ref3.value,
             newProps = _objectWithoutProperties(_ref3, ["value"]);
 
@@ -1296,9 +1303,12 @@ function InputAdapter(Component, valueProps) {
         setUpdatedProps(_objectSpread(_objectSpread({}, updatedProps), newProps));
       };
 
-      updateHandlers[inputId] = update;
+      updateHandlers[inputId] = updateHandler;
       return function () {
-        if (updateHandlers[inputId] === update) delete updateHandlers[inputId];
+        // When the component is rerendered inside `renderUI()`, the new instance is initialised
+        // (and registers its update handler) *before* the old one is cleaned up. Here we ensure
+        // that the old instance only removes its own update handler.
+        if (updateHandlers[inputId] === updateHandler) delete updateHandlers[inputId];
       };
     }, [inputId]);
 
@@ -1403,12 +1413,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var map = {};
+var dataMapper = {};
 function mapReactData(data) {
   var type = data.type;
 
-  if (type in map) {
-    return map[type](data);
+  if (type in dataMapper) {
+    return dataMapper[type](data);
   }
 
   throw new TypeError("Unknown React data type '".concat(type, "'"));
@@ -1450,6 +1460,22 @@ function renameKey(object, from, to) {
   return object;
 }
 
+function prepareProps(elementName, propsData) {
+  var props = mapReactData(propsData);
+  renameKey(props, 'class', 'className'); // https://reactjs.org/docs/uncontrolled-components.html#default-values
+
+  if (['input', 'select', 'textarea'].includes(elementName)) {
+    renameKey(props, 'value', 'defaultValue');
+    renameKey(props, 'checked', 'defaultChecked');
+  }
+
+  if (typeof props.style === 'string') {
+    props.style = styleStringToObject(props.style);
+  }
+
+  return props;
+}
+
 function needsBindingWrapper(className) {
   var regex = /(shiny-input-container|html-widget-output|shiny-\w*-output)/;
   return regex.test(className);
@@ -1465,10 +1491,7 @@ function ShinyBindingWrapper(_ref3) {
     return function () {
       return _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.unbindAll(wrapper);
     };
-  }, []); // useEffect(() => {
-  //   wrapper.dispatchEvent(new Event('resize'));
-  // })
-
+  }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement('div', {
     ref: ref
   }, children);
@@ -1478,45 +1501,34 @@ ShinyBindingWrapper.propTypes = {
   children: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().node.isRequired)
 };
 
-map.raw = function (_ref4) {
+dataMapper.raw = function (_ref4) {
   var value = _ref4.value;
   return value;
 };
 
-map.expr = function (_ref5) {
+dataMapper.expr = function (_ref5) {
   var value = _ref5.value;
   return eval("(".concat(value, ")"));
 }; // eslint-disable-line no-eval
 
 
-map.array = function (_ref6) {
+dataMapper.array = function (_ref6) {
   var value = _ref6.value;
   return value.map(mapReactData);
 };
 
-map.object = function (_ref7) {
+dataMapper.object = function (_ref7) {
   var value = _ref7.value;
   return mapValues(value, mapReactData);
-};
+}; // eslint-disable-next-line react/prop-types
 
-map.element = function (_ref8) {
+
+dataMapper.element = function (_ref8) {
   var module = _ref8.module,
       name = _ref8.name,
       propsData = _ref8.props;
-  // eslint-disable-line react/prop-types
   var component = module ? window.jsmodule[module][name] : name;
-  var props = mapReactData(propsData);
-  renameKey(props, 'class', 'className'); // https://reactjs.org/docs/uncontrolled-components.html#default-values
-
-  if (['input', 'select', 'textarea'].includes(name)) {
-    renameKey(props, 'value', 'defaultValue');
-    renameKey(props, 'checked', 'defaultChecked');
-  }
-
-  if (typeof props.style === 'string') {
-    props.style = styleStringToObject(props.style);
-  }
-
+  var props = prepareProps(name, propsData);
   var element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(component, props);
 
   if (needsBindingWrapper(props.className)) {
@@ -1526,7 +1538,7 @@ map.element = function (_ref8) {
   return element;
 };
 
-map.input = function (_ref9) {
+dataMapper.input = function (_ref9) {
   var id = _ref9.id,
       argIdx = _ref9.argIdx;
   return function () {
