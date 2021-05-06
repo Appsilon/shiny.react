@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shiny.react</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -130,112 +130,69 @@
       <tr>
         
         <td>
-          <p><code><a href="ShinyComponentWrapper.html">ShinyComponentWrapper()</a></code> </p>
+          <p><code><a href="JS.html">JS()</a></code> </p>
         </td>
-        <td><p>Shiny Component Wrapper</p></td>
+        <td><p>Mark character strings as literal JavaScript code</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="enable_react_debug_mode.html">enable_react_debug_mode()</a></code> </p>
+          <p><code><a href="asProps.html">asProps()</a></code> </p>
+        </td>
+        <td><p>Parse arguments as props</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="enableReactDebugMode.html">enableReactDebugMode()</a></code> </p>
         </td>
         <td><p>Sets shiny.react into DEBUG mode.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="html_dependency_react.html">html_dependency_react()</a></code> </p>
+          <p><code><a href="reactDependency.html">reactDependency()</a></code> </p>
         </td>
         <td><p>Shiny React dependency adding React libs.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="html_dependency_shiny_react.html">html_dependency_shiny_react()</a></code> </p>
+          <p><code><a href="reactElement.html">reactElement()</a></code> </p>
         </td>
-        <td><p>Shiny React JS dependency.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="input_class_name.html">input_class_name()</a></code> </p>
-        </td>
-        <td><p>Returns a CSS class name used to select DOM elements when installing Shiny input bindings.
-It must be indentical to the name returned by <code>inputClassName()</code> in <code>shiny-react.jsx</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="make_input.html">make_input()</a></code> </p>
-        </td>
-        <td><p>Make Shiny input</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="make_output.html">make_output()</a></code> </p>
-        </td>
-        <td><p>Make Shiny output</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mark_as_react_tag.html">mark_as_react_tag()</a></code> </p>
-        </td>
-        <td><p>Mark as React tag</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="needs_shiny_component_wrapper.html">needs_shiny_component_wrapper()</a></code> </p>
-        </td>
-        <td><p>Should return TRUE iff a tag should be wrapped in a ShinyComponentWrapper</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="prepare_tags_for_serialization.html">prepare_tags_for_serialization()</a></code> </p>
-        </td>
-        <td><p>This function does several things needed before a tag tree can be transformed into JSON:
-<ol>
-<li><p>Remove all html_dependency nodes.</p></li>
-<li><p>Rename some attributes in React nodes to ensure they do not become controlled components.</p></li>
-<li><p>Remove names so that lists serialize into arrays and not objects.</p></li>
-<li><p>Add ShinyComponentWrapper around Shiny inputs and outputs</p></li>
-</ol></p></td>
+        <td><p>Create a React element</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="reactOutput.html">reactOutput()</a></code> </p>
         </td>
-        <td><p>Shiny binding for shiny.react HTML widget</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="reactWidget.html">reactWidget()</a></code> </p>
-        </td>
-        <td><p>Creates a Shiny React widget that can be then rendered on the client with React</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rename_attribs_to_uncontrolled.html">rename_attribs_to_uncontrolled()</a></code> </p>
-        </td>
-        <td><p>Rename controlled attributes to uncontrolled</p></td>
+        <td><p>React output</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="renderReact.html">renderReact()</a></code> </p>
         </td>
-        <td><p>Shiny binding for shiny.react HTML widget</p></td>
+        <td><p>Render React</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="serialize_shiny_react_tags.html">serialize_shiny_react_tags()</a></code> </p>
+          <p><code><a href="setInput.html">setInput()</a></code> </p>
         </td>
-        <td><p>Serialize <code>JS</code>-wrapped attributes directly into the representation to be executed on the client.</p></td>
+        <td><p>Set input</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="update_input.html">update_input()</a></code> </p>
+          <p><code><a href="shinyReactDependency.html">shinyReactDependency()</a></code> </p>
         </td>
-        <td><p>Update Shiny input</p></td>
+        <td><p>Shiny React JS dependency.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="withReact.html">withReact()</a></code> </p>
+          <p><code><a href="triggerEvent.html">triggerEvent()</a></code> </p>
         </td>
-        <td><p>Use arbitrary React components and props in R.</p></td>
+        <td><p>Trigger event</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="updateReactInput.html">updateReactInput()</a></code> </p>
+        </td>
+        <td><p>Update React input</p></td>
       </tr>
     </tbody>
     </table>

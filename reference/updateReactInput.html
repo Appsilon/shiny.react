@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>React output — reactOutput • shiny.react</title>
+<title>Update React input — updateReactInput • shiny.react</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="React output — reactOutput" />
-<meta property="og:description" content="React output" />
+<meta property="og:title" content="Update React input — updateReactInput" />
+<meta property="og:description" content="Update React input" />
 
 
 
@@ -105,23 +105,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>React output</h1>
+    <h1>Update React input</h1>
     
-    <div class="hidden name"><code>reactOutput.Rd</code></div>
+    <div class="hidden name"><code>updateReactInput.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>React output</p>
+    <p>Update React input</p>
     </div>
 
-    <pre class="usage"><span class='fu'>reactOutput</span><span class='op'>(</span><span class='va'>outputId</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>updateReactInput</span><span class='op'>(</span>session <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>inputId</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>outputId</th>
-      <td><p>Id that can be used to render React on the server</p></td>
+      <th>session</th>
+      <td><p>Session object passed to function given to shinyServer.</p></td>
+    </tr>
+    <tr>
+      <th>inputId</th>
+      <td><p>Id of the input object.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Props to modify.</p></td>
     </tr>
     </table>
 

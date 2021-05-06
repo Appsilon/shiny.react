@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>React output — reactOutput • shiny.react</title>
+<title>Create a React element — reactElement • shiny.react</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="React output — reactOutput" />
-<meta property="og:description" content="React output" />
+<meta property="og:title" content="Create a React element — reactElement" />
+<meta property="og:description" content="Create a React element" />
 
 
 
@@ -105,23 +105,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>React output</h1>
+    <h1>Create a React element</h1>
     
-    <div class="hidden name"><code>reactOutput.Rd</code></div>
+    <div class="hidden name"><code>reactElement.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>React output</p>
+    <p>Create a React element</p>
     </div>
 
-    <pre class="usage"><span class='fu'>reactOutput</span><span class='op'>(</span><span class='va'>outputId</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>reactElement</span><span class='op'>(</span><span class='va'>module</span>, <span class='va'>name</span>, <span class='va'>props</span>, deps <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>outputId</th>
-      <td><p>Id that can be used to render React on the server</p></td>
+      <th>module</th>
+      <td><p>JavaScript module to import the component from.</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>Name of the component.</p></td>
+    </tr>
+    <tr>
+      <th>props</th>
+      <td><p>Props to pass to the component.</p></td>
+    </tr>
+    <tr>
+      <th>deps</th>
+      <td><p>HTML dependencies to attach.</p></td>
     </tr>
     </table>
 

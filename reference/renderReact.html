@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Shiny binding for shiny.react HTML widget — renderReact • shiny.react</title>
+<title>Render React — renderReact • shiny.react</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Shiny binding for shiny.react HTML widget — renderReact" />
-<meta property="og:description" content="Shiny binding for shiny.react HTML widget" />
+<meta property="og:title" content="Render React — renderReact" />
+<meta property="og:description" content="Render React" />
 
 
 
@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shiny.react</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -105,13 +105,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Shiny binding for shiny.react HTML widget</h1>
+    <h1>Render React</h1>
     
     <div class="hidden name"><code>renderReact.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Shiny binding for shiny.react HTML widget</p>
+    <p>Render React</p>
     </div>
 
     <pre class="usage"><span class='fu'>renderReact</span><span class='op'>(</span><span class='va'>expr</span>, env <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span>, quoted <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
@@ -121,15 +121,15 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>expr</th>
-      <td><p>Expression to be rendered</p></td>
+      <td><p>Expression returning the HTML / React to render.</p></td>
     </tr>
     <tr>
       <th>env</th>
-      <td><p>Environment to be used</p></td>
+      <td><p>Environment in which to evaluate expr.</p></td>
     </tr>
     <tr>
       <th>quoted</th>
-      <td><p>Is expression quoted?</p></td>
+      <td><p>Is expr a quoted expression?</p></td>
     </tr>
     </table>
 
