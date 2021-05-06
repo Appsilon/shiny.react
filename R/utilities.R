@@ -8,7 +8,7 @@ toJson <- function(
   Date = Date, POSIXt = POSIXt, null = null, na = na
 )
 
-addChildren <- function(props, children) {
+addChildrenToProps <- function(props, children) {
   if (length(children) > 0) {
     if ("children" %in% names(props))
       stop("Do not use the 'children' argument and unnamed arguments at the same time")
@@ -37,7 +37,7 @@ reactContainer <- function(..., data = NULL) {
   if (!is.null(data)) {
     tag <- htmltools::tagAppendChildren(tag,
       reactDataTag(data),
-      htmltools::tags$script("jsmodule['@/shiny.react'].renderReact()")
+      htmltools::tags$script("jsmodule['@/shiny.react'].findAndRenderReactData()")
     )
   }
   structure(tag, reactData = data)

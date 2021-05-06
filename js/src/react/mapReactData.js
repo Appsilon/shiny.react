@@ -1,13 +1,14 @@
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+
+import ShinyBindingWrapper from './ShinyBindingWrapper';
 import ShinyProxy from './ShinyProxy';
 
-const dataMapper = {};
+const dataMappers = {};
 
 export default function mapReactData(data) {
   const { type } = data;
-  if (type in dataMapper) {
-    return dataMapper[type](data);
+  if (type in dataMappers) {
+    return dataMappers[type](data);
   }
   throw new TypeError(`Unknown React data type '${type}'`);
 }
@@ -18,6 +19,9 @@ function mapValues(object, func) {
   ));
 }
 
+// This function maps an inline CSS string to an object understood by React. It relies on the
+// undocumented behavior of React: it accepts CSS property names with dashes and lower case letters.
+// For example, `style: { 'background-color': 'red' }` works.
 function styleStringToObject(styleString) {
   const style = {};
   styleString.split(';').forEach((attribute) => {
@@ -38,6 +42,16 @@ function renameKey(object, from, to) {
   return object;
 }
 
+// There are a number of attributes that work differently between React and HTML. This function
+// does not provide full compatibility, but does a fairly good job. To some extent this relies
+// on the undocumented behavior of react: the tag / attribute names which are renamed in React
+// (usually to camelCase), actually work just fine withhout renaming. For example, these work:
+//   * `React.createElement('font-size')`
+//   * `React.createElement('label', { 'for': 'target', 'class': 'nice' })`
+//
+// This function should be improved in the future, probably using some external library to do
+// the translation. Full list of differences between React and HTML is available here:
+// https://reactjs.org/docs/dom-elements.html
 function prepareProps(elementName, propsData) {
   const props = mapReactData(propsData);
   renameKey(props, 'class', 'className');
@@ -57,28 +71,13 @@ function needsBindingWrapper(className) {
   return regex.test(className);
 }
 
-function ShinyBindingWrapper({ children }) {
-  const ref = useRef();
-  useEffect(() => {
-    const wrapper = ref.current;
-    ShinyProxy.initializeInputs(wrapper);
-    ShinyProxy.bindAll(wrapper);
-    return () => ShinyProxy.unbindAll(wrapper);
-  }, []);
-  return React.createElement('div', { ref }, children);
-}
-
-ShinyBindingWrapper.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-dataMapper.raw = ({ value }) => value;
-dataMapper.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
-dataMapper.array = ({ value }) => value.map(mapReactData);
-dataMapper.object = ({ value }) => mapValues(value, mapReactData);
+dataMappers.raw = ({ value }) => value;
+dataMappers.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
+dataMappers.array = ({ value }) => value.map(mapReactData);
+dataMappers.object = ({ value }) => mapValues(value, mapReactData);
 
 // eslint-disable-next-line react/prop-types
-dataMapper.element = ({ module, name, props: propsData }) => {
+dataMappers.element = ({ module, name, props: propsData }) => {
   const component = module ? window.jsmodule[module][name] : name;
   const props = prepareProps(name, propsData);
   let element = React.createElement(component, props);
@@ -88,8 +87,12 @@ dataMapper.element = ({ module, name, props: propsData }) => {
   return element;
 };
 
-dataMapper.input = ({ id, argIdx }) => (
+// Used to implement `setInput()` and `triggerEvent()` R functions. In case of `triggerEvent()`,
+// we have `argIdx === null` and the returned function just sets the Shiny input to `TRUE`
+// on every call (this works thanks to `priority: 'event'`).
+dataMappers.input = ({ id, argIdx }) => (
   (...args) => {
-    ShinyProxy.setInputValue(id, argIdx === null || args[argIdx], { priority: 'event' });
+    const value = argIdx === null ? true : args[argIdx];
+    ShinyProxy.setInputValue(id, value, { priority: 'event' });
   }
 );

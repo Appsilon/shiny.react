@@ -10,3 +10,7 @@ Box <- testComponent("Box")
 Counter <- testComponent("Counter")
 Pinger <- testComponent("Pinger")
 # nolint end
+
+ShinyBindingWrapper <- function(...) reactElement( # nolint
+  module = "@/shiny.react", name = "ShinyBindingWrapper", props = asProps(...)
+)

@@ -16,5 +16,13 @@ reactElement(module, name, props, deps = NULL)
 \item{deps}{HTML dependencies to attach.}
 }
 \description{
-Create a React element
+Creates a \code{shiny.tag} which can be rendered just like other Shiny tags as well as passed in props
+to other React elements. Typically returned from a wrapper ("component") function, which parses
+its arguments with \code{asProps()} and fills in the other arguments.
+}
+\examples{
+Component <- function(...) reactElement(
+  module = "@/module", name = "Component", props = asProps(...)
+)
+
 }
