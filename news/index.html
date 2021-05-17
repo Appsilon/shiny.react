@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>React output — reactOutput • shiny.react</title>
+<title>Changelog • shiny.react</title>
 
 
 <!-- jquery -->
@@ -41,9 +41,7 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="React output — reactOutput" />
-<meta property="og:description" content="Creates a Shiny output which can be used analogously to shiny::uiOutput() but preserves
-React state on re-renders." />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -62,7 +60,7 @@ React state on re-renders." />
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -109,34 +107,35 @@ React state on re-renders." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>React output</h1>
-    
-    <div class="hidden name"><code>reactOutput.Rd</code></div>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      
     </div>
 
-    <div class="ref-description">
-    <p>Creates a Shiny output which can be used analogously to <code><a href='https://rdrr.io/pkg/shiny/man/htmlOutput.html'>shiny::uiOutput()</a></code> but preserves
-React state on re-renders.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>reactOutput</span><span class='op'>(</span><span class='va'>outputId</span><span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>outputId</th>
-      <td><p>Id that can be used to render React on the server</p></td>
-    </tr>
-    </table>
-
-
+    <div id="shinyreact-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#shinyreact-020" class="anchor"></a>shiny.react 0.2.0</h1>
+<p>This is the first public release, with several big interface changes:</p>
+<ul>
+<li>Removed <code>withReact()</code>. Components now work without it!</li>
+<li>Removed <code>make_input()</code>, <code>make_output()</code> and <code>mark_as_react_tag()</code>. Components can now be defined by combining <code><a href="../reference/reactElement.html">reactElement()</a></code> and <code><a href="../reference/asProps.html">asProps()</a></code>.</li>
+<li>Removed <code>reactWidget()</code> - no longer applicable / necessary.</li>
+<li>Renamed <code>ShinyComponentWrapper</code> to <code>ShinyBindingWrapper</code> and made it internal.</li>
+<li>Added <code><a href="../reference/setInput.html">setInput()</a></code> and <code><a href="../reference/triggerEvent.html">triggerEvent()</a></code> helpers.</li>
+</ul>
+</div>
+    <div id="shinyreact-010" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#shinyreact-010" class="anchor"></a>shiny.react 0.1.0</h1>
+<p>Initial release made available to the early access group.</p>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
 
 
