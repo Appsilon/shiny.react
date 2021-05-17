@@ -1,4 +1,6 @@
-# shiny.react R package
+<img src="man/figures/shiny-react.png" align="right" alt="" width="130" />
+
+# shiny.react
 
 <!-- badges: start -->
 [![R build status](https://github.com/Appsilon/shiny.react/workflows/R-CMD-check/badge.svg)](https://github.com/Appsilon/shiny.react/actions)
