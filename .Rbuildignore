@@ -5,6 +5,7 @@
 ^__mocks__$
 ^\.github$
 ^lint\.R$
+^LICENSE\.md$
 
 ^_pkgdown\.yml$
 ^docs$
