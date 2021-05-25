@@ -1,3 +1,7 @@
+# shiny.react 0.2.1
+
+Minor changes for CRAN resubmission.
+
 # shiny.react 0.2.0
 
 This is the first public release, with several big interface changes:
