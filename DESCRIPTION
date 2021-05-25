@@ -1,6 +1,6 @@
 Package: shiny.react
 Title: Tools for Using React in Shiny
-Version: 0.2.0
+Version: 0.2.1
 Authors@R:
   c(
     person(given = "Marek", family = "Rogala", role = c("aut", "cre"), email = "marek@appsilon.com"),
@@ -8,12 +8,9 @@ Authors@R:
     person(given = "Appsilon sp. z o.o.", role = "cph")
   )
 Description:
-  This package enables using React in Shiny apps.
-  It contains R and JS code which is independent from the React library
-  (e.g. Fluent UI) that is being wrapped.
-License: LGPL-3 + file LICENSE
+  A toolbox for defining React component wrappers which can be used seamlessly in Shiny apps.
+License: LGPL (>= 3)
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports:
