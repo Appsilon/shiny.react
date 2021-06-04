@@ -86,7 +86,7 @@ renderReact <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' @export
 updateReactInput <- function(session = shiny::getDefaultReactiveDomain(), inputId, ...) {
   session$sendCustomMessage("updateReactInput", list(
-    inputId = inputId, data = asReactData(asProps(...))
+    inputId = session$ns(inputId), data = asReactData(asProps(...))
   ))
 }
 
