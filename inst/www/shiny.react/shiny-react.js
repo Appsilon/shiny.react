@@ -1279,6 +1279,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1290,10 +1294,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 
 
@@ -1314,43 +1314,57 @@ _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.addCustomMessageHandler('update
     updateHandlers[inputId]((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__.default)(data));
   } else throw new Error("Attempted to update non-existent React input '".concat(inputId, "'"));
 });
+
+function useValue(inputId, defaultValue) {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultValue),
+      _useState2 = _slicedToArray(_useState, 2),
+      value = _useState2[0],
+      setValue = _useState2[1];
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.setInputValue(inputId, value);
+  }, [inputId, value]);
+  return [value, setValue];
+}
+
+function useUpdatedProps(inputId, setValue) {
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
+      _useState4 = _slicedToArray(_useState3, 2),
+      updatedProps = _useState4[0],
+      setUpdatedProps = _useState4[1];
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var updateHandler = function updateHandler(props) {
+      var value = props.value,
+          newProps = _objectWithoutProperties(props, ["value"]);
+
+      if (value !== undefined) setValue(value);
+      setUpdatedProps(_objectSpread(_objectSpread({}, updatedProps), newProps));
+    };
+
+    updateHandlers[inputId] = updateHandler;
+    return function () {
+      // When the component is rerendered inside `renderUI()`, the new instance is initialised
+      // (and registers its update handler) *before* the old one is cleaned up. Here we ensure
+      // that the old instance only removes its own update handler.
+      if (updateHandlers[inputId] === updateHandler) delete updateHandlers[inputId];
+    };
+  }, [inputId]);
+  return updatedProps;
+}
+
 function InputAdapter(Component, valueProps) {
   function Adapter(_ref2) {
     var inputId = _ref2.inputId,
         defaultValue = _ref2.value,
         otherProps = _objectWithoutProperties(_ref2, ["inputId", "value"]);
 
-    var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultValue),
-        _useState2 = _slicedToArray(_useState, 2),
-        value = _useState2[0],
-        setValue = _useState2[1];
+    var _useValue = useValue(inputId, defaultValue),
+        _useValue2 = _slicedToArray(_useValue, 2),
+        value = _useValue2[0],
+        setValue = _useValue2[1];
 
-    var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
-        _useState4 = _slicedToArray(_useState3, 2),
-        updatedProps = _useState4[0],
-        setUpdatedProps = _useState4[1];
-
-    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-      _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.setInputValue(inputId, value);
-    }, [inputId, value]); // Register / cleanup update handlers (used to implement updateX.shinyInput functions).
-
-    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-      var updateHandler = function updateHandler(_ref3) {
-        var newValue = _ref3.value,
-            newProps = _objectWithoutProperties(_ref3, ["value"]);
-
-        if (newValue !== undefined) setValue(newValue);
-        setUpdatedProps(_objectSpread(_objectSpread({}, updatedProps), newProps));
-      };
-
-      updateHandlers[inputId] = updateHandler;
-      return function () {
-        // When the component is rerendered inside `renderUI()`, the new instance is initialised
-        // (and registers its update handler) *before* the old one is cleaned up. Here we ensure
-        // that the old instance only removes its own update handler.
-        if (updateHandlers[inputId] === updateHandler) delete updateHandlers[inputId];
-      };
-    }, [inputId]);
+    var updatedProps = useUpdatedProps(inputId, setValue);
 
     var props = _objectSpread(_objectSpread({
       id: inputId
@@ -1368,25 +1382,23 @@ function InputAdapter(Component, valueProps) {
   return Adapter;
 }
 function ButtonAdapter(Component) {
-  function Adapter(_ref4) {
-    var inputId = _ref4.inputId,
-        otherProps = _objectWithoutProperties(_ref4, ["inputId"]);
+  function Adapter(_ref3) {
+    var inputId = _ref3.inputId,
+        otherProps = _objectWithoutProperties(_ref3, ["inputId"]);
 
-    var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-        _useState6 = _slicedToArray(_useState5, 2),
-        value = _useState6[0],
-        setValue = _useState6[1];
+    var _useValue3 = useValue(inputId, null),
+        _useValue4 = _slicedToArray(_useValue3, 2),
+        value = _useValue4[0],
+        setValue = _useValue4[1];
 
-    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-      _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.setInputValue(inputId, value);
-    }, [value]);
+    var updatedProps = useUpdatedProps(inputId, setValue);
 
-    var props = _objectSpread({
+    var props = _objectSpread(_objectSpread({
       id: inputId,
       onClick: function onClick() {
         return setValue(value + 1);
       }
-    }, otherProps);
+    }, otherProps), updatedProps);
 
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Component, props);
   }
