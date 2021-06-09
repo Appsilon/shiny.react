@@ -1,3 +1,7 @@
+# shiny.react 0.2.2
+
+* `updateReactInput()` applies namespace automatically.
+
 # shiny.react 0.2.1
 
 Minor changes for CRAN resubmission.
