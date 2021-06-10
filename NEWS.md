@@ -1,6 +1,7 @@
 # shiny.react 0.2.2
 
 * `updateReactInput()` applies namespace automatically.
+* `updateReactInput()` can be used to update components created with ButtonAdapter.
 
 # shiny.react 0.2.1
 
