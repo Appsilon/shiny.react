@@ -1,0 +1,319 @@
+---
+title: "Tutorial: Porting Blueprint to Shiny"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tutorial: Porting Blueprint to Shiny}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+### Introduction
+[Blueprint](https://blueprintjs.com/)
+is a [React](https://reactjs.org/)-based UI library from Palantir.
+It provides a rich set of components for building web interfaces
+and it is similar in concept to
+Microsoft's [Fluent UI](https://developer.microsoft.com/en-us/fluentui#/)
+or Google's [Material-UI](https://material-ui.com/).
+
+In this tutorial we will (begin to) create a `blueprint` R package,
+which will make it possible to use Blueprint in R/Shiny
+akin to how [shiny.fluent](https://github.com/Appsilon/shiny.fluent) does it for Fluent UI.
+It should give you enough understanding of shiny.react
+to allow you to use other React libraries in your projects,
+either by creating "wrapper" R packages or directly in you Shiny app.
+
+This tutorial is aimed at advanced users
+who feel comfortable with both Shiny and React.
+You will need R and [Node.js](https://nodejs.org/en/) installed.
+
+### Creating the package
+To start off we create a new package called blueprint.
+The `js` directory will contain the Node.js toolchain
+and JavaScript sources which will be compiled into a single file.
+Only that file will be needed to use the package,
+so we add `js` to `.Rbuildignore` to decrease the size of our package.
+```r
+usethis::create_package("blueprint")
+usethis::use_build_ignore("js")
+```
+
+It is also a good idea to list the dependencies in the `DESCRIPTION` file:
+```
+Imports:
+  htmltools,
+  shiny,
+  shiny.react
+```
+
+### The R interface
+In React, a [component](https://reactjs.org/docs/glossary.html#components)
+is a function which takes [props](https://reactjs.org/docs/glossary.html#props)
+and returns an [element](https://reactjs.org/docs/glossary.html#elements).
+These concepts map to R directly.
+
+In R, elements are created with `shiny.react::reactElement(module, name, props)`.
+In the browser, shiny.react will create the element by calling
+`React.createElement(jsmodule[module][name], props)`.
+It is our task to ensure that `jsmodule[module][name]` yields the right component.
+To accomplish it, we will later create a `blueprint.js` script
+which will set up the `jsmodule` global appropriately.
+
+To free the users of our package of having to include this script manually,
+we will use an HTML dependency.
+In `R/components.R` let's define:
+```r
+blueprintDependency <- function() {
+  htmltools::htmlDependency(
+    name = "blueprint",
+    version = "0.1.0",
+    package = "blueprint",
+    src = "www",
+    script = "blueprint.js"
+  )
+}
+```
+
+To define components succinctly, let's create a helper.
+Remember - components are functions which take props and return elements:
+```r
+component <- function(name) {
+  function(...) shiny.react::reactElement(
+    module = "@blueprintjs/core",
+    name = name,
+    props = shiny.react::asProps(...),
+    deps = blueprintDependency()
+  )
+}
+```
+
+We can now add Blueprint components to our package easily!
+Let's try a [Switch](https://blueprintjs.com/docs/#core/components/switch)
+and a [ProgressBar](https://blueprintjs.com/docs/#core/components/progress-bar) for starters.
+```r
+#' @export
+ProgressBar <- component("ProgressBar")
+
+#' @export
+Switch <- component("Switch")
+```
+
+### Adding Blueprint
+In the `js` directory we use `yarn` to add the Blueprint library.
+The [documentation](https://blueprintjs.com/docs/#blueprint.quick-start)
+also suggests adding `react` and `react-dom`,
+but we skip them as they are already provided by shiny.react.
+```sh
+yarn add @blueprintjs/core
+```
+
+We will use a bundler to generate the `blueprint.js` script
+from the following `js/src/index.js` file:
+```js
+const Blueprint = require('@blueprintjs/core');
+
+require('@blueprintjs/core/lib/css/blueprint.css');
+
+window.jsmodule = {
+  ...window.jsmodule,
+  '@blueprintjs/core': Blueprint
+};
+```
+
+This script will make the Blueprint library
+available as `jsmodule[@blueprintjs/core]` on the browser.
+It will also load the necessary CSS.
+
+### Bundling
+We will use [webpack](https://webpack.js.org/) to build the `blueprint.js` file.
+
+There is a handy [online tool](https://createapp.dev/webpack)
+which we can use to generate a configuration for that webpack.
+Let's just pick CSS from the Styling section and copy the the script to `js/webpack.config.js`.
+We also add dev dependencies as suggested by the tool:
+```sh
+yarn add --dev webpack webpack-cli css-loader style-loader
+```
+
+Now let's tweak the config a bit.
+We change the output to `inst/www/blueprint.js`:
+```js
+output: {
+  path: path.join(__dirname, '..', 'inst', 'www'),
+  filename: 'blueprint.js'
+}
+```
+
+We add [`externals`](https://webpack.js.org/configuration/externals/)
+to let webpack know where to look for modules provided by shiny.react:
+```js
+externals: {
+  'react': 'jsmodule["react"]',
+  'react-dom': 'jsmodule["react-dom"]',
+  '@/shiny.react': 'jsmodule["@/shiny.react"]'
+}
+```
+
+Lastly, we need a little hack for a [problem](https://github.com/palantir/blueprint/issues/4393)
+present in Blueprint as of writing this:
+```js
+plugins: [
+  new webpack.DefinePlugin({ 'process.env': '{}' })
+]
+```
+
+Our final `js/webpack.config.js` looks as follows:
+```js
+const webpack = require('webpack');
+const path = require('path');
+
+const config = {
+  entry: './src/index.js',
+  output: {
+    path: path.join(__dirname, '..', 'inst', 'www'),
+    filename: 'blueprint.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      }
+    ]
+  },
+  externals: {
+    'react': 'jsmodule["react"]',
+    'react-dom': 'jsmodule["react-dom"]',
+    '@/shiny.react': 'jsmodule["@/shiny.react"]'
+  },
+  plugins: [
+    new webpack.DefinePlugin({ 'process.env': '{}' })
+  ]
+};
+
+module.exports = config;
+```
+
+
+### Building the package
+We are ready to build our package!
+First of all, we run webpack in the `js` directory:
+```sh
+yarn webpack
+```
+This will generate the `inst/www/webpack.js` bundle.
+We should also generate the NAMESPACE file:
+```r
+devtools::document()
+```
+
+We can now install the package directly with `devtools::install()` and try it out!
+
+### Using the package
+Let's try a simple app first to test our components:
+```r
+library(shiny.react)
+library(blueprint)
+
+shinyApp(
+  ui = tagList(
+    Switch(label = "Animate"),
+    ProgressBar()
+  ),
+  server = function(input, output) {}
+)
+```
+
+Cool! Let's try something more advanced:
+```r
+withDefault <- function(x, default) {
+  if (is.null(x)) default
+  else x
+}
+
+shinyApp(
+  ui = tagList(
+    Switch(
+      onChange = JS("(event) => Shiny.setInputValue('animate', event.target.checked)"),
+      defaultChecked = TRUE,
+      label = "Animate"
+    ),
+    reactOutput("progress")
+  ),
+  server = function(input, output) {
+    output$progress <- renderReact({
+      ProgressBar(animate = withDefault(input$animate, TRUE))
+    })
+  }
+)
+```
+
+### Creating input wrappers
+Even simple components can be cumbersome to use in Shiny,
+as evident in the last example.
+It is a good idea to create `.shinyInput` wrappers to simplify the life of your users.
+
+We change our `js/src/index.js` to the following:
+```js
+const Blueprint = require('@blueprintjs/core');
+const { InputAdapter } = require('@/shiny.react')
+
+require('@blueprintjs/core/lib/css/blueprint.css');
+
+const Switch = InputAdapter(Blueprint.Switch, (value, setValue) => ({
+  checked: value,
+  onChange: (event) => setValue(event.target.checked),
+}));
+
+window.jsmodule = {
+  ...window.jsmodule,
+  '@blueprintjs/core': require('@blueprintjs/core'),
+  '@/blueprint': { Switch }
+};
+```
+
+We also add these lines to `R/components.R`:
+```r
+input <- function(name, defaultValue) {
+  function(inputId, ..., value = defaultValue) shiny.react::reactElement(
+    module = "@/blueprint",
+    name = name,
+    props = shiny.react::asProps(inputId = inputId, ..., value = value),
+    deps = blueprintDependency()
+  )
+}
+
+#' @export
+Switch.shinyInput <- input("Switch", FALSE)
+```
+
+After rebuilding and reinstalling the package
+we can now rewrite the last Shiny app example as:
+```r
+shinyApp(
+  ui = tagList(
+    Switch.shinyInput(
+      inputId = "animate",
+      value = TRUE,
+      label = "Animate"
+    ),
+    reactOutput("progress")
+  ),
+  server = function(input, output) {
+    output$progress <- renderReact({
+      ProgressBar(animate = input$animate)
+    })
+  }
+)
+```
+
+### Notes
+The module name passed to `shiny.react::createElement()` can be arbitrary,
+but the following convention is recommended:
+
+* For modules coming directly from [npm](https://www.npmjs.com/),
+  use the npm name, e.g. [`@blueprintjs/core`](https://www.npmjs.com/package/@blueprintjs/core).
+* For modules with custom code,
+  use the R package name with `@/` prefix, e.g. `@/blueprint`.

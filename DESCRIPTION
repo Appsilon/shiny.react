@@ -13,6 +13,7 @@ License: LGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+VignetteBuilder: knitr
 Imports:
   glue,
   htmltools,
@@ -21,8 +22,10 @@ Imports:
   rlang,
   shiny
 Suggests:
+  knitr,
   leaflet,
   lintr,
   mockery (>= 0.4.2),
+  rmarkdown,
   styler,
   testthat
