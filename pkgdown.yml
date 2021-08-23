@@ -1,6 +1,7 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
-articles: {}
-last_built: 2021-06-10T07:52Z
+articles:
+  shiny-react: shiny-react.html
+last_built: 2021-08-23T07:29Z
 
