@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>React output — reactOutput • shiny.react</title>
+<title>'React' output — reactOutput • shiny.react</title>
 
 
 <!-- jquery -->
@@ -41,9 +41,9 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="React output — reactOutput" />
-<meta property="og:description" content="Creates a Shiny output which can be used analogously to shiny::uiOutput() but preserves
-React state on re-renders." />
+<meta property="og:title" content="'React' output — reactOutput" />
+<meta property="og:description" content="Creates a 'Shiny' output which can be used analogously to shiny::uiOutput() but preserves
+'React' state on re-renders." />
 
 
 
@@ -75,7 +75,7 @@ React state on re-renders." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shiny.react</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -112,14 +112,14 @@ React state on re-renders." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>React output</h1>
+    <h1>'React' output</h1>
     
     <div class="hidden name"><code>reactOutput.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Creates a Shiny output which can be used analogously to <code><a href='https://rdrr.io/pkg/shiny/man/htmlOutput.html'>shiny::uiOutput()</a></code> but preserves
-React state on re-renders.</p>
+    <p>Creates a 'Shiny' output which can be used analogously to <code><a href='https://rdrr.io/pkg/shiny/man/htmlOutput.html'>shiny::uiOutput()</a></code> but preserves
+'React' state on re-renders.</p>
     </div>
 
     <pre class="usage"><span class='fu'>reactOutput</span><span class='op'>(</span><span class='va'>outputId</span><span class='op'>)</span></pre>
@@ -133,7 +133,38 @@ React state on re-renders.</p>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A <code>shiny.tag</code> object which can be placed in the UI.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='renderReact.html'>renderReact</a></code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># This example uses some unexported test components. The components are not exported,</span>
+<span class='co'># as shiny.react is designed to only provide the machinery for building React-based packages.</span>
+<span class='co'># See shiny.fluent for a large number of examples.</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Gold"</span>, <span class='st'>"Lavender"</span>, <span class='st'>"Salmon"</span><span class='op'>)</span>
+
+  <span class='fu'>shinyApp</span><span class='op'>(</span>
+    ui <span class='op'>=</span> <span class='fu'>bootstrapPage</span><span class='op'>(</span>
+      <span class='fu'>reactOutput</span><span class='op'>(</span><span class='st'>"ui"</span><span class='op'>)</span>,
+      <span class='fu'>selectInput</span><span class='op'>(</span><span class='st'>"color"</span>, label <span class='op'>=</span> <span class='st'>"Background color"</span>, choices <span class='op'>=</span> <span class='va'>colors</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
+      <span class='va'>output</span><span class='op'>$</span><span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='renderReact.html'>renderReact</a></span><span class='op'>(</span>
+        <span class='fu'>shiny.react</span><span class='fu'>:::</span><span class='fu'>Box</span><span class='op'>(</span>
+          style <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>backgroundColor <span class='op'>=</span> <span class='va'>input</span><span class='op'>$</span><span class='va'>color</span><span class='op'>)</span>,
+          <span class='fu'>shiny.react</span><span class='fu'>:::</span><span class='fu'>Pinger</span><span class='op'>(</span><span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>}</span>
+  <span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -145,7 +176,7 @@ React state on re-renders.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Marek Rogala, Kamil Zyla.</p>
+  <p>Developed by Kamil Zyla, Marek Rogala.</p>
 </div>
 
 <div class="pkgdown">

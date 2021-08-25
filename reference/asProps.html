@@ -42,7 +42,8 @@
   
 
 <meta property="og:title" content="Parse arguments as props — asProps" />
-<meta property="og:description" content="Converts arguments to a list which can be passed as the props argument to reactElement()." />
+<meta property="og:description" content="Converts arguments to a list which can be passed as the props argument to reactElement().
+Unnamed arguments become children and named arguments become attributes for the element." />
 
 
 
@@ -74,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shiny.react</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -117,7 +118,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Converts arguments to a list which can be passed as the <code>props</code> argument to <code><a href='reactElement.html'>reactElement()</a></code>.</p>
+    <p>Converts arguments to a list which can be passed as the <code>props</code> argument to <code><a href='reactElement.html'>reactElement()</a></code>.
+Unnamed arguments become children and named arguments become attributes for the element.</p>
     </div>
 
     <pre class="usage"><span class='fu'>asProps</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
@@ -127,10 +129,16 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>Arguments to prepare for passing as props to a React component</p></td>
+      <td><p>Arguments to prepare for passing as props to a 'React' component</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list of the arguments structured suitably for <code><a href='reactElement.html'>reactElement()</a></code>.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='reactElement.html'>reactElement</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -143,7 +151,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Marek Rogala, Kamil Zyla.</p>
+  <p>Developed by Kamil Zyla, Marek Rogala.</p>
 </div>
 
 <div class="pkgdown">
