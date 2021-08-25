@@ -2,10 +2,14 @@
 % Please edit documentation in R/dependencies.R
 \name{shinyReactDependency}
 \alias{shinyReactDependency}
-\title{Shiny React JS dependency.}
+\title{'shiny.react' JavaScript dependency}
 \usage{
 shinyReactDependency()
 }
+\value{
+An \code{htmlDependency} object which can be used attach the JavaScript code
+required by 'shiny.react'.
+}
 \description{
-Shiny React JS dependency.
+'shiny.react' JavaScript dependency
 }

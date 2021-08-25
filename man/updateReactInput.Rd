@@ -2,7 +2,7 @@
 % Please edit documentation in R/react.R
 \name{updateReactInput}
 \alias{updateReactInput}
-\title{Update React input}
+\title{Update 'React' input}
 \usage{
 updateReactInput(session = shiny::getDefaultReactiveDomain(), inputId, ...)
 }
@@ -13,11 +13,14 @@ updateReactInput(session = shiny::getDefaultReactiveDomain(), inputId, ...)
 
 \item{...}{Props to modify.}
 }
+\value{
+Nothing. This function is called for its side effects.
+}
 \description{
 Updates inputs created with the help of \code{InputAdapter} function (part of the JavaScript
 interface). Analogous to \code{shiny::updateX()} family of functions, but generic.
 }
 \details{
-If you're creating a wrapper package for a React library, you'll probably want to provide
-a dedicated update function for each input to imitate Shiny interface.
+If you're creating a wrapper package for a 'React' library, you'll probably want to provide
+a dedicated update function for each input to imitate 'Shiny' interface.
 }

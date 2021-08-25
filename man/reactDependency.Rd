@@ -2,13 +2,16 @@
 % Please edit documentation in R/dependencies.R
 \name{reactDependency}
 \alias{reactDependency}
-\title{Shiny React dependency adding React libs.}
+\title{'React' library dependency}
 \usage{
 reactDependency(useCdn = FALSE)
 }
 \arguments{
-\item{useCdn}{If true, will load React from CDN instead of serving locally.}
+\item{useCdn}{If \code{TRUE}, 'React' will be loaded from a CDN instead of being served locally.}
+}
+\value{
+An \code{htmlDependency} object which can be used to attach the 'React' library.
 }
 \description{
-Shiny React dependency adding React libs.
+'React' library dependency
 }

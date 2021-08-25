@@ -2,7 +2,7 @@
 % Please edit documentation in R/react.R
 \name{reactElement}
 \alias{reactElement}
-\title{Create a React element}
+\title{Create a 'React' element}
 \usage{
 reactElement(module, name, props, deps = NULL)
 }
@@ -15,14 +15,20 @@ reactElement(module, name, props, deps = NULL)
 
 \item{deps}{HTML dependencies to attach.}
 }
+\value{
+A \code{shiny.tag} object representing the 'React' element.
+}
 \description{
-Creates a \code{shiny.tag} which can be rendered just like other Shiny tags as well as passed in props
-to other React elements. Typically returned from a wrapper ("component") function, which parses
-its arguments with \code{asProps()} and fills in the other arguments.
+Creates a \code{shiny.tag} which can be rendered just like other 'Shiny' tags as well as passed in
+props to other 'React' elements. Typically returned from a wrapper ("component") function,
+which parses its arguments with \code{asProps()} and fills in the other arguments.
 }
 \examples{
 Component <- function(...) reactElement(
   module = "@/module", name = "Component", props = asProps(...)
 )
 
+}
+\seealso{
+\code{\link{asProps}}
 }

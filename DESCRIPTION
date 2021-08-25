@@ -1,10 +1,10 @@
 Package: shiny.react
 Title: Tools for Using React in Shiny
-Version: 0.2.2
+Version: 0.2.3
 Authors@R:
   c(
-    person(given = "Marek", family = "Rogala", role = c("aut", "cre"), email = "marek@appsilon.com"),
-    person(given = "Kamil", family = "Zyla", role = "aut", email = "kamil@appsilon.com"),
+    person(given = "Kamil", family = "Zyla", role = c("aut", "cre"), email = "kamil@appsilon.com"),
+    person(given = "Marek", family = "Rogala", role = "aut", email = "marek@appsilon.com"),
     person(given = "Appsilon sp. z o.o.", role = "cph")
   )
 Description:

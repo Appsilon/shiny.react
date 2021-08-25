@@ -7,8 +7,15 @@
 asProps(...)
 }
 \arguments{
-\item{...}{Arguments to prepare for passing as props to a React component}
+\item{...}{Arguments to prepare for passing as props to a 'React' component}
+}
+\value{
+A list of the arguments structured suitably for \code{reactElement()}.
 }
 \description{
 Converts arguments to a list which can be passed as the \code{props} argument to \code{reactElement()}.
+Unnamed arguments become children and named arguments become attributes for the element.
+}
+\seealso{
+\code{\link{reactElement}}
 }
