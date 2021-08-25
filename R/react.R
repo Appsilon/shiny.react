@@ -8,6 +8,7 @@
 #' @param name Name of the component.
 #' @param props Props to pass to the component.
 #' @param deps HTML dependencies to attach.
+#' @return A `shiny.tag` object representing the 'React' element.
 #'
 #' @examples
 #' Component <- function(...) reactElement(
@@ -29,8 +30,10 @@ reactElement <- function(module, name, props, deps = NULL) {
 #' Parse arguments as props
 #'
 #' Converts arguments to a list which can be passed as the `props` argument to `reactElement()`.
+#' Unnamed arguments become children and named arguments become attributes for the element.
 #'
 #' @param ... Arguments to prepare for passing as props to a 'React' component
+#' @return A list of the arguments structured suitably for `reactElement()`.
 #'
 #' @export
 asProps <- function(...) {
@@ -45,6 +48,7 @@ asProps <- function(...) {
 #' 'React' state on re-renders.
 #'
 #' @param outputId Id that can be used to render React on the server
+#' @return A `shiny.tag` object which can be placed in the UI.
 #'
 #' @export
 reactOutput <- function(outputId) reactContainer(id = outputId)
@@ -56,7 +60,8 @@ reactOutput <- function(outputId) reactContainer(id = outputId)
 #'
 #' @param expr Expression returning the HTML / 'React' to render.
 #' @param env Environment in which to evaluate expr.
-#' @param quoted Is expr a quoted expression?
+#' @param quoted Is `expr` a quoted expression?
+#' @return A function which can be assigned to an output in a `Shiny` server function.
 #'
 #' @export
 renderReact <- function(expr, env = parent.frame(), quoted = FALSE) {
@@ -82,6 +87,7 @@ renderReact <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' @param session Session object passed to function given to shinyServer.
 #' @param inputId Id of the input object.
 #' @param ... Props to modify.
+#' @return Nothing. This function is called for its side effects.
 #'
 #' @export
 updateReactInput <- function(session = shiny::getDefaultReactiveDomain(), inputId, ...) {
@@ -96,6 +102,8 @@ updateReactInput <- function(session = shiny::getDefaultReactiveDomain(), inputI
 #' to avoid adding a dependency just for this single function.
 #'
 #' @param ... Character vectors as the JavaScript source code
+#'   (all arguments will be pasted into one character string).
+#' @return The input character vector marked with a special class.
 #'
 #' @export
 JS <- function(...) { # nolint
@@ -112,6 +120,7 @@ JS <- function(...) { # nolint
 #' to trigger an event in 'Shiny'.
 #'
 #' @param inputId 'Shiny' input ID to trigger the event on.
+#' @return A `ReactData` object which can be passed as a prop to 'React' components.
 #'
 #' @export
 triggerEvent <- function(inputId) ReactData(
@@ -125,6 +134,7 @@ triggerEvent <- function(inputId) ReactData(
 #'
 #' @param inputId 'Shiny' input ID to set the value on.
 #' @param argIdx Index of the argument to use as value.
+#' @return A `ReactData` object which can be passed as a prop to 'React' components.
 #'
 #' @export
 setInput <- function(inputId, argIdx = 1) ReactData(
