@@ -7,7 +7,11 @@
 JS(...)
 }
 \arguments{
-\item{...}{Character vectors as the JavaScript source code}
+\item{...}{Character vectors as the JavaScript source code
+(all arguments will be pasted into one character string).}
+}
+\value{
+The input character vector marked with a special class.
 }
 \description{
 Copied verbatim from the htmlwidgets package

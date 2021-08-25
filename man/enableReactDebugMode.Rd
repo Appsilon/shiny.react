@@ -2,11 +2,14 @@
 % Please edit documentation in R/dependencies.R
 \name{enableReactDebugMode}
 \alias{enableReactDebugMode}
-\title{Sets shiny.react into DEBUG mode.}
+\title{Enable 'React' debug mode}
 \usage{
 enableReactDebugMode()
 }
+\value{
+Nothing. This function is called for its side effects.
+}
 \description{
-Sets the \code{shiny.react_DEBUG} option to \code{value}. In DEBUG mode, shiny.react will load a dev
-version of React, which is useful for debugging. It will also set a DEBUG logging level.
+Sets the \code{shiny.react_DEBUG} option to \code{TRUE}. In debug mode, 'shiny.react' will load a dev
+version of 'React', which is useful for debugging. It will also set the logging level to DEBUG.
 }

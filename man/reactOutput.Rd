@@ -2,14 +2,45 @@
 % Please edit documentation in R/react.R
 \name{reactOutput}
 \alias{reactOutput}
-\title{React output}
+\title{'React' output}
 \usage{
 reactOutput(outputId)
 }
 \arguments{
 \item{outputId}{Id that can be used to render React on the server}
 }
+\value{
+A \code{shiny.tag} object which can be placed in the UI.
+}
 \description{
-Creates a Shiny output which can be used analogously to \code{shiny::uiOutput()} but preserves
-React state on re-renders.
+Creates a 'Shiny' output which can be used analogously to \code{shiny::uiOutput()} but preserves
+'React' state on re-renders.
+}
+\examples{
+# This example uses some unexported test components. The components are not exported,
+# as shiny.react is designed to only provide the machinery for building React-based packages.
+# See shiny.fluent for a large number of examples.
+
+if (interactive()) {
+  colors <- list("Gold", "Lavender", "Salmon")
+
+  shinyApp(
+    ui = bootstrapPage(
+      reactOutput("ui"),
+      selectInput("color", label = "Background color", choices = colors)
+    ),
+    server = function(input, output) {
+      output$ui <- renderReact(
+        shiny.react:::Box(
+          style = list(backgroundColor = input$color),
+          shiny.react:::Pinger()
+        )
+      )
+    }
+  )
+}
+
+}
+\seealso{
+\code{\link{renderReact}}
 }

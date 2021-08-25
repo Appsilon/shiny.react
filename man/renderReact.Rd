@@ -2,18 +2,24 @@
 % Please edit documentation in R/react.R
 \name{renderReact}
 \alias{renderReact}
-\title{Render React}
+\title{Render 'React'}
 \usage{
 renderReact(expr, env = parent.frame(), quoted = FALSE)
 }
 \arguments{
-\item{expr}{Expression returning the HTML / React to render.}
+\item{expr}{Expression returning the HTML / 'React' to render.}
 
 \item{env}{Environment in which to evaluate expr.}
 
-\item{quoted}{Is expr a quoted expression?}
+\item{quoted}{Is \code{expr} a quoted expression?}
+}
+\value{
+A function which can be assigned to an output in a \code{Shiny} server function.
 }
 \description{
-Renders HTML and/or React in outputs created with \code{reactOutput()} (analogously to
+Renders HTML and/or 'React' in outputs created with \code{reactOutput()} (analogously to
 \code{shiny::renderUI()}).
+}
+\seealso{
+\code{\link{reactOutput}}
 }
