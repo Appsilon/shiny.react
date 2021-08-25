@@ -50,6 +50,30 @@ asProps <- function(...) {
 #' @param outputId Id that can be used to render React on the server
 #' @return A `shiny.tag` object which can be placed in the UI.
 #'
+#' @examples
+#' # This example uses some unexported test components. The components are not exported,
+#' # as shiny.react is designed to only provide the machinery for building React-based packages.
+#' # See shiny.fluent for a large number of examples.
+#'
+#' if (interactive()) {
+#'   colors <- list("Gold", "Lavender", "Salmon")
+#'
+#'   shinyApp(
+#'     ui = bootstrapPage(
+#'       reactOutput("ui"),
+#'       selectInput("color", label = "Background color", choices = colors)
+#'     ),
+#'     server = function(input, output) {
+#'       output$ui <- renderReact(
+#'         shiny.react:::Box(
+#'           style = list(backgroundColor = input$color),
+#'           shiny.react:::Pinger()
+#'         )
+#'       )
+#'     }
+#'   )
+#' }
+#'
 #' @export
 reactOutput <- function(outputId) reactContainer(id = outputId)
 
