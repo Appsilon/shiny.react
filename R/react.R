@@ -10,6 +10,8 @@
 #' @param deps HTML dependencies to attach.
 #' @return A `shiny.tag` object representing the 'React' element.
 #'
+#' @seealso \code{\link{asProps}}
+#'
 #' @examples
 #' Component <- function(...) reactElement(
 #'   module = "@/module", name = "Component", props = asProps(...)
@@ -35,6 +37,8 @@ reactElement <- function(module, name, props, deps = NULL) {
 #' @param ... Arguments to prepare for passing as props to a 'React' component
 #' @return A list of the arguments structured suitably for `reactElement()`.
 #'
+#' @seealso \code{\link{reactElement}}
+#'
 #' @export
 asProps <- function(...) {
   args <- rlang::dots_list(..., .homonyms = "error")
@@ -49,6 +53,8 @@ asProps <- function(...) {
 #'
 #' @param outputId Id that can be used to render React on the server
 #' @return A `shiny.tag` object which can be placed in the UI.
+#'
+#' @seealso \code{\link{renderReact}}
 #'
 #' @examples
 #' # This example uses some unexported test components. The components are not exported,
@@ -86,6 +92,8 @@ reactOutput <- function(outputId) reactContainer(id = outputId)
 #' @param env Environment in which to evaluate expr.
 #' @param quoted Is `expr` a quoted expression?
 #' @return A function which can be assigned to an output in a `Shiny` server function.
+#'
+#' @seealso \code{\link{reactOutput}}
 #'
 #' @export
 renderReact <- function(expr, env = parent.frame(), quoted = FALSE) {
