@@ -1,4 +1,4 @@
-#' Shiny React JS dependency.
+#' 'shiny.react' JavaScript dependency
 #'
 #' @export
 shinyReactDependency <- function() {
@@ -14,7 +14,7 @@ shinyReactDependency <- function() {
 #' Sets shiny.react into DEBUG mode.
 #'
 #' Sets the `shiny.react_DEBUG` option to `value`. In DEBUG mode, shiny.react will load a dev
-#' version of React, which is useful for debugging. It will also set a DEBUG logging level.
+#' version of 'React', which is useful for debugging. It will also set a DEBUG logging level.
 #'
 #' @export
 enableReactDebugMode <- function() {
@@ -26,9 +26,9 @@ isDebugMode <- function() {
   getOption("shiny.react_DEBUG", default = FALSE)
 }
 
-#' Shiny React dependency adding React libs.
+#' 'React' library dependency
 #'
-#' @param useCdn If true, will load React from CDN instead of serving locally.
+#' @param useCdn If `TRUE`, 'React' will be loaded from a CDN instead of being served locally.
 #' @export
 reactDependency <- function(useCdn = FALSE) {
   fileVersionInfix <- if (isDebugMode()) "development" else "production.min" # nolint
