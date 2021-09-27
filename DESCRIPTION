@@ -19,6 +19,7 @@ Imports:
   htmltools,
   jsonlite,
   logger,
+  purrr,
   rlang,
   shiny
 Suggests:

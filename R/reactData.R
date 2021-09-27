@@ -61,6 +61,9 @@ asReactData.list <- function(x) {
 }
 
 #' @export
+asReactData.data.frame <- function(x) asReactData(purrr::transpose(x)) # nolint
+
+#' @export
 asReactData.shiny.tag <- function(x) { # nolint
   # A `shiny.tag` created with `reactContainer()` will have a `reactData` attribute attached
   # with a ReactData representation of whatever was supposed to be rendered in the container.

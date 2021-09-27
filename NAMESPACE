@@ -2,6 +2,7 @@
 
 S3method(asReactData,JS_EVAL)
 S3method(asReactData,ReactData)
+S3method(asReactData,data.frame)
 S3method(asReactData,default)
 S3method(asReactData,html_dependency)
 S3method(asReactData,list)
