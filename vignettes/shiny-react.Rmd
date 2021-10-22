@@ -103,6 +103,7 @@ The [documentation](https://blueprintjs.com/docs/#blueprint.quick-start)
 also suggests adding `react` and `react-dom`,
 but we skip them as they are already provided by shiny.react.
 ```sh
+yarn init --yes
 yarn add @blueprintjs/core
 ```
 
@@ -214,6 +215,7 @@ We can now install the package directly with `devtools::install()` and try it ou
 ### Using the package
 Let's try a simple app first to test our components:
 ```r
+library(shiny)
 library(shiny.react)
 library(blueprint)
 
