@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,18 +34,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shiny.react</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/shiny-react.html">Get started</a>
 </li>
@@ -54,7 +50,14 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/Appsilon/shiny.react/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -70,23 +73,23 @@
       <h1 data-toc-skip>Tutorial: Porting Blueprint to Shiny</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/Appsilon/shiny.react/blob/HEAD/vignettes/shiny-react.Rmd" class="external-link"><code>vignettes/shiny-react.Rmd</code></a></small>
       <div class="hidden name"><code>shiny-react.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction" class="section level3">
-<h3 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h3>
-<p><a href="https://blueprintjs.com/">Blueprint</a> is a <a href="https://reactjs.org/">React</a>-based UI library from Palantir. It provides a rich set of components for building web interfaces and it is similar in concept to Microsoft’s <a href="https://developer.microsoft.com/en-us/fluentui#/">Fluent UI</a> or Google’s <a href="https://material-ui.com/">Material-UI</a>.</p>
-<p>In this tutorial we will (begin to) create a <code>blueprint</code> R package, which will make it possible to use Blueprint in R/Shiny akin to how <a href="https://github.com/Appsilon/shiny.fluent">shiny.fluent</a> does it for Fluent UI. It should give you enough understanding of shiny.react to allow you to use other React libraries in your projects, either by creating “wrapper” R packages or directly in you Shiny app.</p>
-<p>This tutorial is aimed at advanced users who feel comfortable with both Shiny and React. You will need R and <a href="https://nodejs.org/en/">Node.js</a> installed.</p>
+<div class="section level3">
+<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h3>
+<p><a href="https://blueprintjs.com/" class="external-link">Blueprint</a> is a <a href="https://reactjs.org/" class="external-link">React</a>-based UI library from Palantir. It provides a rich set of components for building web interfaces and it is similar in concept to Microsoft’s <a href="https://developer.microsoft.com/en-us/fluentui#/" class="external-link">Fluent UI</a> or Google’s <a href="https://material-ui.com/" class="external-link">Material-UI</a>.</p>
+<p>In this tutorial we will (begin to) create a <code>blueprint</code> R package, which will make it possible to use Blueprint in R/Shiny akin to how <a href="https://github.com/Appsilon/shiny.fluent" class="external-link">shiny.fluent</a> does it for Fluent UI. It should give you enough understanding of shiny.react to allow you to use other React libraries in your projects, either by creating “wrapper” R packages or directly in you Shiny app.</p>
+<p>This tutorial is aimed at advanced users who feel comfortable with both Shiny and React. You will need R and <a href="https://nodejs.org/en/" class="external-link">Node.js</a> installed.</p>
 </div>
-<div id="creating-the-package" class="section level3">
-<h3 class="hasAnchor">
-<a href="#creating-the-package" class="anchor"></a>Creating the package</h3>
+<div class="section level3">
+<h3 id="creating-the-package">Creating the package<a class="anchor" aria-label="anchor" href="#creating-the-package"></a>
+</h3>
 <p>To start off we create a new package called blueprint. The <code>js</code> directory will contain the Node.js toolchain and JavaScript sources which will be compiled into a single file. Only that file will be needed to use the package, so we add <code>js</code> to <code>.Rbuildignore</code> to decrease the size of our package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">usethis</span><span class="fu">::</span><span class="fu">create_package</span><span class="op">(</span><span class="st">"blueprint"</span><span class="op">)</span>
@@ -97,15 +100,15 @@
   shiny,
   shiny.react</code></pre>
 </div>
-<div id="the-r-interface" class="section level3">
-<h3 class="hasAnchor">
-<a href="#the-r-interface" class="anchor"></a>The R interface</h3>
-<p>In React, a <a href="https://reactjs.org/docs/glossary.html#components">component</a> is a function which takes <a href="https://reactjs.org/docs/glossary.html#props">props</a> and returns an <a href="https://reactjs.org/docs/glossary.html#elements">element</a>. These concepts map to R directly.</p>
-<p>In R, elements are created with <code><a href="../reference/reactElement.html">shiny.react::reactElement(module, name, props)</a></code>. In the browser, shiny.react will create the element by calling <code>React.createElement(jsmodule[module][name], props)</code>. It is our task to ensure that <code>jsmodule[module][name]</code> yields the right component. To accomplish it, we will later create a <code>blueprint.js</code> script which will set up the <code>jsmodule</code> global appropriately.</p>
+<div class="section level3">
+<h3 id="the-r-interface">The R interface<a class="anchor" aria-label="anchor" href="#the-r-interface"></a>
+</h3>
+<p>In React, a <a href="https://reactjs.org/docs/glossary.html#components" class="external-link">component</a> is a function which takes <a href="https://reactjs.org/docs/glossary.html#props" class="external-link">props</a> and returns an <a href="https://reactjs.org/docs/glossary.html#elements" class="external-link">element</a>. These concepts map to R directly.</p>
+<p>In R, elements are created with <code>shiny.react::reactElement(module, name, props)</code>. In the browser, shiny.react will create the element by calling <code>React.createElement(jsmodule[module][name], props)</code>. It is our task to ensure that <code>jsmodule[module][name]</code> yields the right component. To accomplish it, we will later create a <code>blueprint.js</code> script which will set up the <code>jsmodule</code> global appropriately.</p>
 <p>To free the users of our package of having to include this script manually, we will use an HTML dependency. In <code>R/components.R</code> let’s define:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">blueprintDependency</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu">htmltools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html">htmlDependency</a></span><span class="op">(</span>
+  <span class="fu">htmltools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html" class="external-link">htmlDependency</a></span><span class="op">(</span>
     name <span class="op">=</span> <span class="st">"blueprint"</span>,
     version <span class="op">=</span> <span class="st">"0.1.0"</span>,
     package <span class="op">=</span> <span class="st">"blueprint"</span>,
@@ -123,7 +126,7 @@
     deps <span class="op">=</span> <span class="fu">blueprintDependency</span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>We can now add Blueprint components to our package easily! Let’s try a <a href="https://blueprintjs.com/docs/#core/components/switch">Switch</a> and a <a href="https://blueprintjs.com/docs/#core/components/progress-bar">ProgressBar</a> for starters.</p>
+<p>We can now add Blueprint components to our package easily! Let’s try a <a href="https://blueprintjs.com/docs/#core/components/switch" class="external-link">Switch</a> and a <a href="https://blueprintjs.com/docs/#core/components/progress-bar" class="external-link">ProgressBar</a> for starters.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' @export</span>
 <span class="va">ProgressBar</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"ProgressBar"</span><span class="op">)</span>
@@ -131,10 +134,10 @@
 <span class="co">#' @export</span>
 <span class="va">Switch</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"Switch"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="adding-blueprint" class="section level3">
-<h3 class="hasAnchor">
-<a href="#adding-blueprint" class="anchor"></a>Adding Blueprint</h3>
-<p>In the <code>js</code> directory we use <code>yarn</code> to add the Blueprint library. The <a href="https://blueprintjs.com/docs/#blueprint.quick-start">documentation</a> also suggests adding <code>react</code> and <code>react-dom</code>, but we skip them as they are already provided by shiny.react.</p>
+<div class="section level3">
+<h3 id="adding-blueprint">Adding Blueprint<a class="anchor" aria-label="anchor" href="#adding-blueprint"></a>
+</h3>
+<p>In the <code>js</code> directory we use <code>yarn</code> to add the Blueprint library. The <a href="https://blueprintjs.com/docs/#blueprint.quick-start" class="external-link">documentation</a> also suggests adding <code>react</code> and <code>react-dom</code>, but we skip them as they are already provided by shiny.react.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="ex">yarn</span> init --yes</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="ex">yarn</span> add @blueprintjs/core</span></code></pre></div>
 <p>We will use a bundler to generate the <code>blueprint.js</code> script from the following <code>js/src/index.js</code> file:</p>
@@ -148,24 +151,24 @@
 <span id="cb7-8"><a href="#cb7-8"></a><span class="op">};</span></span></code></pre></div>
 <p>This script will make the Blueprint library available as <code>jsmodule[@blueprintjs/core]</code> on the browser. It will also load the necessary CSS.</p>
 </div>
-<div id="bundling" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bundling" class="anchor"></a>Bundling</h3>
-<p>We will use <a href="https://webpack.js.org/">webpack</a> to build the <code>blueprint.js</code> file.</p>
-<p>There is a handy <a href="https://createapp.dev/webpack">online tool</a> which we can use to generate a configuration for that webpack. Let’s just pick CSS from the Styling section and copy the the script to <code>js/webpack.config.js</code>. We also add dev dependencies as suggested by the tool:</p>
+<div class="section level3">
+<h3 id="bundling">Bundling<a class="anchor" aria-label="anchor" href="#bundling"></a>
+</h3>
+<p>We will use <a href="https://webpack.js.org/" class="external-link">webpack</a> to build the <code>blueprint.js</code> file.</p>
+<p>There is a handy <a href="https://createapp.dev/webpack" class="external-link">online tool</a> which we can use to generate a configuration for that webpack. Let’s just pick CSS from the Styling section and copy the the script to <code>js/webpack.config.js</code>. We also add dev dependencies as suggested by the tool:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">yarn</span> add --dev webpack webpack-cli css-loader style-loader</span></code></pre></div>
 <p>Now let’s tweak the config a bit. We change the output to <code>inst/www/blueprint.js</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1"></a>output<span class="op">:</span> <span class="op">{</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>  <span class="dt">path</span><span class="op">:</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">'..'</span><span class="op">,</span> <span class="st">'inst'</span><span class="op">,</span> <span class="st">'www'</span>)<span class="op">,</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>  <span class="dt">filename</span><span class="op">:</span> <span class="st">'blueprint.js'</span></span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="op">}</span></span></code></pre></div>
-<p>We add <a href="https://webpack.js.org/configuration/externals/"><code>externals</code></a> to let webpack know where to look for modules provided by shiny.react:</p>
+<p>We add <a href="https://webpack.js.org/configuration/externals/" class="external-link"><code>externals</code></a> to let webpack know where to look for modules provided by shiny.react:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1"></a>externals<span class="op">:</span> <span class="op">{</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>  <span class="st">'react'</span><span class="op">:</span> <span class="st">'jsmodule["react"]'</span><span class="op">,</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a>  <span class="st">'react-dom'</span><span class="op">:</span> <span class="st">'jsmodule["react-dom"]'</span><span class="op">,</span></span>
 <span id="cb10-4"><a href="#cb10-4"></a>  <span class="st">'@/shiny.react'</span><span class="op">:</span> <span class="st">'jsmodule["@/shiny.react"]'</span></span>
 <span id="cb10-5"><a href="#cb10-5"></a><span class="op">}</span></span></code></pre></div>
-<p>Lastly, we need a little hack for a <a href="https://github.com/palantir/blueprint/issues/4393">problem</a> present in Blueprint as of writing this:</p>
+<p>Lastly, we need a little hack for a <a href="https://github.com/palantir/blueprint/issues/4393" class="external-link">problem</a> present in Blueprint as of writing this:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1"></a>plugins<span class="op">:</span> [</span>
 <span id="cb11-2"><a href="#cb11-2"></a>  <span class="kw">new</span> <span class="va">webpack</span>.<span class="at">DefinePlugin</span>(<span class="op">{</span> <span class="st">'process.env'</span><span class="op">:</span> <span class="st">'{}'</span> <span class="op">}</span>)</span>
 <span id="cb11-3"><a href="#cb11-3"></a>]</span></code></pre></div>
@@ -202,9 +205,9 @@
 <span id="cb12-30"><a href="#cb12-30"></a></span>
 <span id="cb12-31"><a href="#cb12-31"></a><span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> config<span class="op">;</span></span></code></pre></div>
 </div>
-<div id="building-the-package" class="section level3">
-<h3 class="hasAnchor">
-<a href="#building-the-package" class="anchor"></a>Building the package</h3>
+<div class="section level3">
+<h3 id="building-the-package">Building the package<a class="anchor" aria-label="anchor" href="#building-the-package"></a>
+</h3>
 <p>We are ready to build our package! First of all, we run webpack in the <code>js</code> directory:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="ex">yarn</span> webpack</span></code></pre></div>
 <p>This will generate the <code>inst/www/webpack.js</code> bundle. We should also generate the NAMESPACE file:</p>
@@ -212,17 +215,17 @@
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>We can now install the package directly with <code>devtools::install()</code> and try it out!</p>
 </div>
-<div id="using-the-package" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-the-package" class="anchor"></a>Using the package</h3>
+<div class="section level3">
+<h3 id="using-the-package">Using the package<a class="anchor" aria-label="anchor" href="#using-the-package"></a>
+</h3>
 <p>Let’s try a simple app first to test our components:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/">shiny</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">shiny.react</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">blueprint</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://appsilon.github.io/shiny.react" class="external-link">shiny.react</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">blueprint</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span>
-  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html">tagList</a></span><span class="op">(</span>
+<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span>
+  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span>
     <span class="fu">Switch</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Animate"</span><span class="op">)</span>,
     <span class="fu">ProgressBar</span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
@@ -231,12 +234,12 @@
 <p>Cool! Let’s try something more advanced:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">withDefault</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">default</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="va">default</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="va">default</span>
   <span class="kw">else</span> <span class="va">x</span>
 <span class="op">}</span>
 
-<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span>
-  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html">tagList</a></span><span class="op">(</span>
+<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span>
+  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span>
     <span class="fu">Switch</span><span class="op">(</span>
       onChange <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span><span class="st">"(event) =&gt; Shiny.setInputValue('animate', event.target.checked)"</span><span class="op">)</span>,
       defaultChecked <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -251,9 +254,9 @@
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div id="creating-input-wrappers" class="section level3">
-<h3 class="hasAnchor">
-<a href="#creating-input-wrappers" class="anchor"></a>Creating input wrappers</h3>
+<div class="section level3">
+<h3 id="creating-input-wrappers">Creating input wrappers<a class="anchor" aria-label="anchor" href="#creating-input-wrappers"></a>
+</h3>
 <p>Even simple components can be cumbersome to use in Shiny, as evident in the last example. It is a good idea to create <code>.shinyInput</code> wrappers to simplify the life of your users.</p>
 <p>We change our <code>js/src/index.js</code> to the following:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">const</span> Blueprint <span class="op">=</span> <span class="at">require</span>(<span class="st">'@blueprintjs/core'</span>)<span class="op">;</span></span>
@@ -286,8 +289,8 @@
 <span class="va">Switch.shinyInput</span> <span class="op">&lt;-</span> <span class="fu">input</span><span class="op">(</span><span class="st">"Switch"</span>, <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>After rebuilding and reinstalling the package we can now rewrite the last Shiny app example as:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span>
-  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html">tagList</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span>
+  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span>
     <span class="fu">Switch.shinyInput</span><span class="op">(</span>
       inputId <span class="op">=</span> <span class="st">"animate"</span>,
       value <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -302,12 +305,12 @@
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div id="notes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#notes" class="anchor"></a>Notes</h3>
+<div class="section level3">
+<h3 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
+</h3>
 <p>The module name passed to <code>shiny.react::createElement()</code> can be arbitrary, but the following convention is recommended:</p>
 <ul>
-<li>For modules coming directly from <a href="https://www.npmjs.com/">npm</a>, use the npm name, e.g. <a href="https://www.npmjs.com/package/@blueprintjs/core"><code>@blueprintjs/core</code></a>.</li>
+<li>For modules coming directly from <a href="https://www.npmjs.com/" class="external-link">npm</a>, use the npm name, e.g. <a href="https://www.npmjs.com/package/@blueprintjs/core" class="external-link"><code>@blueprintjs/core</code></a>.</li>
 <li>For modules with custom code, use the R package name with <code>@/</code> prefix, e.g. <code>@/blueprint</code>.</li>
 </ul>
 </div>
@@ -322,11 +325,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Kamil Zyla, Marek Rogala.</p>
+  <p></p>
+<p>Developed by Kamil Zyla, Marek Rogala, Developers Appsilon.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -334,6 +339,8 @@
 
   
 
+
+  
 
   </body>
 </html>

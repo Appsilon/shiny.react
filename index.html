@@ -21,6 +21,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -33,18 +35,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">shiny.react</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/shiny-react.html">Get started</a>
 </li>
@@ -55,7 +51,14 @@
   <a href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/Appsilon/shiny.react/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -69,23 +72,23 @@
   <div class="contents col-md-9">
 
 <p><img src="reference/figures/shiny-react.png" align="right" alt="" width="130"></p>
-<div id="shinyreact" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#shinyreact" class="anchor"></a>shiny.react</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="shinyreact">shiny.react<a class="anchor" aria-label="anchor" href="#shinyreact"></a>
+</h1></div>
 <!-- badges: start -->
-<p><a href="https://github.com/Appsilon/shiny.react/actions"><img src="https://github.com/Appsilon/shiny.react/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <!-- badges: end --></p>
+
 <p>This R package enables using React in Shiny apps and is used e.g. by the shiny.fluent package. It contains R and JS code which is independent from the React library (e.g. Fluent UI) that is being wrapped.</p>
-<p>To install the package, run <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("Appsilon/shiny.react")</a></code>.</p>
-<div id="development" class="section level3">
-<h3 class="hasAnchor">
-<a href="#development" class="anchor"></a>Development</h3>
+<p>To install the package, run <code>remotes::install_github("Appsilon/shiny.react")</code>.</p>
+<div class="section level3">
+<h3 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
+</h3>
 <p>To build and install the package, run:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">(</span><span class="bu">cd</span> js <span class="kw">&amp;&amp;</span> <span class="ex">yarn</span> <span class="kw">&amp;&amp;</span> <span class="ex">yarn</span> webpack<span class="kw">)</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="ex">Rscript</span> -e <span class="st">'devtools::document(); devtools::install()'</span></span></code></pre></div>
 </div>
-<div id="testing" class="section level3">
-<h3 class="hasAnchor">
-<a href="#testing" class="anchor"></a>Testing</h3>
+<div class="section level3">
+<h3 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a>
+</h3>
 <ul>
 <li>
 <code>cd js &amp;&amp; yarn lint</code> lints the JS code</li>
@@ -103,25 +106,43 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=shiny.react">https://​cloud.r-project.org/​package=shiny.react</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=shiny.react" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/Appsilon/shiny.react/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small>LGPL (&gt;= 3)</small></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Kamil Zyla <br><small class="roles"> Author, maintainer </small>  </li>
+<li><a href="authors.html#citation">Citing shiny.react</a></li>
+</ul>
+</div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Kamil Zyla <br><small class="roles"> Author </small>  </li>
 <li>Marek Rogala <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li>Developers Appsilon <br><small class="roles"> Maintainer </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/Appsilon/shiny.react/actions" class="external-link"><img src="https://github.com/Appsilon/shiny.react/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
 
@@ -130,11 +151,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Kamil Zyla, Marek Rogala.</p>
+  <p></p>
+<p>Developed by Kamil Zyla, Marek Rogala, Developers Appsilon.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -142,6 +165,8 @@
 
   
 
+
+  
 
   </body>
 </html>
