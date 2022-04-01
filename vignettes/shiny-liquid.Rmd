@@ -8,7 +8,8 @@ vignette: >
 ---
 
 ### Introduction
-[Liquid Oxygen](https://emdgroup-liquid.github.io/liquid/) is a UI component library based on the Liquid Design System, focusing on accessibility and interoperability. It provides React bindings and as such can be ported to Shiny through `shiny.react`.
+[Liquid Oxygen](https://emdgroup-liquid.github.io/liquid/) is a UI component library based on the Liquid Design System, 
+focusing on accessibility and interoperability. It provides React bindings and as such can be ported to Shiny through `shiny.react`.
 It is similar in concept to Microsoft's [Fluent UI](https://developer.microsoft.com/en-us/fluentui#/)
 or Google's [Material-UI](https://material-ui.com/).
 
@@ -241,24 +242,37 @@ const { InputAdapter } = require('@/shiny.react')
 require('@emdgroup-liquid/liquid/dist/css/liquid.css');
 
 const LdSelect = InputAdapter(Liquid.LdSelect, (value, setValue) => ({
-  ldchange: (event) => {
-   console.log(event)
-   setValue(event.target.checked)
+  onLdchange: (event) => {
+    setValue(event.detail);
   },
 }));
+
 
 window.jsmodule = {
   ...window.jsmodule,
   '@emdgroup-liquid/liquid': Liquid,
   '@/liquid': { LdSelect }
 };
-
 ```
 
 We also add these lines to `R/components.R`:
 ```r
+input <- function(name, defaultValue) {
+  function(inputId, ..., value = defaultValue) {
+    shiny.react::reactElement(
+      module = "@/liquid",
+      name = name,
+      props = shiny.react::asProps(inputId = inputId, ..., value = value),
+      deps = liquidDependency()
+    )
+  }
+}
+
 #' @export
 LdOption <- component("LdOption")
+
+#' @export
+LdSelect.shinyInput <- input("LdSelect", NULL)
 
 #' @export
 LdSelect <- component("LdSelect")
@@ -269,20 +283,19 @@ we can now rewrite the last Shiny app example as:
 ```r
 shinyApp(
   ui = tagList(
-    LdButton(
-      "Initiate loading",
-      onClick = JS("(event) => Shiny.setInputValue('loading', true)")
-    ),
-    LdSelect(placeholder="Pick a fruit", name="fruit",
+    LdSelect.shinyInput(
+      placeholder = "Pick a fruit",
+      inputId = "fruit",
+      value = NULL,
       LdOption("Apple"),
       LdOption("Orange"),
       LdOption("Strawberry")
     ),
-    reactOutput("spinner")
+    textOutput("selectedFruit")
   ),
   server = function(input, output) {
-    output$spinner <- renderReact({
-      if (!is.null(input$loading) && input$loading)  LdLoading() else NULL
+    output$selectedFruit <- renderText({
+      input$fruit
     })
   }
 )
@@ -293,6 +306,6 @@ The module name passed to `shiny.react::createElement()` can be arbitrary,
 but the following convention is recommended:
 
 * For modules coming directly from [npm](https://www.npmjs.com/),
-  use the npm name, e.g. [`@blueprintjs/core`](https://www.npmjs.com/package/@blueprintjs/core).
+  use the npm name, e.g. [`@emdgroup-liquid/liquid`](https://www.npmjs.com/package/@emdgroup-liquid/liquid).
 * For modules with custom code,
-  use the R package name with `@/` prefix, e.g. `@/blueprint`.
+  use the R package name with `@/` prefix, e.g. `@/liquid`.
