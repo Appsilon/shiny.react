@@ -102,6 +102,8 @@ yarn init --yes
 yarn add @emdgroup-liquid/liquid
 ```
 
+In order to use react components we need to find where package exports are defined first. We need to look for export keyword with names of components. In case of this package, exports can be found in `@emdgroup-liquid/liquid/dist/react`.
+
 We will use a bundler to generate the `liquid.js` script
 from the following `js/src/index.js` file:
 ```js
@@ -254,6 +256,17 @@ window.jsmodule = {
   '@/liquid': { LdSelect }
 };
 ```
+
+In order to create an input that can be used in Shiny server we need to 
+create the component with a hook that will set a value of Shiny input. 
+We can use `InputAdapter` from `shiny.react` package to do it easily.
+
+The documentation states that Liquid components dispatch ldchange events, 
+to change value of Shiny input we need to set a value when component changes its state. 
+For React components we use onLdchange prop and we set the value using event.detail.
+This property contains an array of selected items from the dropdown. 
+If the documentation provides information which event field contains value of input use the one from documentation. 
+If it doesn't you can set a breakpoint in the browser to investigate what fields does event object have and use the appropriate one.
 
 We also add these lines to `R/components.R`:
 ```r
