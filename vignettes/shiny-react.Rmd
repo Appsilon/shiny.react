@@ -1,22 +1,20 @@
 ---
-title: "Tutorial: Porting Blueprint to Shiny"
+title: "Tutorial: Porting Liquid Oxygen to Shiny"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Tutorial: Porting Blueprint to Shiny}
+  %\VignetteIndexEntry{Tutorial: Porting Liquid Oxygen to Shiny}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ### Introduction
-[Blueprint](https://blueprintjs.com/)
-is a [React](https://reactjs.org/)-based UI library from Palantir.
-It provides a rich set of components for building web interfaces
-and it is similar in concept to
-Microsoft's [Fluent UI](https://developer.microsoft.com/en-us/fluentui#/)
+[Liquid Oxygen](https://emdgroup-liquid.github.io/liquid/) is a UI component library based on the Liquid Design System, 
+focusing on accessibility and interoperability. It provides React bindings and as such can be ported to Shiny through `shiny.react`.
+It is similar in concept to Microsoft's [Fluent UI](https://developer.microsoft.com/en-us/fluentui#/)
 or Google's [Material-UI](https://material-ui.com/).
 
-In this tutorial we will (begin to) create a `blueprint` R package,
-which will make it possible to use Blueprint in R/Shiny
+In this tutorial we will (begin to) create a `liquid` R package,
+which will make it possible to use Liquid Oxygen in R/Shiny
 akin to how [shiny.fluent](https://github.com/Appsilon/shiny.fluent) does it for Fluent UI.
 It should give you enough understanding of shiny.react
 to allow you to use other React libraries in your projects,
@@ -27,13 +25,13 @@ who feel comfortable with both Shiny and React.
 You will need R and [Node.js](https://nodejs.org/en/) installed.
 
 ### Creating the package
-To start off we create a new package called blueprint.
+To start off we create a new package called liquid.
 The `js` directory will contain the Node.js toolchain
 and JavaScript sources which will be compiled into a single file.
 Only that file will be needed to use the package,
 so we add `js` to `.Rbuildignore` to decrease the size of our package.
 ```r
-usethis::create_package("blueprint")
+usethis::create_package("liquid")
 usethis::use_build_ignore("js")
 ```
 
@@ -55,20 +53,20 @@ In R, elements are created with `shiny.react::reactElement(module, name, props)`
 In the browser, shiny.react will create the element by calling
 `React.createElement(jsmodule[module][name], props)`.
 It is our task to ensure that `jsmodule[module][name]` yields the right component.
-To accomplish it, we will later create a `blueprint.js` script
+To accomplish it, we will later create a `liquid.js` script
 which will set up the `jsmodule` global appropriately.
 
 To free the users of our package of having to include this script manually,
 we will use an HTML dependency.
 In `R/components.R` let's define:
 ```r
-blueprintDependency <- function() {
+liquidDependency <- function() {
   htmltools::htmlDependency(
-    name = "blueprint",
+    name = "liquid",
     version = "0.1.0",
-    package = "blueprint",
+    package = "liquid",
     src = "www",
-    script = "blueprint.js"
+    script = "liquid.js"
   )
 }
 ```
@@ -78,54 +76,53 @@ Remember - components are functions which take props and return elements:
 ```r
 component <- function(name) {
   function(...) shiny.react::reactElement(
-    module = "@blueprintjs/core",
+    module = "@emdgroup-liquid/liquid",
     name = name,
     props = shiny.react::asProps(...),
-    deps = blueprintDependency()
+    deps = liquidDependency()
   )
 }
 ```
 
-We can now add Blueprint components to our package easily!
-Let's try a [Switch](https://blueprintjs.com/docs/#core/components/switch)
-and a [ProgressBar](https://blueprintjs.com/docs/#core/components/progress-bar) for starters.
+We can now add Liquid components to our package easily!
+Let's try a [LdButton](https://emdgroup-liquid.github.io/liquid/components/ld-button/)
+and a [LdLoading](https://emdgroup-liquid.github.io/liquid/components/ld-loading/) for starters.
 ```r
 #' @export
-ProgressBar <- component("ProgressBar")
+LdButton <- component("LdButton")
 
 #' @export
-Switch <- component("Switch")
+LdLoading <- component("LdLoading")
 ```
 
-### Adding Blueprint
-In the `js` directory we use `yarn` to add the Blueprint library.
-The [documentation](https://blueprintjs.com/docs/#blueprint.quick-start)
-also suggests adding `react` and `react-dom`,
-but we skip them as they are already provided by shiny.react.
+### Adding Liquid
+In the `js` directory we use `yarn` to add the Liquid Oxygen library.
 ```sh
 yarn init --yes
-yarn add @blueprintjs/core
+yarn add @emdgroup-liquid/liquid
 ```
 
-We will use a bundler to generate the `blueprint.js` script
+In order to use react components we need to find where package exports are defined first. We need to look for export keyword with names of components. In case of this package, exports can be found in `@emdgroup-liquid/liquid/dist/react`.
+
+We will use a bundler to generate the `liquid.js` script
 from the following `js/src/index.js` file:
 ```js
-const Blueprint = require('@blueprintjs/core');
+const Liquid = require('@emdgroup-liquid/liquid/dist/react');
 
-require('@blueprintjs/core/lib/css/blueprint.css');
+require('@emdgroup-liquid/liquid/dist/css/liquid.css');
 
 window.jsmodule = {
   ...window.jsmodule,
-  '@blueprintjs/core': Blueprint
+  '@emdgroup-liquid/liquid': Liquid
 };
 ```
 
-This script will make the Blueprint library
-available as `jsmodule[@blueprintjs/core]` on the browser.
+This script will make the Liquid Oxygen library
+available as `jsmodule[@emdgroup-liquid/liquid]` on the browser.
 It will also load the necessary CSS.
 
 ### Bundling
-We will use [webpack](https://webpack.js.org/) to build the `blueprint.js` file.
+We will use [webpack](https://webpack.js.org/) to build the `liquid.js` file.
 
 There is a handy [online tool](https://createapp.dev/webpack)
 which we can use to generate a configuration for that webpack.
@@ -136,11 +133,11 @@ yarn add --dev webpack webpack-cli css-loader style-loader
 ```
 
 Now let's tweak the config a bit.
-We change the output to `inst/www/blueprint.js`:
+We change the output to `inst/www/liquid.js`:
 ```js
 output: {
   path: path.join(__dirname, '..', 'inst', 'www'),
-  filename: 'blueprint.js'
+  filename: 'liquid.js'
 }
 ```
 
@@ -154,14 +151,6 @@ externals: {
 }
 ```
 
-Lastly, we need a little hack for a [problem](https://github.com/palantir/blueprint/issues/4393)
-present in Blueprint as of writing this:
-```js
-plugins: [
-  new webpack.DefinePlugin({ 'process.env': '{}' })
-]
-```
-
 Our final `js/webpack.config.js` looks as follows:
 ```js
 const webpack = require('webpack');
@@ -171,7 +160,7 @@ const config = {
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, '..', 'inst', 'www'),
-    filename: 'blueprint.js'
+    filename: 'liquid.js'
   },
   module: {
     rules: [
@@ -188,10 +177,7 @@ const config = {
     'react': 'jsmodule["react"]',
     'react-dom': 'jsmodule["react-dom"]',
     '@/shiny.react': 'jsmodule["@/shiny.react"]'
-  },
-  plugins: [
-    new webpack.DefinePlugin({ 'process.env': '{}' })
-  ]
+  }
 };
 
 module.exports = config;
@@ -217,12 +203,12 @@ Let's try a simple app first to test our components:
 ```r
 library(shiny)
 library(shiny.react)
-library(blueprint)
+library(liquid)
 
 shinyApp(
   ui = tagList(
-    Switch(label = "Animate"),
-    ProgressBar()
+    LdButton("Test Button"),
+    LdLoading()
   ),
   server = function(input, output) {}
 )
@@ -230,65 +216,79 @@ shinyApp(
 
 Cool! Let's try something more advanced:
 ```r
-withDefault <- function(x, default) {
-  if (is.null(x)) default
-  else x
-}
-
 shinyApp(
   ui = tagList(
-    Switch(
-      onChange = JS("(event) => Shiny.setInputValue('animate', event.target.checked)"),
-      defaultChecked = TRUE,
-      label = "Animate"
+    LdButton(
+      "Initiate loading",
+      onClick = JS("(event) => Shiny.setInputValue('loading', true)")
     ),
-    reactOutput("progress")
+    reactOutput("spinner")
   ),
   server = function(input, output) {
-    output$progress <- renderReact({
-      ProgressBar(animate = withDefault(input$animate, TRUE))
+    output$spinner <- renderReact({
+      if (!is.null(input$loading) && input$loading) LdLoading() else NULL
     })
   }
 )
 ```
 
 ### Creating input wrappers
-Even simple components can be cumbersome to use in Shiny,
-as evident in the last example.
+Even simple components can be cumbersome to use in Shiny, as evident in the last example.
 It is a good idea to create `.shinyInput` wrappers to simplify the life of your users.
 
 We change our `js/src/index.js` to the following:
 ```js
-const Blueprint = require('@blueprintjs/core');
+const Liquid = require('@emdgroup-liquid/liquid/dist/react');
 const { InputAdapter } = require('@/shiny.react')
 
-require('@blueprintjs/core/lib/css/blueprint.css');
+require('@emdgroup-liquid/liquid/dist/css/liquid.css');
 
-const Switch = InputAdapter(Blueprint.Switch, (value, setValue) => ({
-  checked: value,
-  onChange: (event) => setValue(event.target.checked),
+const LdSelect = InputAdapter(Liquid.LdSelect, (value, setValue) => ({
+  onLdchange: (event) => {
+    setValue(event.detail);
+  },
 }));
+
 
 window.jsmodule = {
   ...window.jsmodule,
-  '@blueprintjs/core': require('@blueprintjs/core'),
-  '@/blueprint': { Switch }
+  '@emdgroup-liquid/liquid': Liquid,
+  '@/liquid': { LdSelect }
 };
 ```
+
+In order to create an input that can be used in Shiny server we need to 
+create the component with a hook that will set a value of Shiny input. 
+We can use `InputAdapter` from `shiny.react` package to do it easily.
+
+The documentation states that Liquid components dispatch ldchange events, 
+to change value of Shiny input we need to set a value when component changes its state. 
+For React components we use onLdchange prop and we set the value using event.detail.
+This property contains an array of selected items from the dropdown. 
+If the documentation provides information which event field contains value of input use the one from documentation. 
+If it doesn't you can set a breakpoint in the browser to investigate what fields does event object have and use the appropriate one.
 
 We also add these lines to `R/components.R`:
 ```r
 input <- function(name, defaultValue) {
-  function(inputId, ..., value = defaultValue) shiny.react::reactElement(
-    module = "@/blueprint",
-    name = name,
-    props = shiny.react::asProps(inputId = inputId, ..., value = value),
-    deps = blueprintDependency()
-  )
+  function(inputId, ..., value = defaultValue) {
+    shiny.react::reactElement(
+      module = "@/liquid",
+      name = name,
+      props = shiny.react::asProps(inputId = inputId, ..., value = value),
+      deps = liquidDependency()
+    )
+  }
 }
 
 #' @export
-Switch.shinyInput <- input("Switch", FALSE)
+LdOption <- component("LdOption")
+
+#' @export
+LdSelect.shinyInput <- input("LdSelect", NULL)
+
+#' @export
+LdSelect <- component("LdSelect")
 ```
 
 After rebuilding and reinstalling the package
@@ -296,16 +296,19 @@ we can now rewrite the last Shiny app example as:
 ```r
 shinyApp(
   ui = tagList(
-    Switch.shinyInput(
-      inputId = "animate",
-      value = TRUE,
-      label = "Animate"
+    LdSelect.shinyInput(
+      placeholder = "Pick a fruit",
+      inputId = "fruit",
+      value = NULL,
+      LdOption("Apple"),
+      LdOption("Orange"),
+      LdOption("Strawberry")
     ),
-    reactOutput("progress")
+    textOutput("selectedFruit")
   ),
   server = function(input, output) {
-    output$progress <- renderReact({
-      ProgressBar(animate = input$animate)
+    output$selectedFruit <- renderText({
+      input$fruit
     })
   }
 )
@@ -316,6 +319,6 @@ The module name passed to `shiny.react::createElement()` can be arbitrary,
 but the following convention is recommended:
 
 * For modules coming directly from [npm](https://www.npmjs.com/),
-  use the npm name, e.g. [`@blueprintjs/core`](https://www.npmjs.com/package/@blueprintjs/core).
+  use the npm name, e.g. [`@emdgroup-liquid/liquid`](https://www.npmjs.com/package/@emdgroup-liquid/liquid).
 * For modules with custom code,
-  use the R package name with `@/` prefix, e.g. `@/blueprint`.
+  use the R package name with `@/` prefix, e.g. `@/liquid`.
