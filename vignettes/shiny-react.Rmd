@@ -133,7 +133,7 @@ yarn add --dev webpack webpack-cli css-loader style-loader
 ```
 
 Now let's tweak the config a bit.
-We change the output to `inst/www/liquid`:
+We change the output to `inst/www/liquid.js`:
 ```js
 output: {
   path: path.join(__dirname, '..', 'inst', 'www'),
