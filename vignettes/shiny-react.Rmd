@@ -107,7 +107,7 @@ In order to use react components we need to find where package exports are defin
 We will use a bundler to generate the `liquid.js` script
 from the following `js/src/index.js` file:
 ```js
-import Liquid from '@emdgroup-liquid/liquid/dist/react'
+const Liquid = require('@emdgroup-liquid/liquid/dist/react');
 
 require('@emdgroup-liquid/liquid/dist/css/liquid.css');
 
