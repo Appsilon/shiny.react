@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 import ShinyProxy from './ShinyProxy';
 import mapReactData from './mapReactData';
 
@@ -12,16 +14,42 @@ import mapReactData from './mapReactData';
 
 const updateHandlers = {};
 
+function shinySetInputValue() {
+  return (inputId, value) => ShinyProxy.setInputValue(inputId, value);
+}
+
+function debouncedSetInputValue(debounceValue = 1000) {
+  return useCallback(debounce((inputId, value) => {
+    ShinyProxy.setInputValue(inputId, value);
+  }, debounceValue), []);
+}
+
+function throttledSetInputValue(throttleValue = 1000) {
+  return useCallback(throttle((inputId, value) => {
+    ShinyProxy.setInputValue(inputId, value);
+  }, throttleValue), []);
+}
+
+function selectSetInputValueFunction(props) {
+  const { inputId, throttle, debounce } = props; // eslint-disable-line
+  if (throttle && debounce) {
+    throw new Error(`Attempted to use throttle and debounce at the same time for React input ${inputId}`);
+  }
+  if (throttle) return throttledSetInputValue(throttle);
+  if (debounce) return debouncedSetInputValue(debounce);
+  return shinySetInputValue();
+}
+
 ShinyProxy.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
   if (inputId in updateHandlers) {
     updateHandlers[inputId](mapReactData(data));
   } else throw new Error(`Attempted to update non-existent React input '${inputId}'`);
 });
 
-function useValue(inputId, defaultValue) {
+function useValue(inputId, defaultValue, setInputValueFunction) {
   const [value, setValue] = useState(defaultValue);
   useEffect(() => {
-    ShinyProxy.setInputValue(inputId, value);
+    setInputValueFunction(inputId, value);
   }, [inputId, value]);
   return [value, setValue];
 }
@@ -47,7 +75,8 @@ function useUpdatedProps(inputId, setValue) {
 
 export function InputAdapter(Component, valueProps) {
   function Adapter({ inputId, value: defaultValue, ...otherProps }) {
-    const [value, setValue] = useValue(inputId, defaultValue);
+    const updateFunction = selectSetInputValueFunction({ inputId, ...otherProps });
+    const [value, setValue] = useValue(inputId, defaultValue, updateFunction);
     const updatedProps = useUpdatedProps(inputId, setValue);
     let props = { id: inputId, ...otherProps, ...updatedProps };
     props = { ...valueProps(value, setValue, props), ...props };
@@ -62,7 +91,8 @@ export function InputAdapter(Component, valueProps) {
 
 export function ButtonAdapter(Component) {
   function Adapter({ inputId, ...otherProps }) {
-    const [value, setValue] = useValue(inputId, null);
+    const updateFunction = selectSetInputValueFunction({ inputId, ...otherProps });
+    const [value, setValue] = useValue(inputId, null, updateFunction);
     const updatedProps = useUpdatedProps(inputId, setValue);
     const props = {
       id: inputId,
