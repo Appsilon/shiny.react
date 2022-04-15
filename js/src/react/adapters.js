@@ -18,13 +18,13 @@ function shinySetInputValue() {
   return (inputId, value) => ShinyProxy.setInputValue(inputId, value);
 }
 
-function debouncedSetInputValue(debounceValue = 1000) {
+function debouncedSetInputValue(debounceValue) {
   return useCallback(debounce((inputId, value) => {
     ShinyProxy.setInputValue(inputId, value);
   }, debounceValue), []);
 }
 
-function throttledSetInputValue(throttleValue = 1000) {
+function throttledSetInputValue(throttleValue) {
   return useCallback(throttle((inputId, value) => {
     ShinyProxy.setInputValue(inputId, value);
   }, throttleValue), []);

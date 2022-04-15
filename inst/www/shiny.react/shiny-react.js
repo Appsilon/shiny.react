@@ -2176,15 +2176,13 @@ function shinySetInputValue() {
   };
 }
 
-function debouncedSetInputValue() {
-  var debounceValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
+function debouncedSetInputValue(debounceValue) {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()(function (inputId, value) {
     _ShinyProxy__WEBPACK_IMPORTED_MODULE_4__.default.setInputValue(inputId, value);
   }, debounceValue), []);
 }
 
-function throttledSetInputValue() {
-  var throttleValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
+function throttledSetInputValue(throttleValue) {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(lodash_throttle__WEBPACK_IMPORTED_MODULE_3___default()(function (inputId, value) {
     _ShinyProxy__WEBPACK_IMPORTED_MODULE_4__.default.setInputValue(inputId, value);
   }, throttleValue), []);
