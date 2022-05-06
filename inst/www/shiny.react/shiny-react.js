@@ -2426,6 +2426,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ShinyBindingWrapper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ShinyBindingWrapper */ "./src/react/ShinyBindingWrapper.js");
 /* harmony import */ var _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShinyProxy */ "./src/react/ShinyProxy.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash.debounce */ "./node_modules/lodash.debounce/index.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash.throttle */ "./node_modules/lodash.throttle/index.js");
+/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_throttle__WEBPACK_IMPORTED_MODULE_4__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2437,6 +2441,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -2564,8 +2570,11 @@ dataMappers.element = function (_ref7) {
 
 dataMappers.input = function (_ref8) {
   var id = _ref8.id,
-      argIdx = _ref8.argIdx;
-  return function () {
+      argIdx = _ref8.argIdx,
+      debounceValue = _ref8.debounce,
+      throttleValue = _ref8.throttle;
+
+  var setValue = function setValue() {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
@@ -2575,6 +2584,14 @@ dataMappers.input = function (_ref8) {
       priority: 'event'
     });
   };
+
+  if (throttleValue && debounceValue) {
+    throw new Error("Attempted to use throttle and debounce at the same time for React input ".concat(id));
+  }
+
+  if (throttleValue) return lodash_throttle__WEBPACK_IMPORTED_MODULE_4___default()(setValue, throttleValue);
+  if (debounceValue) return lodash_debounce__WEBPACK_IMPORTED_MODULE_3___default()(setValue, debounceValue);
+  return setValue;
 };
 
 /***/ }),

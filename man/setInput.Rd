@@ -4,12 +4,16 @@
 \alias{setInput}
 \title{Set input}
 \usage{
-setInput(inputId, argIdx = 1)
+setInput(inputId, argIdx = 1, debounce = NULL, throttle = NULL)
 }
 \arguments{
 \item{inputId}{'Shiny' input ID to set the value on.}
 
 \item{argIdx}{Index of the argument to use as value.}
+
+\item{debounce}{The number of milliseconds to delay.}
+
+\item{throttle}{The number of milliseconds to throttle invocations to.}
 }
 \value{
 A \code{ReactData} object which can be passed as a prop to 'React' components.

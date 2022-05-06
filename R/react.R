@@ -166,9 +166,11 @@ triggerEvent <- function(inputId) ReactData(
 #'
 #' @param inputId 'Shiny' input ID to set the value on.
 #' @param argIdx Index of the argument to use as value.
+#' @param debounce The number of milliseconds to delay.
+#' @param throttle The number of milliseconds to throttle invocations to.
 #' @return A `ReactData` object which can be passed as a prop to 'React' components.
 #'
 #' @export
-setInput <- function(inputId, argIdx = 1) ReactData(
-  type = "input", id = inputId, argIdx = argIdx - 1
+setInput <- function(inputId, argIdx = 1, debounce = NULL, throttle = NULL) ReactData(
+  type = "input", id = inputId, argIdx = argIdx - 1, debounce = debounce, throttle = throttle
 )

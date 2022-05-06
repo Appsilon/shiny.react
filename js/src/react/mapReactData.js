@@ -1,5 +1,7 @@
 import React from 'react';
 
+import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 import ShinyBindingWrapper from './ShinyBindingWrapper';
 import ShinyProxy from './ShinyProxy';
 
@@ -90,9 +92,17 @@ dataMappers.element = ({ module, name, props: propsData }) => {
 // Used to implement `setInput()` and `triggerEvent()` R functions. In case of `triggerEvent()`,
 // we have `argIdx === null` and the returned function just sets the Shiny input to `TRUE`
 // on every call (this works thanks to `priority: 'event'`).
-dataMappers.input = ({ id, argIdx }) => (
-  (...args) => {
+dataMappers.input = ({
+  id, argIdx, debounce: debounceValue, throttle: throttleValue,
+}) => {
+  const setValue = (...args) => {
     const value = argIdx === null ? true : args[argIdx];
     ShinyProxy.setInputValue(id, value, { priority: 'event' });
+  };
+  if (throttleValue && debounceValue) {
+    throw new Error(`Attempted to use throttle and debounce at the same time for React input ${id}`);
   }
-);
+  if (throttleValue) return throttle(setValue, throttleValue);
+  if (debounceValue) return debounce(setValue, debounceValue);
+  return setValue;
+};
