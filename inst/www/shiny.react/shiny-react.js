@@ -1426,7 +1426,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/shiny */ "@/shiny");
 /* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
+/* harmony import */ var _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShinyProxy */ "./src/react/ShinyProxy.js");
+/* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
+
 
 
 
@@ -1440,7 +1442,7 @@ binding.renderValue = function (container, _ref) {
   var data = _ref.data,
       deps = _ref.deps;
   _shiny__WEBPACK_IMPORTED_MODULE_1___default().renderDependencies(deps);
-  react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__.default)(data), container);
+  react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__.default)(data), container);
 };
 
 _shiny__WEBPACK_IMPORTED_MODULE_1___default().outputBindings.register(binding);
@@ -1468,6 +1470,35 @@ new MutationObserver(cleanupRemovedNodes).observe(document, {
   childList: true,
   subtree: true
 });
+
+function isShinyOutput(className) {
+  var regex = /(shiny-\w*-output)/;
+  return regex.test(className);
+}
+
+function removeOutputBinding(mutations) {
+  var elements = mutations.map(function (x) {
+    return x.target;
+  });
+  var outputElements = elements.filter(function (x) {
+    return isShinyOutput(x.className);
+  });
+  outputElements.forEach(function (el) {
+    _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.unbindAll(el.querySelector('.react-container'), true);
+  });
+} // Removes bindings of React inputs inside of `uiOutput` containers
+
+
+new MutationObserver(removeOutputBinding).observe(document, {
+  childList: true,
+  subtree: true
+});
+
+function getInputIdFromData(reactData) {
+  var inputId = reactData.props.value.inputId;
+  return inputId;
+}
+
 function findAndRenderReactData() {
   [].forEach.call(document.getElementsByClassName('react-data'), function (dataElement) {
     // The script tag with the JSON data is nested in the container which we render to. This will
@@ -1475,7 +1506,12 @@ function findAndRenderReactData() {
     // need to render the data once).
     var data = JSON.parse(dataElement.innerHTML);
     var container = dataElement.parentElement;
-    react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__.default)(data), container);
+    react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__.default)(data), container); // Get inputId of created component and unbind it from Shiny
+    // This prevents Shiny from setting input values itself and allows InputAdapter to set the value
+
+    var inputId = getInputIdFromData(data);
+    var inputElement = document.getElementById(inputId);
+    _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.unbindAll(inputElement, true);
   });
 }
 

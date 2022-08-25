@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import Shiny from '@/shiny';
-
+import ShinyProxy from './ShinyProxy';
 import mapReactData from './mapReactData';
 
 const binding = new Shiny.OutputBinding();
@@ -31,6 +31,27 @@ function cleanupRemovedNodes(mutations) {
 
 new MutationObserver(cleanupRemovedNodes).observe(document, { childList: true, subtree: true });
 
+function isShinyOutput(className) {
+  const regex = /(shiny-\w*-output)/;
+  return regex.test(className);
+}
+
+function removeOutputBinding(mutations) {
+  const elements = mutations.map((x) => x.target);
+  const outputElements = elements.filter((x) => isShinyOutput(x.className));
+  outputElements.forEach((el) => {
+    ShinyProxy.unbindAll(el.querySelector('.react-container'), true);
+  });
+}
+
+// Removes bindings of React inputs inside of `uiOutput` containers
+new MutationObserver(removeOutputBinding).observe(document, { childList: true, subtree: true });
+
+function getInputIdFromData(reactData) {
+  const { props: { value: { inputId } } } = reactData;
+  return inputId;
+}
+
 export default function findAndRenderReactData() {
   [].forEach.call(document.getElementsByClassName('react-data'), (dataElement) => {
     // The script tag with the JSON data is nested in the container which we render to. This will
@@ -39,5 +60,10 @@ export default function findAndRenderReactData() {
     const data = JSON.parse(dataElement.innerHTML);
     const container = dataElement.parentElement;
     ReactDOM.render(mapReactData(data), container);
+    // Get inputId of created component and unbind it from Shiny
+    // This prevents Shiny from setting input values itself and allows InputAdapter to set the value
+    const inputId = getInputIdFromData(data);
+    const inputElement = document.getElementById(inputId);
+    ShinyProxy.unbindAll(inputElement, true);
   });
 }
