@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import Shiny from '@/shiny';
 import PropTypes from 'prop-types';
-import ShinyProxy from './ShinyProxy';
+import React, { useEffect, useState } from 'react';
+
 import mapReactData from './mapReactData';
 
 // The higher-level components in this file can be used to adapt the interface of React components
@@ -12,7 +13,7 @@ import mapReactData from './mapReactData';
 
 const updateHandlers = {};
 
-ShinyProxy.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
+Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
   if (inputId in updateHandlers) {
     updateHandlers[inputId](mapReactData(data));
   } else throw new Error(`Attempted to update non-existent React input '${inputId}'`);
@@ -21,7 +22,7 @@ ShinyProxy.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
 function useValue(inputId, defaultValue) {
   const [value, setValue] = useState(defaultValue);
   useEffect(() => {
-    ShinyProxy.setInputValue(inputId, value);
+    Shiny.setInputValue(inputId, value);
   }, [inputId, value]);
   return [value, setValue];
 }

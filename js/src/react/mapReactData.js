@@ -1,7 +1,7 @@
+import Shiny from '@/shiny';
 import React from 'react';
 
 import ShinyBindingWrapper from './ShinyBindingWrapper';
-import ShinyProxy from './ShinyProxy';
 
 const dataMappers = {};
 
@@ -93,6 +93,6 @@ dataMappers.element = ({ module, name, props: propsData }) => {
 dataMappers.input = ({ id, argIdx }) => (
   (...args) => {
     const value = argIdx === null ? true : args[argIdx];
-    ShinyProxy.setInputValue(id, value, { priority: 'event' });
+    Shiny.setInputValue(id, value, { priority: 'event' });
   }
 );

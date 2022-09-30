@@ -1,15 +1,14 @@
+import Shiny from '@/shiny';
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
-
-import ShinyProxy from './ShinyProxy';
 
 export default function ShinyBindingWrapper({ children }) {
   const ref = useRef();
   useEffect(() => {
     const wrapper = ref.current;
-    ShinyProxy.initializeInputs(wrapper);
-    ShinyProxy.bindAll(wrapper);
-    return () => ShinyProxy.unbindAll(wrapper);
+    Shiny.initializeInputs(wrapper);
+    Shiny.bindAll(wrapper);
+    return () => Shiny.unbindAll(wrapper);
   }, []);
   return React.createElement('div', { ref }, children);
 }
