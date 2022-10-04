@@ -2,11 +2,13 @@ toJson <- function(
   x, ...,
   auto_unbox = TRUE, json_verbatim = TRUE, # nolint
   Date = "ISO8601", POSIXt = "ISO8601", null = "null", na = "null" # nolint
-) jsonlite::toJSON(
-  x, ...,
-  auto_unbox = auto_unbox, json_verbatim = json_verbatim,
-  Date = Date, POSIXt = POSIXt, null = null, na = na
-)
+) {
+  jsonlite::toJSON(
+    x, ...,
+    auto_unbox = auto_unbox, json_verbatim = json_verbatim,
+    Date = Date, POSIXt = POSIXt, null = null, na = na
+  )
+}
 
 addChildrenToProps <- function(props, children) {
   if (length(children) > 0) {

@@ -27,7 +27,7 @@ Imports:
 Suggests:
   knitr,
   leaflet,
-  lintr,
+  lintr (>= 3.0.0),
   mockery (>= 0.4.2),
   rmarkdown,
   styler,
