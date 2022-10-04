@@ -67,7 +67,7 @@ function prepareProps(elementName, propsData) {
 }
 
 function needsBindingWrapper(className) {
-  const regex = /(shiny-input-container|html-widget-output|shiny-\w*-output)/;
+  const regex = /(action-button|shiny-input-container|html-widget-output|shiny-\w*-output|react-container)/;
   return regex.test(className);
 }
 
