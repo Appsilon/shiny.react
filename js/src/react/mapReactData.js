@@ -1,7 +1,7 @@
 import Shiny from '@/shiny';
 import React from 'react';
 
-import { needsBindingWrapper, ShinyBindingWrapper } from './shinyBindings';
+import { needsShinyBindings, withShinyBindings } from './shinyBindings';
 
 const dataMappers = {};
 
@@ -71,16 +71,17 @@ dataMappers.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-
 dataMappers.array = ({ value }) => value.map(mapReactData);
 dataMappers.object = ({ value }) => mapValues(value, mapReactData);
 
-// eslint-disable-next-line react/prop-types
+/* eslint-disable react/prop-types */
 dataMappers.element = ({ module, name, props: propsData }) => {
   const component = module ? window.jsmodule[module][name] : name;
   const props = prepareProps(name, propsData);
-  let element = React.createElement(component, props);
-  if (needsBindingWrapper(props.className)) {
-    element = React.createElement(ShinyBindingWrapper, {}, element);
-  }
-  return element;
+  const { className } = props;
+  return React.createElement(
+    needsShinyBindings(className) ? withShinyBindings(component) : component,
+    props,
+  );
 };
+/* eslint-enable react/prop-types */
 
 // Used to implement `setInput()` and `triggerEvent()` R functions. In case of `triggerEvent()`,
 // we have `argIdx === null` and the returned function just sets the Shiny input to `TRUE`

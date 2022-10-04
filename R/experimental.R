@@ -25,7 +25,3 @@ Pinger <- testComponent("Pinger") # nolint
 #'   server = function(input, output) {}
 #' )
 ReactContext <- testComponent("ReactContext") # nolint
-
-ShinyBindingWrapper <- function(...) reactElement( # nolint
-  module = "@/shiny.react", name = "ShinyBindingWrapper", props = asProps(...)
-)
