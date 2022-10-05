@@ -12,21 +12,26 @@ binding.renderValue = (container, { data, deps }) => {
 };
 Shiny.outputBindings.register(binding);
 
-function unmountContainersAtNode(node) {
-  if (node instanceof Element) {
-    [].forEach.call(node.getElementsByClassName('react-container'), (container) => {
-      ReactDOM.unmountComponentAtNode(container);
-    });
-    // The getElementsByClassName() method only returns descendants - check the node itself too.
-    if (node.classList.contains('react-container')) {
-      ReactDOM.unmountComponentAtNode(node);
-    }
+function unmountContainers(element) {
+  [].forEach.call(element.getElementsByClassName('react-container'), (container) => {
+    ReactDOM.unmountComponentAtNode(container);
+  });
+  // The getElementsByClassName() method only returns descendants - check the element itself too.
+  if (element.classList.contains('react-container')) {
+    ReactDOM.unmountComponentAtNode(element);
   }
 }
 
 function cleanupRemovedNodes(mutations) {
   mutations.forEach(({ removedNodes }) => {
-    removedNodes.forEach(unmountContainersAtNode);
+    removedNodes.forEach((node) => {
+      // If a node is removed and reinserted into the document
+      // it will still be listed as a removed node in the mutations.
+      // Thus we need to check if it is actually connected or not.
+      if (!node.isConnected && node instanceof Element) {
+        unmountContainers(node);
+      }
+    });
   });
 }
 
