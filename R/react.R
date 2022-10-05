@@ -155,9 +155,11 @@ JS <- function(...) { # nolint
 #' @return A `ReactData` object which can be passed as a prop to 'React' components.
 #'
 #' @export
-triggerEvent <- function(inputId) ReactData(
-  type = "input", id = inputId, argIdx = NULL
-)
+triggerEvent <- function(inputId) {
+  ReactData(
+    type = "input", id = inputId, argIdx = NULL
+  )
+}
 
 #' Set input
 #'
@@ -169,6 +171,8 @@ triggerEvent <- function(inputId) ReactData(
 #' @return A `ReactData` object which can be passed as a prop to 'React' components.
 #'
 #' @export
-setInput <- function(inputId, argIdx = 1) ReactData(
-  type = "input", id = inputId, argIdx = argIdx - 1
-)
+setInput <- function(inputId, argIdx = 1) {
+  ReactData(
+    type = "input", id = inputId, argIdx = argIdx - 1
+  )
+}

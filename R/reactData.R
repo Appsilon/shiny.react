@@ -11,25 +11,31 @@ asReactData <- function(x) UseMethod("asReactData")
 asReactData.ReactData <- function(x) x
 
 #' @export
-asReactData.default <- function(x) ReactData(
-  type = "raw",
-  value = dropDeps(x),
-  deps = getDeps(x)
-)
+asReactData.default <- function(x) {
+  ReactData(
+    type = "raw",
+    value = dropDeps(x),
+    deps = getDeps(x)
+  )
+}
 
 #' @export
-asReactData.html_dependency <- function(x) ReactData(
-  type = "raw",
-  value = NULL,
-  deps = x
-)
+asReactData.html_dependency <- function(x) {
+  ReactData(
+    type = "raw",
+    value = NULL,
+    deps = x
+  )
+}
 
 #' @export
-asReactData.JS_EVAL <- function(x) ReactData(
-  type = "expr",
-  value = dropDeps(unclass(x)),
-  deps = getDeps(x)
-)
+asReactData.JS_EVAL <- function(x) {
+  ReactData(
+    type = "expr",
+    value = dropDeps(unclass(x)),
+    deps = getDeps(x)
+  )
+}
 
 checkNames <- function(x) {
   # `toJson()` converts named lists to JSON objects, and unnamed lists to JSON arrays. A list `x`
@@ -77,7 +83,9 @@ asReactData.shiny.tag <- function(x) { # nolint
       props = dropDeps(props),
       deps = list(getDeps(props), getDeps(x))
     )
-  } else data
+  } else {
+    data
+  }
 }
 
 #' @export

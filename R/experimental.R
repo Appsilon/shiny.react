@@ -1,8 +1,10 @@
 testComponent <- function(name) {
-  function(...) reactElement(
-    module = "@/shiny.react/test-components", name = name,
-    props = asProps(...)
-  )
+  function(...) {
+    reactElement(
+      module = "@/shiny.react/test-components", name = name,
+      props = asProps(...)
+    )
+  }
 }
 
 # nolint start
