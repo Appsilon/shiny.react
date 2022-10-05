@@ -58,17 +58,20 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">reactOutput</span><span class="op">(</span><span class="va">outputId</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">reactOutput</span><span class="op">(</span><span class="va">outputId</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>outputId</dt>
 <dd><p>Id that can be used to render React on the server</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>shiny.tag</code> object which can be placed in the UI.</p>
+    
+
+<p>A <code>shiny.tag</code> object which can be placed in the UI.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -77,29 +80,29 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># This example uses some unexported test components. The components are not exported,</span></span>
-<span class="r-in"><span class="co"># as shiny.react is designed to only provide the machinery for building React-based packages.</span></span>
-<span class="r-in"><span class="co"># See shiny.fluent for a large number of examples.</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Gold"</span>, <span class="st">"Lavender"</span>, <span class="st">"Salmon"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="fu">shinyApp</span><span class="op">(</span></span>
-<span class="r-in">    ui <span class="op">=</span> <span class="fu">bootstrapPage</span><span class="op">(</span></span>
-<span class="r-in">      <span class="fu">reactOutput</span><span class="op">(</span><span class="st">"ui"</span><span class="op">)</span>,</span>
-<span class="r-in">      <span class="fu">selectInput</span><span class="op">(</span><span class="st">"color"</span>, label <span class="op">=</span> <span class="st">"Background color"</span>, choices <span class="op">=</span> <span class="va">colors</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">      <span class="va">output</span><span class="op">$</span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="renderReact.html">renderReact</a></span><span class="op">(</span></span>
-<span class="r-in">        <span class="fu">shiny.react</span><span class="fu">:::</span><span class="fu">Box</span><span class="op">(</span></span>
-<span class="r-in">          style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>backgroundColor <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">color</span><span class="op">)</span>,</span>
-<span class="r-in">          <span class="fu">shiny.react</span><span class="fu">:::</span><span class="fu">Pinger</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">        <span class="op">)</span></span>
-<span class="r-in">      <span class="op">)</span></span>
-<span class="r-in">    <span class="op">}</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># This example uses some unexported test components. The components are not exported,</span></span></span>
+<span class="r-in"><span><span class="co"># as shiny.react is designed to only provide the machinery for building React-based packages.</span></span></span>
+<span class="r-in"><span><span class="co"># See shiny.fluent for a large number of examples.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Gold"</span>, <span class="st">"Lavender"</span>, <span class="st">"Salmon"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="fu">shinyApp</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    ui <span class="op">=</span> <span class="fu">bootstrapPage</span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu">reactOutput</span><span class="op">(</span><span class="st">"ui"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu">selectInput</span><span class="op">(</span><span class="st">"color"</span>, label <span class="op">=</span> <span class="st">"Background color"</span>, choices <span class="op">=</span> <span class="va">colors</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="va">output</span><span class="op">$</span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="renderReact.html">renderReact</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="fu">shiny.react</span><span class="fu">:::</span><span class="fu">Box</span><span class="op">(</span></span></span>
+<span class="r-in"><span>          style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>backgroundColor <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">color</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>          <span class="fu">shiny.react</span><span class="fu">:::</span><span class="fu">Pinger</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -114,7 +117,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -1,7 +1,7 @@
 pandoc: 2.7.3
-pkgdown: 2.0.3
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   shiny-react: shiny-react.html
-last_built: 2022-05-18T10:43Z
+last_built: 2022-10-05T09:19Z
 

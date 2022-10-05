@@ -60,23 +60,32 @@ which parses its arguments with <code><a href="asProps.html">asProps()</a></code
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">reactElement</span><span class="op">(</span><span class="va">module</span>, <span class="va">name</span>, <span class="va">props</span>, deps <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">reactElement</span><span class="op">(</span><span class="va">module</span>, <span class="va">name</span>, <span class="va">props</span>, deps <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>module</dt>
 <dd><p>JavaScript module to import the component from.</p></dd>
+
+
 <dt>name</dt>
 <dd><p>Name of the component.</p></dd>
+
+
 <dt>props</dt>
 <dd><p>Props to pass to the component.</p></dd>
+
+
 <dt>deps</dt>
 <dd><p>HTML dependencies to attach.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>shiny.tag</code> object representing the 'React' element.</p>
+    
+
+<p>A <code>shiny.tag</code> object representing the 'React' element.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -85,10 +94,10 @@ which parses its arguments with <code><a href="asProps.html">asProps()</a></code
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">Component</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">reactElement</span><span class="op">(</span></span>
-<span class="r-in">  module <span class="op">=</span> <span class="st">"@/module"</span>, name <span class="op">=</span> <span class="st">"Component"</span>, props <span class="op">=</span> <span class="fu"><a href="asProps.html">asProps</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">Component</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">reactElement</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  module <span class="op">=</span> <span class="st">"@/module"</span>, name <span class="op">=</span> <span class="st">"Component"</span>, props <span class="op">=</span> <span class="fu"><a href="asProps.html">asProps</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -103,7 +112,7 @@ which parses its arguments with <code><a href="asProps.html">asProps()</a></code
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

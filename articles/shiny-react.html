@@ -92,8 +92,8 @@
 </h3>
 <p>To start off we create a new package called liquid. The <code>js</code> directory will contain the Node.js toolchain and JavaScript sources which will be compiled into a single file. Only that file will be needed to use the package, so we add <code>js</code> to <code>.Rbuildignore</code> to decrease the size of our package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">usethis</span><span class="fu">::</span><span class="fu">create_package</span><span class="op">(</span><span class="st">"liquid"</span><span class="op">)</span>
-<span class="fu">usethis</span><span class="fu">::</span><span class="fu">use_build_ignore</span><span class="op">(</span><span class="st">"js"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">create_package</span><span class="op">(</span><span class="st">"liquid"</span><span class="op">)</span></span>
+<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">use_build_ignore</span><span class="op">(</span><span class="st">"js"</span><span class="op">)</span></span></code></pre></div>
 <p>It is also a good idea to list the dependencies in the <code>DESCRIPTION</code> file:</p>
 <pre><code>Imports:
   htmltools,
@@ -107,32 +107,32 @@
 <p>In R, elements are created with <code>shiny.react::reactElement(module, name, props)</code>. In the browser, shiny.react will create the element by calling <code>React.createElement(jsmodule[module][name], props)</code>. It is our task to ensure that <code>jsmodule[module][name]</code> yields the right component. To accomplish it, we will later create a <code>liquid.js</code> script which will set up the <code>jsmodule</code> global appropriately.</p>
 <p>To free the users of our package of having to include this script manually, we will use an HTML dependency. In <code>R/components.R</code> let’s define:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">liquidDependency</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu">htmltools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html" class="external-link">htmlDependency</a></span><span class="op">(</span>
-    name <span class="op">=</span> <span class="st">"liquid"</span>,
-    version <span class="op">=</span> <span class="st">"0.1.0"</span>,
-    package <span class="op">=</span> <span class="st">"liquid"</span>,
-    src <span class="op">=</span> <span class="st">"www"</span>,
-    script <span class="op">=</span> <span class="st">"liquid.js"</span>
-  <span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">liquidDependency</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">htmltools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html" class="external-link">htmlDependency</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"liquid"</span>,</span>
+<span>    version <span class="op">=</span> <span class="st">"0.1.0"</span>,</span>
+<span>    package <span class="op">=</span> <span class="st">"liquid"</span>,</span>
+<span>    src <span class="op">=</span> <span class="st">"www"</span>,</span>
+<span>    script <span class="op">=</span> <span class="st">"liquid.js"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>To define components succinctly, let’s create a helper. Remember - components are functions which take props and return elements:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">component</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">shiny.react</span><span class="fu">::</span><span class="fu"><a href="../reference/reactElement.html">reactElement</a></span><span class="op">(</span>
-    module <span class="op">=</span> <span class="st">"@emdgroup-liquid/liquid"</span>,
-    name <span class="op">=</span> <span class="va">name</span>,
-    props <span class="op">=</span> <span class="fu">shiny.react</span><span class="fu">::</span><span class="fu"><a href="../reference/asProps.html">asProps</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>,
-    deps <span class="op">=</span> <span class="fu">liquidDependency</span><span class="op">(</span><span class="op">)</span>
-  <span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">component</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">shiny.react</span><span class="fu">::</span><span class="fu"><a href="../reference/reactElement.html">reactElement</a></span><span class="op">(</span></span>
+<span>    module <span class="op">=</span> <span class="st">"@emdgroup-liquid/liquid"</span>,</span>
+<span>    name <span class="op">=</span> <span class="va">name</span>,</span>
+<span>    props <span class="op">=</span> <span class="fu">shiny.react</span><span class="fu">::</span><span class="fu"><a href="../reference/asProps.html">asProps</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>,</span>
+<span>    deps <span class="op">=</span> <span class="fu">liquidDependency</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>We can now add Liquid components to our package easily! Let’s try a <a href="https://emdgroup-liquid.github.io/liquid/components/ld-button/" class="external-link">LdButton</a> and a <a href="https://emdgroup-liquid.github.io/liquid/components/ld-loading/" class="external-link">LdLoading</a> for starters.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' @export</span>
-<span class="va">LdButton</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"LdButton"</span><span class="op">)</span>
-
-<span class="co">#' @export</span>
-<span class="va">LdLoading</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"LdLoading"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#' @export</span></span>
+<span><span class="va">LdButton</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"LdButton"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">LdLoading</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"LdLoading"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="adding-liquid">Adding Liquid<a class="anchor" aria-label="anchor" href="#adding-liquid"></a>
@@ -206,7 +206,7 @@
 <div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="ex">yarn</span> webpack</span></code></pre></div>
 <p>This will generate the <code>inst/www/webpack.js</code> bundle. We should also generate the NAMESPACE file:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>We can now install the package directly with <code>devtools::install()</code> and try it out!</p>
 </div>
 <div class="section level3">
@@ -214,33 +214,33 @@
 </h3>
 <p>Let’s try a simple app first to test our components:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://appsilon.github.io/shiny.react" class="external-link">shiny.react</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">liquid</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span>
-  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span>
-    <span class="fu">LdButton</span><span class="op">(</span><span class="st">"Test Button"</span><span class="op">)</span>,
-    <span class="fu">LdLoading</span><span class="op">(</span><span class="op">)</span>
-  <span class="op">)</span>,
-  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://appsilon.github.io/shiny.react" class="external-link">shiny.react</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">liquid</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span>  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
+<span>    <span class="fu">LdButton</span><span class="op">(</span><span class="st">"Test Button"</span><span class="op">)</span>,</span>
+<span>    <span class="fu">LdLoading</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Cool! Let’s try something more advanced:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span>
-  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span>
-    <span class="fu">LdButton</span><span class="op">(</span>
-      <span class="st">"Initiate loading"</span>,
-      onClick <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span><span class="st">"(event) =&gt; Shiny.setInputValue('loading', true)"</span><span class="op">)</span>
-    <span class="op">)</span>,
-    <span class="fu"><a href="../reference/reactOutput.html">reactOutput</a></span><span class="op">(</span><span class="st">"spinner"</span><span class="op">)</span>
-  <span class="op">)</span>,
-  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">output</span><span class="op">$</span><span class="va">spinner</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/renderReact.html">renderReact</a></span><span class="op">(</span><span class="op">{</span>
-      <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">loading</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="va">input</span><span class="op">$</span><span class="va">loading</span><span class="op">)</span> <span class="fu">LdLoading</span><span class="op">(</span><span class="op">)</span> <span class="kw">else</span> <span class="cn">NULL</span>
-    <span class="op">}</span><span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span>  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
+<span>    <span class="fu">LdButton</span><span class="op">(</span></span>
+<span>      <span class="st">"Initiate loading"</span>,</span>
+<span>      onClick <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span><span class="st">"(event) =&gt; Shiny.setInputValue('loading', true)"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/reactOutput.html">reactOutput</a></span><span class="op">(</span><span class="st">"spinner"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">spinner</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/renderReact.html">renderReact</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">loading</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="va">input</span><span class="op">$</span><span class="va">loading</span><span class="op">)</span> <span class="fu">LdLoading</span><span class="op">(</span><span class="op">)</span> <span class="kw">else</span> <span class="cn">NULL</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="creating-input-wrappers">Creating input wrappers<a class="anchor" aria-label="anchor" href="#creating-input-wrappers"></a>
@@ -268,45 +268,45 @@
 <p>The documentation states that Liquid components dispatch ldchange events, to change value of Shiny input we need to set a value when component changes its state. For React components we use onLdchange prop and we set the value using event.detail. This property contains an array of selected items from the dropdown. If the documentation provides information which event field contains value of input use the one from documentation. If it doesn’t you can set a breakpoint in the browser to investigate what fields does event object have and use the appropriate one.</p>
 <p>We also add these lines to <code>R/components.R</code>:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">input</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">defaultValue</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">function</span><span class="op">(</span><span class="va">inputId</span>, <span class="va">...</span>, <span class="va">value</span> <span class="op">=</span> <span class="va">defaultValue</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu">shiny.react</span><span class="fu">::</span><span class="fu"><a href="../reference/reactElement.html">reactElement</a></span><span class="op">(</span>
-      module <span class="op">=</span> <span class="st">"@/liquid"</span>,
-      name <span class="op">=</span> <span class="va">name</span>,
-      props <span class="op">=</span> <span class="fu">shiny.react</span><span class="fu">::</span><span class="fu"><a href="../reference/asProps.html">asProps</a></span><span class="op">(</span>inputId <span class="op">=</span> <span class="va">inputId</span>, <span class="va">...</span>, value <span class="op">=</span> <span class="va">value</span><span class="op">)</span>,
-      deps <span class="op">=</span> <span class="fu">liquidDependency</span><span class="op">(</span><span class="op">)</span>
-    <span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">}</span>
-
-<span class="co">#' @export</span>
-<span class="va">LdOption</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"LdOption"</span><span class="op">)</span>
-
-<span class="co">#' @export</span>
-<span class="va">LdSelect.shinyInput</span> <span class="op">&lt;-</span> <span class="fu">input</span><span class="op">(</span><span class="st">"LdSelect"</span>, <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="co">#' @export</span>
-<span class="va">LdSelect</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"LdSelect"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">input</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">defaultValue</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">inputId</span>, <span class="va">...</span>, <span class="va">value</span> <span class="op">=</span> <span class="va">defaultValue</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">shiny.react</span><span class="fu">::</span><span class="fu"><a href="../reference/reactElement.html">reactElement</a></span><span class="op">(</span></span>
+<span>      module <span class="op">=</span> <span class="st">"@/liquid"</span>,</span>
+<span>      name <span class="op">=</span> <span class="va">name</span>,</span>
+<span>      props <span class="op">=</span> <span class="fu">shiny.react</span><span class="fu">::</span><span class="fu"><a href="../reference/asProps.html">asProps</a></span><span class="op">(</span>inputId <span class="op">=</span> <span class="va">inputId</span>, <span class="va">...</span>, value <span class="op">=</span> <span class="va">value</span><span class="op">)</span>,</span>
+<span>      deps <span class="op">=</span> <span class="fu">liquidDependency</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">LdOption</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"LdOption"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">LdSelect.shinyInput</span> <span class="op">&lt;-</span> <span class="fu">input</span><span class="op">(</span><span class="st">"LdSelect"</span>, <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="va">LdSelect</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"LdSelect"</span><span class="op">)</span></span></code></pre></div>
 <p>After rebuilding and reinstalling the package we can now rewrite the last Shiny app example as:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span>
-  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span>
-    <span class="fu">LdSelect.shinyInput</span><span class="op">(</span>
-      placeholder <span class="op">=</span> <span class="st">"Pick a fruit"</span>,
-      inputId <span class="op">=</span> <span class="st">"fruit"</span>,
-      value <span class="op">=</span> <span class="cn">NULL</span>,
-      <span class="fu">LdOption</span><span class="op">(</span><span class="st">"Apple"</span><span class="op">)</span>,
-      <span class="fu">LdOption</span><span class="op">(</span><span class="st">"Orange"</span><span class="op">)</span>,
-      <span class="fu">LdOption</span><span class="op">(</span><span class="st">"Strawberry"</span><span class="op">)</span>
-    <span class="op">)</span>,
-    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">textOutput</a></span><span class="op">(</span><span class="st">"selectedFruit"</span><span class="op">)</span>
-  <span class="op">)</span>,
-  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">output</span><span class="op">$</span><span class="va">selectedFruit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span>
-      <span class="va">input</span><span class="op">$</span><span class="va">fruit</span>
-    <span class="op">}</span><span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span>  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
+<span>    <span class="fu">LdSelect.shinyInput</span><span class="op">(</span></span>
+<span>      placeholder <span class="op">=</span> <span class="st">"Pick a fruit"</span>,</span>
+<span>      inputId <span class="op">=</span> <span class="st">"fruit"</span>,</span>
+<span>      value <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>      <span class="fu">LdOption</span><span class="op">(</span><span class="st">"Apple"</span><span class="op">)</span>,</span>
+<span>      <span class="fu">LdOption</span><span class="op">(</span><span class="st">"Orange"</span><span class="op">)</span>,</span>
+<span>      <span class="fu">LdOption</span><span class="op">(</span><span class="st">"Strawberry"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">textOutput</a></span><span class="op">(</span><span class="st">"selectedFruit"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">selectedFruit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="va">input</span><span class="op">$</span><span class="va">fruit</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
@@ -334,7 +334,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
