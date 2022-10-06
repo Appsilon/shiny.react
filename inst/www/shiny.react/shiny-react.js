@@ -1135,126 +1135,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/react/ShinyBindingWrapper.js":
-/*!******************************************!*\
-  !*** ./src/react/ShinyBindingWrapper.js ***!
-  \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => /* binding */ ShinyBindingWrapper
-/* harmony export */ });
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShinyProxy */ "./src/react/ShinyProxy.js");
-
-
-
-function ShinyBindingWrapper(_ref) {
-  var children = _ref.children;
-  var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)();
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    var wrapper = ref.current;
-    _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.initializeInputs(wrapper);
-    _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.bindAll(wrapper);
-    return function () {
-      return _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.unbindAll(wrapper);
-    };
-  }, []);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement('div', {
-    ref: ref
-  }, children);
-}
-ShinyBindingWrapper.propTypes = {
-  children: (prop_types__WEBPACK_IMPORTED_MODULE_0___default().node.isRequired)
-};
-
-/***/ }),
-
-/***/ "./src/react/ShinyProxy.js":
-/*!*********************************!*\
-  !*** ./src/react/ShinyProxy.js ***!
-  \*********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
- // Shiny initializes some functions after a delay:
-// https://github.com/rstudio/shiny/blob/a1ff7652358a14f717b0b9f49f7385b164f762af/srcjs/init_shiny.js#L587
-// This file provides a generic workaround.
-
-function waitForInit(target, name, queues) {
-  var tries = 10;
-  var delay = 1;
-
-  function check() {
-    tries -= 1;
-    delay *= 2;
-    var func = target[name];
-
-    if (func || tries < 0) {
-      var calls = queues[name].calls;
-      delete queues[name]; // eslint-disable-line no-param-reassign
-
-      if (func) calls.forEach(function (args) {
-        return func.apply(void 0, _toConsumableArray(args));
-      });else throw new Error("Waited too long for ".concat(name, " to initialize"));
-    } else {
-      setTimeout(check, delay);
-    }
-  }
-
-  setTimeout(check, delay);
-}
-
-var ShinyProxy = new Proxy((_shiny__WEBPACK_IMPORTED_MODULE_0___default()), {
-  queues: {},
-  get: function get(target, name) {
-    if (this.queues[name]) return this.queues[name].wait;
-    if (target[name]) return target[name];
-    var calls = [];
-
-    var wait = function wait() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      calls.push(args);
-    };
-
-    this.queues[name] = {
-      calls: calls,
-      wait: wait
-    };
-    waitForInit(target, name, this.queues);
-    return this.queues[name].wait;
-  }
-});
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ShinyProxy);
-
-/***/ }),
-
 /***/ "./src/react/adapters.js":
 /*!*******************************!*\
   !*** ./src/react/adapters.js ***!
@@ -1267,11 +1147,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "InputAdapter": () => /* binding */ InputAdapter,
 /* harmony export */   "ButtonAdapter": () => /* binding */ ButtonAdapter
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShinyProxy */ "./src/react/ShinyProxy.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -1306,7 +1187,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 // in a controlled manner, which allows also for the value to be updated from R.
 
 var updateHandlers = {};
-_ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.addCustomMessageHandler('updateReactInput', function (_ref) {
+_shiny__WEBPACK_IMPORTED_MODULE_0___default().addCustomMessageHandler('updateReactInput', function (_ref) {
   var inputId = _ref.inputId,
       data = _ref.data;
 
@@ -1316,24 +1197,24 @@ _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.addCustomMessageHandler('update
 });
 
 function useValue(inputId, defaultValue) {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultValue),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(defaultValue),
       _useState2 = _slicedToArray(_useState, 2),
       value = _useState2[0],
       setValue = _useState2[1];
 
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.setInputValue(inputId, value);
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+    _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(inputId, value);
   }, [inputId, value]);
   return [value, setValue];
 }
 
 function useUpdatedProps(inputId, setValue) {
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(),
       _useState4 = _slicedToArray(_useState3, 2),
       updatedProps = _useState4[0],
       setUpdatedProps = _useState4[1];
 
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
     var updateHandler = function updateHandler(props) {
       var value = props.value,
           newProps = _objectWithoutProperties(props, ["value"]);
@@ -1371,7 +1252,7 @@ function InputAdapter(Component, valueProps) {
     }, otherProps), updatedProps);
 
     props = _objectSpread(_objectSpread({}, valueProps(value, setValue, props)), props);
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Component, props);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement(Component, props);
   }
 
   Adapter.propTypes = {
@@ -1400,7 +1281,7 @@ function ButtonAdapter(Component) {
       }
     }, otherProps), updatedProps);
 
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Component, props);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement(Component, props);
   }
 
   Adapter.propTypes = {
@@ -1422,15 +1303,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => /* binding */ findAndRenderReactData
 /* harmony export */ });
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-dom */ "react-dom");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/shiny */ "@/shiny");
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "react-dom");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _onceShinyInitialized__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./onceShinyInitialized */ "./src/react/onceShinyInitialized.js");
+/* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
 
 
 
-var binding = new (_shiny__WEBPACK_IMPORTED_MODULE_1___default().OutputBinding)();
+
+var binding = new (_shiny__WEBPACK_IMPORTED_MODULE_0___default().OutputBinding)();
 
 binding.find = function (scope) {
   return scope.find('.react-container');
@@ -1439,20 +1322,20 @@ binding.find = function (scope) {
 binding.renderValue = function (container, _ref) {
   var data = _ref.data,
       deps = _ref.deps;
-  _shiny__WEBPACK_IMPORTED_MODULE_1___default().renderDependencies(deps);
-  react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__.default)(data), container);
+  _shiny__WEBPACK_IMPORTED_MODULE_0___default().renderDependencies(deps);
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__.default)(data), container);
 };
 
-_shiny__WEBPACK_IMPORTED_MODULE_1___default().outputBindings.register(binding);
+_shiny__WEBPACK_IMPORTED_MODULE_0___default().outputBindings.register(binding);
 
 function unmountContainersAtNode(node) {
   if (node instanceof Element) {
     [].forEach.call(node.getElementsByClassName('react-container'), function (container) {
-      react_dom__WEBPACK_IMPORTED_MODULE_0___default().unmountComponentAtNode(container);
+      react_dom__WEBPACK_IMPORTED_MODULE_1___default().unmountComponentAtNode(container);
     }); // The getElementsByClassName() method only returns descendants - check the node itself too.
 
     if (node.classList.contains('react-container')) {
-      react_dom__WEBPACK_IMPORTED_MODULE_0___default().unmountComponentAtNode(node);
+      react_dom__WEBPACK_IMPORTED_MODULE_1___default().unmountComponentAtNode(node);
     }
   }
 }
@@ -1469,13 +1352,15 @@ new MutationObserver(cleanupRemovedNodes).observe(document, {
   subtree: true
 });
 function findAndRenderReactData() {
-  [].forEach.call(document.getElementsByClassName('react-data'), function (dataElement) {
-    // The script tag with the JSON data is nested in the container which we render to. This will
-    // replace the container contents and thus remove the script tag, which is desireable (we only
-    // need to render the data once).
-    var data = JSON.parse(dataElement.innerHTML);
-    var container = dataElement.parentElement;
-    react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__.default)(data), container);
+  (0,_onceShinyInitialized__WEBPACK_IMPORTED_MODULE_2__.default)(function () {
+    [].forEach.call(document.getElementsByClassName('react-data'), function (dataElement) {
+      // The script tag with the JSON data is nested in the container which we render to. This will
+      // replace the container contents and thus remove the script tag, which is desireable (we only
+      // need to render the data once).
+      var data = JSON.parse(dataElement.innerHTML);
+      var container = dataElement.parentElement;
+      react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__.default)(data), container);
+    });
   });
 }
 
@@ -1493,14 +1378,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ButtonAdapter": () => /* reexport safe */ _adapters__WEBPACK_IMPORTED_MODULE_0__.ButtonAdapter,
 /* harmony export */   "InputAdapter": () => /* reexport safe */ _adapters__WEBPACK_IMPORTED_MODULE_0__.InputAdapter,
 /* harmony export */   "findAndRenderReactData": () => /* reexport safe */ _findAndRenderReactData__WEBPACK_IMPORTED_MODULE_1__.default,
-/* harmony export */   "ShinyBindingWrapper": () => /* reexport safe */ _ShinyBindingWrapper__WEBPACK_IMPORTED_MODULE_2__.default,
-/* harmony export */   "ShinyProxy": () => /* reexport safe */ _ShinyProxy__WEBPACK_IMPORTED_MODULE_3__.default
+/* harmony export */   "ShinyBindingWrapper": () => /* reexport safe */ _shinyBindings__WEBPACK_IMPORTED_MODULE_2__.ShinyBindingWrapper
 /* harmony export */ });
 /* harmony import */ var _adapters__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./adapters */ "./src/react/adapters.js");
 /* harmony import */ var _findAndRenderReactData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./findAndRenderReactData */ "./src/react/findAndRenderReactData.js");
-/* harmony import */ var _ShinyBindingWrapper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShinyBindingWrapper */ "./src/react/ShinyBindingWrapper.js");
-/* harmony import */ var _ShinyProxy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ShinyProxy */ "./src/react/ShinyProxy.js");
-
+/* harmony import */ var _shinyBindings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shinyBindings */ "./src/react/shinyBindings.jsx");
 
 
 
@@ -1518,10 +1400,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => /* binding */ mapReactData
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ShinyBindingWrapper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ShinyBindingWrapper */ "./src/react/ShinyBindingWrapper.js");
-/* harmony import */ var _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShinyProxy */ "./src/react/ShinyProxy.js");
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _shinyBindings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shinyBindings */ "./src/react/shinyBindings.jsx");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1613,11 +1496,6 @@ function prepareProps(elementName, propsData) {
   return props;
 }
 
-function needsBindingWrapper(className) {
-  var regex = /(shiny-input-container|html-widget-output|shiny-\w*-output)/;
-  return regex.test(className);
-}
-
 dataMappers.raw = function (_ref3) {
   var value = _ref3.value;
   return value;
@@ -1646,10 +1524,10 @@ dataMappers.element = function (_ref7) {
       propsData = _ref7.props;
   var component = module ? window.jsmodule[module][name] : name;
   var props = prepareProps(name, propsData);
-  var element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(component, props);
+  var element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(component, props);
 
-  if (needsBindingWrapper(props.className)) {
-    element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ShinyBindingWrapper__WEBPACK_IMPORTED_MODULE_1__.default, {}, element);
+  if ((0,_shinyBindings__WEBPACK_IMPORTED_MODULE_2__.needsBindingWrapper)(props.className)) {
+    element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_shinyBindings__WEBPACK_IMPORTED_MODULE_2__.ShinyBindingWrapper, {}, element);
   }
 
   return element;
@@ -1667,10 +1545,116 @@ dataMappers.input = function (_ref8) {
     }
 
     var value = argIdx === null ? true : args[argIdx];
-    _ShinyProxy__WEBPACK_IMPORTED_MODULE_2__.default.setInputValue(id, value, {
+    _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(id, value, {
       priority: 'event'
     });
   };
+};
+
+/***/ }),
+
+/***/ "./src/react/onceShinyInitialized.js":
+/*!*******************************************!*\
+  !*** ./src/react/onceShinyInitialized.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ onceShinyInitialized
+/* harmony export */ });
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
+ // Shiny initializes some functions after a delay:
+// https://github.com/rstudio/shiny/blob/cda59da698eba1deda20ba09ca8b7f0b0b149f87/srcts/src/shiny/index.ts#L101
+
+function shinyInitialized() {
+  return (_shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue) !== undefined;
+} // Run `callback` and keep retrying with exponential backoff until it returns true.
+
+
+function retry(callback) {
+  var retryDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  if (!callback()) setTimeout(retry, retryDelay, callback, retryDelay * 2);
+}
+
+var callbackQueue = []; // Run `callback` asynchronously (in another event loop iteration)
+// and only once Shiny is fully initialized.
+
+function onceShinyInitialized(callback) {
+  if (shinyInitialized()) {
+    setTimeout(callback);
+  } else {
+    callbackQueue.push(callback);
+  }
+}
+retry(function () {
+  if (shinyInitialized()) {
+    callbackQueue.forEach(function (callback) {
+      return setTimeout(callback);
+    });
+    callbackQueue.length = 0;
+    return true;
+  }
+
+  return false;
+});
+
+/***/ }),
+
+/***/ "./src/react/shinyBindings.jsx":
+/*!*************************************!*\
+  !*** ./src/react/shinyBindings.jsx ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "needsBindingWrapper": () => /* binding */ needsBindingWrapper,
+/* harmony export */   "ShinyBindingWrapper": () => /* binding */ ShinyBindingWrapper
+/* harmony export */ });
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
+/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var regex = new RegExp([// `shiny::actionButton()` and `shiny::actionLink()`.
+'action-button', // All Shiny inputs, e.g. `shiny::textInput()`.
+'shiny-input-container', // All Shiny outputs, e.g. `shiny::textOutput()`.
+'shiny-\\w*-output', // Outputs created with the `htmlwidgets` package, e.g. `leaflet::leafletOutput()`.
+'html-widget-output', // `shiny.react::reactOutput()`.
+'react-container'].join('|'));
+function needsBindingWrapper(className) {
+  return regex.test(className);
+}
+function ShinyBindingWrapper(_ref) {
+  var children = _ref.children;
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)();
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+    var wrapper = ref.current;
+    _shiny__WEBPACK_IMPORTED_MODULE_0___default().initializeInputs(wrapper);
+    _shiny__WEBPACK_IMPORTED_MODULE_0___default().bindAll(wrapper);
+    return function () {
+      return _shiny__WEBPACK_IMPORTED_MODULE_0___default().unbindAll(wrapper);
+    };
+  }, []);
+  return (
+    /*#__PURE__*/
+    // The CSS class is only for HTML readability.
+    react__WEBPACK_IMPORTED_MODULE_2___default().createElement("div", {
+      ref: ref,
+      className: "shiny-binding-wrapper"
+    }, children)
+  );
+}
+ShinyBindingWrapper.propTypes = {
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().node.isRequired)
 };
 
 /***/ }),
