@@ -1911,6 +1911,33 @@ Pinger.defaultProps = {
 
 /***/ }),
 
+/***/ "./src/test-components/ReactContext.jsx":
+/*!**********************************************!*\
+  !*** ./src/test-components/ReactContext.jsx ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ ReactContext
+/* harmony export */ });
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_0__);
+
+function ReactContext(_ref) {
+  var children = _ref.children;
+  return children;
+}
+ReactContext.propTypes = {
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_0___default().node)
+};
+ReactContext.defaultProps = {
+  children: null
+};
+
+/***/ }),
+
 /***/ "./src/test-components/index.js":
 /*!**************************************!*\
   !*** ./src/test-components/index.js ***!
@@ -1922,11 +1949,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Box": () => /* reexport safe */ _Box__WEBPACK_IMPORTED_MODULE_0__.default,
 /* harmony export */   "Counter": () => /* reexport safe */ _Counter__WEBPACK_IMPORTED_MODULE_1__.default,
-/* harmony export */   "Pinger": () => /* reexport safe */ _Pinger__WEBPACK_IMPORTED_MODULE_2__.default
+/* harmony export */   "Pinger": () => /* reexport safe */ _Pinger__WEBPACK_IMPORTED_MODULE_2__.default,
+/* harmony export */   "ReactContext": () => /* reexport safe */ _ReactContext__WEBPACK_IMPORTED_MODULE_3__.default
 /* harmony export */ });
 /* harmony import */ var _Box__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Box */ "./src/test-components/Box.jsx");
 /* harmony import */ var _Counter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Counter */ "./src/test-components/Counter.jsx");
 /* harmony import */ var _Pinger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Pinger */ "./src/test-components/Pinger.jsx");
+/* harmony import */ var _ReactContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ReactContext */ "./src/test-components/ReactContext.jsx");
+
 
 
 
