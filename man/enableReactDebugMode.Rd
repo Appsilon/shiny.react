@@ -12,4 +12,5 @@ Nothing. This function is called for its side effects.
 \description{
 Sets the \code{shiny.react_DEBUG} option to \code{TRUE}. In debug mode, 'shiny.react' will load a dev
 version of 'React', which is useful for debugging. It will also set the logging level to DEBUG.
+Call this function before running the app to enable the debugging mode.
 }
