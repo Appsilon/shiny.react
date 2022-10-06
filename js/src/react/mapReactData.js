@@ -1,7 +1,7 @@
 import Shiny from '@/shiny';
 import React from 'react';
 
-import ShinyBindingWrapper from './ShinyBindingWrapper';
+import { needsBindingWrapper, ShinyBindingWrapper } from './shinyBindings';
 
 const dataMappers = {};
 
@@ -64,11 +64,6 @@ function prepareProps(elementName, propsData) {
     props.style = styleStringToObject(props.style);
   }
   return props;
-}
-
-function needsBindingWrapper(className) {
-  const regex = /(action-button|shiny-input-container|html-widget-output|shiny-\w*-output|react-container)/;
-  return regex.test(className);
 }
 
 dataMappers.raw = ({ value }) => value;
