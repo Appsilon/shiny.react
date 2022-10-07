@@ -1,6 +1,7 @@
-import ReactDOM from 'react-dom';
 import Shiny from '@/shiny';
+import ReactDOM from 'react-dom';
 
+import onceShinyInitialized from './onceShinyInitialized';
 import mapReactData from './mapReactData';
 
 const binding = new Shiny.OutputBinding();
@@ -32,12 +33,14 @@ function cleanupRemovedNodes(mutations) {
 new MutationObserver(cleanupRemovedNodes).observe(document, { childList: true, subtree: true });
 
 export default function findAndRenderReactData() {
-  [].forEach.call(document.getElementsByClassName('react-data'), (dataElement) => {
-    // The script tag with the JSON data is nested in the container which we render to. This will
-    // replace the container contents and thus remove the script tag, which is desireable (we only
-    // need to render the data once).
-    const data = JSON.parse(dataElement.innerHTML);
-    const container = dataElement.parentElement;
-    ReactDOM.render(mapReactData(data), container);
+  onceShinyInitialized(() => {
+    [].forEach.call(document.getElementsByClassName('react-data'), (dataElement) => {
+      // The script tag with the JSON data is nested in the container which we render to. This will
+      // replace the container contents and thus remove the script tag, which is desireable (we only
+      // need to render the data once).
+      const data = JSON.parse(dataElement.innerHTML);
+      const container = dataElement.parentElement;
+      ReactDOM.render(mapReactData(data), container);
+    });
   });
 }

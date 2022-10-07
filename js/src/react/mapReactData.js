@@ -1,7 +1,7 @@
+import Shiny from '@/shiny';
 import React from 'react';
 
-import ShinyBindingWrapper from './ShinyBindingWrapper';
-import ShinyProxy from './ShinyProxy';
+import { needsBindingWrapper, ShinyBindingWrapper } from './shinyBindings';
 
 const dataMappers = {};
 
@@ -66,11 +66,6 @@ function prepareProps(elementName, propsData) {
   return props;
 }
 
-function needsBindingWrapper(className) {
-  const regex = /(shiny-input-container|html-widget-output|shiny-\w*-output)/;
-  return regex.test(className);
-}
-
 dataMappers.raw = ({ value }) => value;
 dataMappers.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
 dataMappers.array = ({ value }) => value.map(mapReactData);
@@ -93,6 +88,6 @@ dataMappers.element = ({ module, name, props: propsData }) => {
 dataMappers.input = ({ id, argIdx }) => (
   (...args) => {
     const value = argIdx === null ? true : args[argIdx];
-    ShinyProxy.setInputValue(id, value, { priority: 'event' });
+    Shiny.setInputValue(id, value, { priority: 'event' });
   }
 );
