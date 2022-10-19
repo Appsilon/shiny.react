@@ -1,6 +1,7 @@
 import Shiny from '@/shiny';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { throttle as lodashThrottle, debounce as lodashDebounce } from 'lodash';
 
 import mapReactData from './mapReactData';
 
@@ -12,6 +13,10 @@ import mapReactData from './mapReactData';
 // in a controlled manner, which allows also for the value to be updated from R.
 
 const updateHandlers = {};
+const rateFunctions = {
+  debounce: lodashDebounce,
+  throttle: lodashThrottle,
+};
 
 Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
   if (inputId in updateHandlers) {
@@ -26,6 +31,36 @@ function useValue(inputId, defaultValue) {
   }, [inputId, value]);
   return [value, setValue];
 }
+
+function useRatedValue(inputId, defaultValue, rateLimit) {
+  const setInputValue = (value) => Shiny.setInputValue(inputId, value);
+  const { policy, value: rateValue } = rateLimit;
+  if (!(policy in rateFunctions)) {
+    throw new Error(`Undefined rate function: ${policy}`);
+  }
+  const rateFunction = rateFunctions[policy];
+  const [value, setValue] = useState(defaultValue);
+  const rated = useRef(rateFunction((newValue) => {
+    setInputValue(newValue);
+  }, rateValue));
+  useEffect(() => {
+    rated.current(value);
+  }, [inputId, value]);
+  useEffect(() => {
+    setInputValue(value);
+    return () => rated.current.flush();
+  }, [inputId]);
+  return [value, setValue];
+}
+
+useRatedValue.propTypes = {
+  inputId: PropTypes.string.isRequired,
+  defaultValue: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
+  rateLimit: PropTypes.shape({
+    policy: PropTypes.string.isRequired,
+    value: PropTypes.number.isRequired,
+  }),
+};
 
 function useUpdatedProps(inputId, setValue) {
   const [updatedProps, setUpdatedProps] = useState();
@@ -46,9 +81,11 @@ function useUpdatedProps(inputId, setValue) {
   return updatedProps;
 }
 
-export function InputAdapter(Component, valueProps) {
+export function InputAdapter(Component, valueProps, rateLimit) {
   function Adapter({ inputId, value: defaultValue, ...otherProps }) {
-    const [value, setValue] = useValue(inputId, defaultValue);
+    const [value, setValue] = rateLimit
+      ? useRatedValue(inputId, defaultValue, rateLimit)
+      : useValue(inputId, defaultValue);
     const updatedProps = useUpdatedProps(inputId, setValue);
     let props = { id: inputId, ...otherProps, ...updatedProps };
     props = { ...valueProps(value, setValue, props), ...props };
