@@ -3,7 +3,7 @@
 # shiny.react
 
 <!-- badges: start -->
-[![R build status](https://github.com/Appsilon/shiny.react/workflows/R-CMD-check/badge.svg)](https://github.com/Appsilon/shiny.react/actions)
+[![CI](https://github.com/Appsilon/shiny.react/actions/workflows/ci.yaml/badge.svg)](https://github.com/Appsilon/shiny.react/actions/workflows/ci.yaml)
 <!-- badges: end -->
 
 This R package enables using React in Shiny apps and is used e.g. by the shiny.fluent package.
