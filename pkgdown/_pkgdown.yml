@@ -1,6 +1,17 @@
 template:
   params:
     bootswatch: yeti
+  includes:
+    in_header: |
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PPRNFWFZBQ"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-PPRNFWFZBQ');
+      </script>
 
 navbar:
   type: inverse
