@@ -10629,6 +10629,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "throttle": () => /* reexport safe */ lodash__WEBPACK_IMPORTED_MODULE_4__.throttle,
+/* harmony export */   "debounce": () => /* reexport safe */ lodash__WEBPACK_IMPORTED_MODULE_4__.debounce,
 /* harmony export */   "InputAdapter": () => /* binding */ InputAdapter,
 /* harmony export */   "ButtonAdapter": () => /* binding */ ButtonAdapter
 /* harmony export */ });
@@ -10638,9 +10640,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
+/* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -10675,16 +10677,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 // in a controlled manner, which allows also for the value to be updated from R.
 
 var updateHandlers = {};
-var rateFunctions = {
-  debounce: lodash__WEBPACK_IMPORTED_MODULE_3__.debounce,
-  throttle: lodash__WEBPACK_IMPORTED_MODULE_3__.throttle
-};
 _shiny__WEBPACK_IMPORTED_MODULE_0___default().addCustomMessageHandler('updateReactInput', function (_ref) {
   var inputId = _ref.inputId,
       data = _ref.data;
 
   if (inputId in updateHandlers) {
-    updateHandlers[inputId]((0,_mapReactData__WEBPACK_IMPORTED_MODULE_4__.default)(data));
+    updateHandlers[inputId]((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__.default)(data));
   } else throw new Error("Attempted to update non-existent React input '".concat(inputId, "'"));
 });
 
@@ -10708,18 +10706,12 @@ function useRatedValue(inputId, defaultValue, rateLimit) {
   var policy = rateLimit.policy,
       rateValue = rateLimit.value;
 
-  if (!(policy in rateFunctions)) {
-    throw new Error("Undefined rate function: ".concat(policy));
-  }
-
-  var rateFunction = rateFunctions[policy];
-
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(defaultValue),
       _useState4 = _slicedToArray(_useState3, 2),
       value = _useState4[0],
       setValue = _useState4[1];
 
-  var rated = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(rateFunction(function (newValue) {
+  var rated = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(policy(function (newValue) {
     setInputValue(newValue);
   }, rateValue));
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
@@ -10728,21 +10720,11 @@ function useRatedValue(inputId, defaultValue, rateLimit) {
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
     setInputValue(value);
     return function () {
-      rated.current.flush();
+      return rated.current.flush();
     };
   }, [inputId]);
   return [value, setValue];
 }
-
-useRatedValue.propTypes = {
-  inputId: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string.isRequired),
-  defaultValue: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().any.isRequired),
-  // eslint-disable-line react/forbid-prop-types
-  rateLimit: prop_types__WEBPACK_IMPORTED_MODULE_1___default().shape({
-    policy: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string.isRequired),
-    value: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().number.isRequired)
-  })
-};
 
 function useUpdatedProps(inputId, setValue) {
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(),
@@ -10913,6 +10895,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ButtonAdapter": () => /* reexport safe */ _adapters__WEBPACK_IMPORTED_MODULE_0__.ButtonAdapter,
 /* harmony export */   "InputAdapter": () => /* reexport safe */ _adapters__WEBPACK_IMPORTED_MODULE_0__.InputAdapter,
+/* harmony export */   "debounce": () => /* reexport safe */ _adapters__WEBPACK_IMPORTED_MODULE_0__.debounce,
+/* harmony export */   "throttle": () => /* reexport safe */ _adapters__WEBPACK_IMPORTED_MODULE_0__.throttle,
 /* harmony export */   "findAndRenderReactData": () => /* reexport safe */ _findAndRenderReactData__WEBPACK_IMPORTED_MODULE_1__.default,
 /* harmony export */   "ShinyBindingWrapper": () => /* reexport safe */ _shinyBindings__WEBPACK_IMPORTED_MODULE_2__.ShinyBindingWrapper
 /* harmony export */ });

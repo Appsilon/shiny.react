@@ -1,9 +1,10 @@
 import Shiny from '@/shiny';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
-import { throttle as lodashThrottle, debounce as lodashDebounce } from 'lodash';
 
 import mapReactData from './mapReactData';
+
+export { throttle, debounce } from 'lodash';
 
 // The higher-level components in this file can be used to adapt the interface of React components
 // to make it in line with what is expected from Shiny inputs / buttons. The adapters add
@@ -13,10 +14,6 @@ import mapReactData from './mapReactData';
 // in a controlled manner, which allows also for the value to be updated from R.
 
 const updateHandlers = {};
-const rateFunctions = {
-  debounce: lodashDebounce,
-  throttle: lodashThrottle,
-};
 
 Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
   if (inputId in updateHandlers) {
@@ -35,12 +32,8 @@ function useValue(inputId, defaultValue) {
 function useRatedValue(inputId, defaultValue, rateLimit) {
   const setInputValue = (value) => Shiny.setInputValue(inputId, value);
   const { policy, value: rateValue } = rateLimit;
-  if (!(policy in rateFunctions)) {
-    throw new Error(`Undefined rate function: ${policy}`);
-  }
-  const rateFunction = rateFunctions[policy];
   const [value, setValue] = useState(defaultValue);
-  const rated = useRef(rateFunction((newValue) => {
+  const rated = useRef(policy((newValue) => {
     setInputValue(newValue);
   }, rateValue));
   useEffect(() => {
@@ -52,15 +45,6 @@ function useRatedValue(inputId, defaultValue, rateLimit) {
   }, [inputId]);
   return [value, setValue];
 }
-
-useRatedValue.propTypes = {
-  inputId: PropTypes.string.isRequired,
-  defaultValue: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
-  rateLimit: PropTypes.shape({
-    policy: PropTypes.string.isRequired,
-    value: PropTypes.number.isRequired,
-  }),
-};
 
 function useUpdatedProps(inputId, setValue) {
   const [updatedProps, setUpdatedProps] = useState();
