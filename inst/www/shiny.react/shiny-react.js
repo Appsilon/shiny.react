@@ -10698,11 +10698,12 @@ function useValue(inputId, defaultValue) {
   return [value, setValue];
 }
 
-function useRatedValue(inputId, defaultValue, rateLimit) {
-  var setInputValue = function setInputValue(value) {
-    return _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(inputId, value);
-  };
+function withInitialization(rateLimitFunction) {
+  // TODO
+  return rateLimitFunction;
+}
 
+function useRatedValue(inputId, defaultValue, rateLimit) {
   var policy = rateLimit.policy,
       rateValue = rateLimit.value;
 
@@ -10711,18 +10712,20 @@ function useRatedValue(inputId, defaultValue, rateLimit) {
       value = _useState4[0],
       setValue = _useState4[1];
 
-  var rated = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(policy(function (newValue) {
-    setInputValue(newValue);
-  }, rateValue));
+  var rated = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)();
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
-    rated.current(value);
-  }, [inputId, value]);
-  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
-    setInputValue(value);
+    var setInputValue = function setInputValue(v) {
+      return _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(inputId, v);
+    };
+
+    rated.current = withInitialization(policy(setInputValue, rateValue));
     return function () {
       return rated.current.flush();
     };
   }, [inputId]);
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+    rated.current(value); // TODO add comment why inputId is in dependency array
+  }, [inputId, value]);
   return [value, setValue];
 }
 

@@ -29,20 +29,24 @@ function useValue(inputId, defaultValue) {
   return [value, setValue];
 }
 
+function withInitialization(rateLimitFunction) {
+  // TODO
+  return rateLimitFunction;
+}
+
 function useRatedValue(inputId, defaultValue, rateLimit) {
-  const setInputValue = (value) => Shiny.setInputValue(inputId, value);
   const { policy, value: rateValue } = rateLimit;
   const [value, setValue] = useState(defaultValue);
-  const rated = useRef(policy((newValue) => {
-    setInputValue(newValue);
-  }, rateValue));
+  const rated = useRef();
   useEffect(() => {
-    rated.current(value);
-  }, [inputId, value]);
-  useEffect(() => {
-    setInputValue(value);
+    const setInputValue = (v) => Shiny.setInputValue(inputId, v);
+    rated.current = withInitialization(policy(setInputValue, rateValue));
     return () => rated.current.flush();
   }, [inputId]);
+  useEffect(() => {
+    rated.current(value);
+    // TODO add comment why inputId is in dependency array
+  }, [inputId, value]);
   return [value, setValue];
 }
 
