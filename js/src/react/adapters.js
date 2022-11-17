@@ -29,23 +29,41 @@ function useValue(inputId, defaultValue) {
   return [value, setValue];
 }
 
-function withInitialization(rateLimitFunction) {
-  // TODO
-  return rateLimitFunction;
+function withFirstCall(first, rest) {
+  let firstCall = true;
+  return (value) => {
+    if (firstCall) {
+      firstCall = false;
+      first(value);
+    } else {
+      rest(value);
+    }
+  };
 }
 
+/**
+ * Effects for setting input value with a policy
+ *
+ * On mount: sets initial value without rate limiting
+ * On inputId change: set value without rate limit
+ * On value change: sets new value wit rate limiting
+ * On unmount: Flush rate limited value change
+ *
+ * @param {rateLimit} An object of shape:
+ *   - function: A policy function, e.g. debounce
+ *   - delay: Delay to use in policy function
+ */
 function useRatedValue(inputId, defaultValue, rateLimit) {
-  const { policy, value: rateValue } = rateLimit;
   const [value, setValue] = useState(defaultValue);
   const rated = useRef();
   useEffect(() => {
     const setInputValue = (v) => Shiny.setInputValue(inputId, v);
-    rated.current = withInitialization(policy(setInputValue, rateValue));
+    // eslint-disable-next-line max-len
+    rated.current = withFirstCall(setInputValue, rateLimit.function(setInputValue, rateLimit.delay));
     return () => rated.current.flush();
   }, [inputId]);
   useEffect(() => {
     rated.current(value);
-    // TODO add comment why inputId is in dependency array
   }, [inputId, value]);
   return [value, setValue];
 }
