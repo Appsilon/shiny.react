@@ -10686,54 +10686,63 @@ _shiny__WEBPACK_IMPORTED_MODULE_0___default().addCustomMessageHandler('updateRea
   } else throw new Error("Attempted to update non-existent React input '".concat(inputId, "'"));
 });
 
-function useValue(inputId, defaultValue) {
+var withFirstCall = function withFirstCall(first, rest) {
+  var firstCall = true;
+  return function (value) {
+    if (firstCall) {
+      firstCall = false;
+      first(value);
+    }
+
+    rest(value);
+  };
+};
+/**
+ * Hook for setting input value with a policy
+ *
+ * On mount: sets initial value without rate limiting
+ * On inputId change: set value without rate limit
+ * On value change: sets new value with rate limiting
+ * On unmount: flushes current value
+ *
+ * @param {rateLimit} An object of shape:
+ *   - policy: A policy function, e.g. debounce
+ *   - delay: Delay to use in policy function
+ */
+
+
+function useValue(inputId, defaultValue, rateLimit) {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(defaultValue),
       _useState2 = _slicedToArray(_useState, 2),
       value = _useState2[0],
       setValue = _useState2[1];
 
-  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
-    _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(inputId, value);
-  }, [inputId, value]);
-  return [value, setValue];
-}
+  var rated = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(); // eslint-disable-next-line consistent-return
 
-function withInitialization(rateLimitFunction) {
-  // TODO
-  return rateLimitFunction;
-}
-
-function useRatedValue(inputId, defaultValue, rateLimit) {
-  var policy = rateLimit.policy,
-      rateValue = rateLimit.value;
-
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(defaultValue),
-      _useState4 = _slicedToArray(_useState3, 2),
-      value = _useState4[0],
-      setValue = _useState4[1];
-
-  var rated = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)();
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
     var setInputValue = function setInputValue(v) {
       return _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(inputId, v);
     };
 
-    rated.current = withInitialization(policy(setInputValue, rateValue));
-    return function () {
-      return rated.current.flush();
-    };
+    if (rateLimit === undefined) {
+      rated.current = setInputValue;
+    } else {
+      var setInputValueRated = rateLimit.policy(setInputValue, rateLimit.delay);
+      rated.current = withFirstCall(setInputValue, setInputValueRated);
+      return setInputValueRated.flush;
+    }
   }, [inputId]);
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
-    rated.current(value); // TODO add comment why inputId is in dependency array
+    rated.current(value);
   }, [inputId, value]);
   return [value, setValue];
 }
 
 function useUpdatedProps(inputId, setValue) {
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(),
-      _useState6 = _slicedToArray(_useState5, 2),
-      updatedProps = _useState6[0],
-      setUpdatedProps = _useState6[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(),
+      _useState4 = _slicedToArray(_useState3, 2),
+      updatedProps = _useState4[0],
+      setUpdatedProps = _useState4[1];
 
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
     var updateHandler = function updateHandler(props) {
@@ -10761,10 +10770,10 @@ function InputAdapter(Component, valueProps, rateLimit) {
         defaultValue = _ref2.value,
         otherProps = _objectWithoutProperties(_ref2, ["inputId", "value"]);
 
-    var _ref3 = rateLimit ? useRatedValue(inputId, defaultValue, rateLimit) : useValue(inputId, defaultValue),
-        _ref4 = _slicedToArray(_ref3, 2),
-        value = _ref4[0],
-        setValue = _ref4[1];
+    var _useValue = useValue(inputId, defaultValue, rateLimit),
+        _useValue2 = _slicedToArray(_useValue, 2),
+        value = _useValue2[0],
+        setValue = _useValue2[1];
 
     var updatedProps = useUpdatedProps(inputId, setValue);
 
@@ -10784,14 +10793,14 @@ function InputAdapter(Component, valueProps, rateLimit) {
   return Adapter;
 }
 function ButtonAdapter(Component) {
-  function Adapter(_ref5) {
-    var inputId = _ref5.inputId,
-        otherProps = _objectWithoutProperties(_ref5, ["inputId"]);
+  function Adapter(_ref3) {
+    var inputId = _ref3.inputId,
+        otherProps = _objectWithoutProperties(_ref3, ["inputId"]);
 
-    var _useValue = useValue(inputId, null),
-        _useValue2 = _slicedToArray(_useValue, 2),
-        value = _useValue2[0],
-        setValue = _useValue2[1];
+    var _useValue3 = useValue(inputId, null),
+        _useValue4 = _slicedToArray(_useValue3, 2),
+        value = _useValue4[0],
+        setValue = _useValue4[1];
 
     var updatedProps = useUpdatedProps(inputId, setValue);
 

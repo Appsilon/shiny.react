@@ -21,46 +21,42 @@ Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
   } else throw new Error(`Attempted to update non-existent React input '${inputId}'`);
 });
 
-function useValue(inputId, defaultValue) {
-  const [value, setValue] = useState(defaultValue);
-  useEffect(() => {
-    Shiny.setInputValue(inputId, value);
-  }, [inputId, value]);
-  return [value, setValue];
-}
-
-function withFirstCall(first, rest) {
+const withFirstCall = (first, rest) => {
   let firstCall = true;
   return (value) => {
     if (firstCall) {
       firstCall = false;
       first(value);
-    } else {
-      rest(value);
     }
+    rest(value);
   };
-}
+};
 
 /**
- * Effects for setting input value with a policy
+ * Hook for setting input value with a policy
  *
  * On mount: sets initial value without rate limiting
  * On inputId change: set value without rate limit
- * On value change: sets new value wit rate limiting
- * On unmount: Flush rate limited value change
+ * On value change: sets new value with rate limiting
+ * On unmount: flushes current value
  *
  * @param {rateLimit} An object of shape:
- *   - function: A policy function, e.g. debounce
+ *   - policy: A policy function, e.g. debounce
  *   - delay: Delay to use in policy function
  */
-function useRatedValue(inputId, defaultValue, rateLimit) {
+function useValue(inputId, defaultValue, rateLimit) {
   const [value, setValue] = useState(defaultValue);
   const rated = useRef();
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const setInputValue = (v) => Shiny.setInputValue(inputId, v);
-    // eslint-disable-next-line max-len
-    rated.current = withFirstCall(setInputValue, rateLimit.function(setInputValue, rateLimit.delay));
-    return () => rated.current.flush();
+    if (rateLimit === undefined) {
+      rated.current = setInputValue;
+    } else {
+      const setInputValueRated = rateLimit.policy(setInputValue, rateLimit.delay);
+      rated.current = withFirstCall(setInputValue, setInputValueRated);
+      return setInputValueRated.flush;
+    }
   }, [inputId]);
   useEffect(() => {
     rated.current(value);
@@ -89,9 +85,7 @@ function useUpdatedProps(inputId, setValue) {
 
 export function InputAdapter(Component, valueProps, rateLimit) {
   function Adapter({ inputId, value: defaultValue, ...otherProps }) {
-    const [value, setValue] = rateLimit
-      ? useRatedValue(inputId, defaultValue, rateLimit)
-      : useValue(inputId, defaultValue);
+    const [value, setValue] = useValue(inputId, defaultValue, rateLimit);
     const updatedProps = useUpdatedProps(inputId, setValue);
     let props = { id: inputId, ...otherProps, ...updatedProps };
     props = { ...valueProps(value, setValue, props), ...props };
