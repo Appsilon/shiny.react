@@ -10717,23 +10717,24 @@ function useValue(inputId, defaultValue, rateLimit) {
       value = _useState2[0],
       setValue = _useState2[1];
 
-  var rated = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(); // eslint-disable-next-line consistent-return
-
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)();
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
     var setInputValue = function setInputValue(v) {
       return _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(inputId, v);
     };
 
     if (rateLimit === undefined) {
-      rated.current = setInputValue;
-    } else {
-      var setInputValueRated = rateLimit.policy(setInputValue, rateLimit.delay);
-      rated.current = withFirstCall(setInputValue, setInputValueRated);
-      return setInputValueRated.flush;
+      ref.current = setInputValue; // No cleanup effect
+
+      return undefined;
     }
+
+    var setInputValueRateLimited = rateLimit.policy(setInputValue, rateLimit.delay);
+    ref.current = withFirstCall(setInputValue, setInputValueRateLimited);
+    return setInputValueRateLimited.flush;
   }, [inputId]);
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
-    rated.current(value);
+    ref.current(value);
   }, [inputId, value]);
   return [value, setValue];
 }

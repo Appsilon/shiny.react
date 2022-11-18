@@ -46,20 +46,20 @@ const withFirstCall = (first, rest) => {
  */
 function useValue(inputId, defaultValue, rateLimit) {
   const [value, setValue] = useState(defaultValue);
-  const rated = useRef();
-  // eslint-disable-next-line consistent-return
+  const ref = useRef();
   useEffect(() => {
     const setInputValue = (v) => Shiny.setInputValue(inputId, v);
     if (rateLimit === undefined) {
-      rated.current = setInputValue;
-    } else {
-      const setInputValueRated = rateLimit.policy(setInputValue, rateLimit.delay);
-      rated.current = withFirstCall(setInputValue, setInputValueRated);
-      return setInputValueRated.flush;
+      ref.current = setInputValue;
+      // No cleanup effect
+      return undefined;
     }
+    const setInputValueRateLimited = rateLimit.policy(setInputValue, rateLimit.delay);
+    ref.current = withFirstCall(setInputValue, setInputValueRateLimited);
+    return setInputValueRateLimited.flush;
   }, [inputId]);
   useEffect(() => {
-    rated.current(value);
+    ref.current(value);
   }, [inputId, value]);
   return [value, setValue];
 }
