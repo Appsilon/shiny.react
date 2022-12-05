@@ -1,34 +1,34 @@
 .navbar {
-background-color: rgb(78,196,215) !important;
+    background-color: rgb(78,196,215) !important;
 }
 
 #navbar > ul.navbar-nav > li.nav-item a:hover {
-background-color: rgb(78,196,215) !important;
+    background-color: rgb(78,196,215) !important;
 }
 
 .navbar-dark .navbar-nav .active>.nav-link {
-background-color: rgb(78,196,215) !important;
-color: #fff;
+    background-color: rgb(78,196,215) !important;
+    color: #fff;
 }
 
 .navbar-dark input[type="search"] {
-background-color: #fff !important;
-color: #444 !important;
+    background-color: #fff !important;
+    color: #444 !important;
 }
 
 nav .text-muted {
-color: #d8d8d8 !important;
+    color: #d8d8d8 !important;
 }
 
 a {
-color: rgb(78,196,215);
+    color: rgb(78,196,215);
 }
 
 a:hover {
-color: rgb(63, 162, 177);
+    color: rgb(63, 162, 177);
 }
 
 button.btn.btn-primary.btn-copy-ex {
-background-color: rgb(78,196,215);
-border-color: rgb(78,196,215);
+    background-color: rgb(78,196,215);
+    border-color: rgb(78,196,215);
 }
