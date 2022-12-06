@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/shiny-react.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/articles/shiny-react.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/index.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/news/index.html</loc>
   </url>
   <url>
-    <loc>/pull_request_template.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/pull_request_template.html</loc>
   </url>
   <url>
-    <loc>/reference/JS.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/JS.html</loc>
   </url>
   <url>
-    <loc>/reference/ReactContext.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/ReactContext.html</loc>
   </url>
   <url>
-    <loc>/reference/asProps.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/asProps.html</loc>
   </url>
   <url>
-    <loc>/reference/enableReactDebugMode.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/enableReactDebugMode.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/reactDependency.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/reactDependency.html</loc>
   </url>
   <url>
-    <loc>/reference/reactElement.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/reactElement.html</loc>
   </url>
   <url>
-    <loc>/reference/reactOutput.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/reactOutput.html</loc>
   </url>
   <url>
-    <loc>/reference/renderReact.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/renderReact.html</loc>
   </url>
   <url>
-    <loc>/reference/setInput.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/setInput.html</loc>
   </url>
   <url>
-    <loc>/reference/shinyReactDependency.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/shinyReactDependency.html</loc>
   </url>
   <url>
-    <loc>/reference/triggerEvent.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/triggerEvent.html</loc>
   </url>
   <url>
-    <loc>/reference/updateReactInput.html</loc>
+    <loc>https://appsilon.github.io/shiny.react/reference/updateReactInput.html</loc>
   </url>
 </urlset>
