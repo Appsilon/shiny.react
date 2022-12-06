@@ -1,6 +1,9 @@
+title: shiny.react
 template:
-  params:
-    bootswatch: yeti
+  bootstrap: 5
+  bootswatch: pulse
+  bslib:
+    pkgdown-nav-height: 100px
   includes:
     in_header: |
       <!-- Google tag (gtag.js) -->
@@ -12,6 +15,36 @@ template:
 
         gtag('config', 'G-PPRNFWFZBQ');
       </script>
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+url: https://appsilon.github.io/shiny.react/
 
 navbar:
-  type: inverse
+  bg: primary
+  structure:
+    left: [tutorial, reference, news]
+  components:
+    tutorial:
+      text: Tutorial
+      href: articles/shiny-react.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/Appsilon/shiny.react
+    - icon: fa-twitter fa-lg
+      href: https://twitter.com/Appsilon
+
+home:
+  sidebar:
+    structure: [star, links, license, community, citation, authors, dev]
+    components:
+      star:
+        title: GitHub
+        text: |
+          <a class="github-button" href="https://github.com/appsilon/shiny.react" data-size="large" data-show-count="true" aria-label="Star appsilon/shiny.react on GitHub">Star</a>
+
+
+footer:
+  structure:
+    left: developed
+  components:
+    developed: "Developed with :heart: by [Appsilon](https://appsilon.com)."

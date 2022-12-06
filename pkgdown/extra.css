@@ -1,31 +1,38 @@
-.navbar-inverse {
-    background-color: #0099f9;	
+.navbar {
+    background-color: rgb(69, 179, 196) !important;
 }
 
-.navbar-inverse .dropdown-menu {
-    background-color: #efefef;
+#navbar > ul.navbar-nav > li.nav-item a:hover {
+    background-color: rgb(69, 179, 196) !important;
 }
 
-.navbar-inverse .dropdown-menu>li>a:hover, .navbar-inverse .dropdown-menu>.active>a, .navbar-inverse .dropdown-menu>.active>a:hover {
-    background-color: #fff;
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,0.70) !important;
 }
 
-.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
-    background-color: #47abfd;
+.navbar-dark .navbar-nav .active>.nav-link {
+    background-color: rgb(69, 179, 196) !important;
+    color: #fff !important;
 }
 
-.navbar-inverse .dropdown-menu>li>a, .navbar-inverse .dropdown-menu>li>a:focus {
-    color: #15354a;
+.navbar-dark input[type="search"] {
+    background-color: #fff !important;
+    color: #444 !important;
 }
 
-.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus {
-    background-color: #15354a;
+nav .text-muted {
+    color: #d8d8d8 !important;
 }
 
-.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus {
-    background-color: #47abfd; /*#74c3fc;*/
+a {
+    color: rgb(69, 179, 196);
 }
 
-.dropdown-menu>.active>a, .dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus {
-    color: #15354a;
+a:hover {
+    color: rgb(63, 162, 177);
+}
+
+button.btn.btn-primary.btn-copy-ex {
+    background-color: rgb(69, 179, 196);
+    border-color: rgb(69, 179, 196);
 }
