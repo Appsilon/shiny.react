@@ -10688,17 +10688,17 @@ _shiny__WEBPACK_IMPORTED_MODULE_0___default().addCustomMessageHandler('updateRea
 
 var withFirstCall = function withFirstCall(first, rest) {
   var firstCall = true;
-  return function (value) {
+  return function () {
     if (firstCall) {
       firstCall = false;
-      first(value);
+      first.apply(void 0, arguments);
     }
 
-    rest(value);
+    rest.apply(void 0, arguments);
   };
 };
 /**
- * Hook for setting input value with a policy
+ * Hook for setting input value with rate limiting.
  *
  * On mount: sets initial value without rate limiting
  * On inputId change: set value without rate limit

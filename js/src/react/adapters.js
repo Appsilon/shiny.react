@@ -23,17 +23,17 @@ Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
 
 const withFirstCall = (first, rest) => {
   let firstCall = true;
-  return (value) => {
+  return (...args) => {
     if (firstCall) {
       firstCall = false;
-      first(value);
+      first(...args);
     }
-    rest(value);
+    rest(...args);
   };
 };
 
 /**
- * Hook for setting input value with a policy
+ * Hook for setting input value with rate limiting.
  *
  * On mount: sets initial value without rate limiting
  * On inputId change: set value without rate limit
