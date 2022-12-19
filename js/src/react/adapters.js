@@ -1,8 +1,10 @@
 import Shiny from '@/shiny';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import mapReactData from './mapReactData';
+
+export { throttle, debounce } from 'lodash';
 
 // The higher-level components in this file can be used to adapt the interface of React components
 // to make it in line with what is expected from Shiny inputs / buttons. The adapters add
@@ -19,10 +21,45 @@ Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
   } else throw new Error(`Attempted to update non-existent React input '${inputId}'`);
 });
 
-function useValue(inputId, defaultValue) {
+const withFirstCall = (first, rest) => {
+  let firstCall = true;
+  return (...args) => {
+    if (firstCall) {
+      firstCall = false;
+      first(...args);
+    }
+    rest(...args);
+  };
+};
+
+/**
+ * Hook for setting input value with rate limiting.
+ *
+ * On mount: sets initial value without rate limiting
+ * On inputId change: set value without rate limit
+ * On value change: sets new value with rate limiting
+ * On unmount: flushes current value
+ *
+ * @param {rateLimit} An object of shape:
+ *   - policy: A policy function, e.g. debounce
+ *   - delay: Delay to use in policy function
+ */
+function useValue(inputId, defaultValue, rateLimit) {
   const [value, setValue] = useState(defaultValue);
+  const ref = useRef();
   useEffect(() => {
-    Shiny.setInputValue(inputId, value);
+    const setInputValue = (v) => Shiny.setInputValue(inputId, v);
+    if (rateLimit === undefined) {
+      ref.current = setInputValue;
+      // No cleanup effect
+      return undefined;
+    }
+    const setInputValueRateLimited = rateLimit.policy(setInputValue, rateLimit.delay);
+    ref.current = withFirstCall(setInputValue, setInputValueRateLimited);
+    return setInputValueRateLimited.flush;
+  }, [inputId]);
+  useEffect(() => {
+    ref.current(value);
   }, [inputId, value]);
   return [value, setValue];
 }
@@ -46,9 +83,9 @@ function useUpdatedProps(inputId, setValue) {
   return updatedProps;
 }
 
-export function InputAdapter(Component, valueProps) {
+export function InputAdapter(Component, valueProps, rateLimit) {
   function Adapter({ inputId, value: defaultValue, ...otherProps }) {
-    const [value, setValue] = useValue(inputId, defaultValue);
+    const [value, setValue] = useValue(inputId, defaultValue, rateLimit);
     const updatedProps = useUpdatedProps(inputId, setValue);
     let props = { id: inputId, ...otherProps, ...updatedProps };
     props = { ...valueProps(value, setValue, props), ...props };
