@@ -1,6 +1,6 @@
 Package: shiny.react
 Title: Tools for Using React in Shiny
-Version: 0.2.3
+Version: 0.3.0
 Authors@R:
   c(
     person("Kamil", "Żyła", role = c("aut", "cre"), email = "opensource+kamil@appsilon.com"),
