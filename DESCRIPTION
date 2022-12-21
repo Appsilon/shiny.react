@@ -8,7 +8,7 @@ Authors@R:
     person("Marek", "Rogala", role = "aut", email = "marek@appsilon.com"),
     person("Appsilon Sp. z o.o.", role = "cph", email = "opensource@appsilon.com")
   )
-URL: https://appsilon.github.io/shiny.react, https://github.com/Appsilon/shiny.react
+URL: https://appsilon.github.io/shiny.react/, https://github.com/Appsilon/shiny.react
 Description:
   A toolbox for defining React component wrappers which can be used seamlessly in Shiny apps.
 License: LGPL (>= 3)
