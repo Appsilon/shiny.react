@@ -16,7 +16,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">shiny.react</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,6 +59,17 @@
       <small>Source: <a href="https://github.com/Appsilon/shiny.react/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="shinyreact-030">shiny.react 0.3.0<a class="anchor" aria-label="anchor" href="#shinyreact-030"></a></h2>
+<ol style="list-style-type: decimal"><li>Render React asynchronously and only once Shiny is fully initialized:<ul><li>
+<code><a href="../reference/reactOutput.html">reactOutput()</a></code> can now be nested.</li>
+<li>
+<code>ShinyProxy</code> is no longer needed and was removed from the JavaScript API.</li>
+</ul></li>
+<li>Support rate limiting (debounce and throttle) in <code>InputAdapter</code>.</li>
+<li>
+<code><a href="../reference/updateReactInput.html">updateReactInput()</a></code> now works correctly with tibbles.</li>
+</ol></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.3" id="shinyreact-023">shiny.react 0.2.3<a class="anchor" aria-label="anchor" href="#shinyreact-023"></a></h2><p class="text-muted">CRAN release: 2021-09-08</p>
 <p>Improved documentation, including a tutorial vignette.</p>

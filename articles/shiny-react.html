@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">shiny.react</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,7 @@
 <div class="section level3">
 <h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h3>
-<p><a href="https://emdgroup-liquid.github.io/liquid/" class="external-link">Liquid Oxygen</a> is a UI component library based on the Liquid Design System, focusing on accessibility and interoperability. It provides React bindings and as such can be ported to Shiny through <code>shiny.react</code>. It is similar in concept to Microsoft’s <a href="https://developer.microsoft.com/en-us/fluentui#/" class="external-link">Fluent UI</a> or Google’s <a href="https://material-ui.com/" class="external-link">Material-UI</a>.</p>
+<p><a href="https://emdgroup-liquid.github.io/liquid/" class="external-link">Liquid Oxygen</a> is a UI component library based on the Liquid Design System, focusing on accessibility and interoperability. It provides React bindings and as such can be ported to Shiny through <code>shiny.react</code>. It is similar in concept to Microsoft’s <a href="https://developer.microsoft.com/en-us/fluentui#/" class="external-link">Fluent UI</a> or Google’s <a href="https://mui.com/core/" class="external-link">MUI</a>.</p>
 <p>In this tutorial we will (begin to) create a <code>liquid</code> R package, which will make it possible to use Liquid Oxygen in R/Shiny akin to how <a href="https://github.com/Appsilon/shiny.fluent" class="external-link">shiny.fluent</a> does it for Fluent UI. It should give you enough understanding of shiny.react to allow you to use other React libraries in your projects, either by creating “wrapper” R packages or directly in you Shiny app.</p>
 <p>This tutorial is aimed at advanced users who feel comfortable with both Shiny and React. You will need R and <a href="https://nodejs.org/en/" class="external-link">Node.js</a> installed.</p>
 </div>
@@ -230,7 +230,7 @@
 <p>Let’s try a simple app first to test our components:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://appsilon.github.io/shiny.react">shiny.react</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://appsilon.github.io/shiny.react/">shiny.react</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">liquid</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
