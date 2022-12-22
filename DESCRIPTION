@@ -1,20 +1,20 @@
 Package: shiny.react
 Title: Tools for Using React in Shiny
-Version: 0.2.3
+Version: 0.3.0
 Authors@R:
   c(
-    person(given = "Kamil", family = "Zyla", role = "aut", email = "kamil@appsilon.com"),
-    person(given = "Marek", family = "Rogala", role = "aut", email = "marek@appsilon.com"),
-    person("Developers", "Appsilon", email = "support+opensource@appsilon.com", role = "cre"),
-    person(family = "Appsilon Sp. z o.o.", role = "cph")
+    person("Kamil", "Żyła", role = c("aut", "cre"), email = "opensource+kamil@appsilon.com"),
+    person("Jakub", "Sobolewski", role = "aut", email = "jakub.sobolewski@appsilon.com"),
+    person("Marek", "Rogala", role = "aut", email = "marek@appsilon.com"),
+    person("Appsilon Sp. z o.o.", role = "cph", email = "opensource@appsilon.com")
   )
-URL: https://appsilon.github.io/shiny.react, https://github.com/Appsilon/shiny.react
+URL: https://appsilon.github.io/shiny.react/, https://github.com/Appsilon/shiny.react
 Description:
   A toolbox for defining React component wrappers which can be used seamlessly in Shiny apps.
 License: LGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Imports:
   glue,

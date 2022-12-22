@@ -8,10 +8,10 @@ vignette: >
 ---
 
 ### Introduction
-[Liquid Oxygen](https://emdgroup-liquid.github.io/liquid/) is a UI component library based on the Liquid Design System, 
+[Liquid Oxygen](https://emdgroup-liquid.github.io/liquid/) is a UI component library based on the Liquid Design System,
 focusing on accessibility and interoperability. It provides React bindings and as such can be ported to Shiny through `shiny.react`.
 It is similar in concept to Microsoft's [Fluent UI](https://developer.microsoft.com/en-us/fluentui#/)
-or Google's [Material-UI](https://material-ui.com/).
+or Google's [MUI](https://mui.com/core/).
 
 In this tutorial we will (begin to) create a `liquid` R package,
 which will make it possible to use Liquid Oxygen in R/Shiny
@@ -257,15 +257,15 @@ window.jsmodule = {
 };
 ```
 
-In order to create an input that can be used in Shiny server we need to 
-create the component with a hook that will set a value of Shiny input. 
+In order to create an input that can be used in Shiny server we need to
+create the component with a hook that will set a value of Shiny input.
 We can use `InputAdapter` from `shiny.react` package to do it easily.
 
-The documentation states that Liquid components dispatch ldchange events, 
-to change value of Shiny input we need to set a value when component changes its state. 
+The documentation states that Liquid components dispatch ldchange events,
+to change value of Shiny input we need to set a value when component changes its state.
 For React components we use onLdchange prop and we set the value using event.detail.
-This property contains an array of selected items from the dropdown. 
-If the documentation provides information which event field contains value of input use the one from documentation. 
+This property contains an array of selected items from the dropdown.
+If the documentation provides information which event field contains value of input use the one from documentation.
 If it doesn't you can set a breakpoint in the browser to investigate what fields does event object have and use the appropriate one.
 
 We also add these lines to `R/components.R`:
