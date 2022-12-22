@@ -53,10 +53,9 @@ Reporting a bug is also helpful - please use [GitHub issues](https://github.com/
 <img src="https://avatars0.githubusercontent.com/u/6096772" align="right" alt="" width="6%" />
 
 Appsilon is a **Posit (formerly RStudio) Full Service Certified Partner**.<br/>
-Learn more
-at [appsilon.com](https://appsilon.com).
+Learn more at [appsilon.com](https://appsilon.com).
 
-Get in touch [opensource@appsilon.com](opensource@appsilon.com)
+[Get in touch](mailto:opensource@appsilon.com).
 
 Check our [Open Source tools](https://shiny.tools).
 
