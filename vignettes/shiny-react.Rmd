@@ -151,6 +151,16 @@ externals: {
 }
 ```
 
+We also have to add the following rule to properly resolve `liquid` modules imports.
+```js
+{
+  test: /\.m?js/,
+  resolve: {
+    fullySpecified: false,
+  }
+}
+```
+
 Our final `js/webpack.config.js` looks as follows:
 ```js
 const webpack = require('webpack');
@@ -170,6 +180,12 @@ const config = {
           'style-loader',
           'css-loader'
         ]
+      },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        }
       }
     ]
   },
