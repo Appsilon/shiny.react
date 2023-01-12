@@ -154,7 +154,7 @@
 </h3>
 <p>In the <code>js</code> directory we use <code>yarn</code> to add the Liquid Oxygen library.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="ex">yarn</span> init --yes</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="ex">yarn</span> add @emdgroup-liquid/liquid</span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="ex">yarn</span> add @emdgroup-liquid/liquid@3.0.0</span></code></pre></div>
 <p>In order to use react components we need to find where package exports are defined first. We need to look for export keyword with names of components. In case of this package, exports can be found in <code>@emdgroup-liquid/liquid/dist/react</code>.</p>
 <p>We will use a bundler to generate the <code>liquid.js</code> script from the following <code>js/src/index.js</code> file:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">const</span> Liquid <span class="op">=</span> <span class="at">require</span>(<span class="st">'@emdgroup-liquid/liquid/dist/react'</span>)<span class="op">;</span></span>
