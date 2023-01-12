@@ -99,7 +99,7 @@ LdLoading <- component("LdLoading")
 In the `js` directory we use `yarn` to add the Liquid Oxygen library.
 ```sh
 yarn init --yes
-yarn add @emdgroup-liquid/liquid
+yarn add @emdgroup-liquid/liquid@3.0.0
 ```
 
 In order to use react components we need to find where package exports are defined first. We need to look for export keyword with names of components. In case of this package, exports can be found in `@emdgroup-liquid/liquid/dist/react`.
