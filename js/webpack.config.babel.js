@@ -5,6 +5,7 @@ export default {
   output: {
     path: join(__dirname, '..', 'inst', 'www', 'shiny.react'),
     filename: 'shiny-react.js',
+    hashFunction: "sha256",
   },
   resolve: { extensions: ['.js', '.jsx'] },
   module: {
