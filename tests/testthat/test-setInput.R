@@ -33,6 +33,6 @@ test_that("setInput :: returns correct information with invalid integer argIdx",
 test_that("setInput :: returns correct information with string as argIdx", {
   result <- setInput("some_id", "[0].target.checked")
   valid_input(result, NULL)
-  expect_identical(result$ancestor, "[0].target.checked")
+  expect_identical(result$accessor, "[0].target.checked")
 })
 

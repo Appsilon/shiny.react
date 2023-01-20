@@ -18,7 +18,7 @@ setInput(inputId, argIdx = 1)
 \arguments{
 \item{inputId}{'Shiny' input ID to set the value on.}
 
-\item{argIdx}{Index (numeric) or ancestor (string) of the argument to use as value.}
+\item{argIdx}{Index (numeric) or accessor (string) of the argument to use as value.}
 }
 \value{
 A \code{ReactData} object which can be passed as a prop to 'React' components.
@@ -33,7 +33,7 @@ to set the value of a 'Shiny' input to one of the arguments passed to the handle
 
 \item \code{setInput(inputId = character, argIdx = numeric)}: Gets the value from index in argIdx
 
-\item \code{setInput(inputId = character, argIdx = character)}: Gets value via ancestor, for instance,
+\item \code{setInput(inputId = character, argIdx = character)}: Gets value via accessor, for instance,
 the equivalent for a checkbox with \code{argIdx = 1} is
 \code{argIdx = "[0].target.checked"}
 

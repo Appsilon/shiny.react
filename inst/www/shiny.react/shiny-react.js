@@ -11072,14 +11072,14 @@ dataMappers.element = function (_ref7) {
 dataMappers.input = function (_ref8) {
   var id = _ref8.id,
       argIdx = _ref8.argIdx,
-      ancestor = _ref8.ancestor;
+      accessor = _ref8.accessor;
   return function () {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
     var value = argIdx === null || argIdx === undefined ? true : args[argIdx];
-    value = ancestor === null || ancestor === undefined ? value : eval("args" + ancestor);
+    value = accessor === null || accessor === undefined ? value : eval("args" + accessor);
     _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(id, value, {
       priority: 'event'
     });

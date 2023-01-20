@@ -166,7 +166,7 @@ setInput_usage <- function() {
   message()
   message("  setInput(<inputId string>) :: equivalent as setInput(inputId, 1)")
   message("  setInput(<inputId string>, <integer with an index>) :: index in R (starting at 1)")
-  message("  setInput(<inputId string>, <ancestor string>)")
+  message("  setInput(<inputId string>, <accessor string>)")
 }
 
 #' Set input
@@ -175,7 +175,7 @@ setInput_usage <- function() {
 #' to set the value of a 'Shiny' input to one of the arguments passed to the handler.
 #'
 #' @param inputId 'Shiny' input ID to set the value on.
-#' @param argIdx Index (numeric) or ancestor (string) of the argument to use as value.
+#' @param argIdx Index (numeric) or accessor (string) of the argument to use as value.
 #' @return A `ReactData` object which can be passed as a prop to 'React' components.
 #'
 #' @examples
@@ -219,7 +219,7 @@ methods::setMethod(
   }
 )
 
-#' @describeIn setInput Gets value via ancestor, for instance,
+#' @describeIn setInput Gets value via accessor, for instance,
 #' the equivalent for a checkbox with `argIdx = 1` is
 #' `argIdx = "[0].target.checked"`
 #' @examples
@@ -229,7 +229,7 @@ methods::setMethod(
   signature(inputId="character", argIdx="character"),
   function(inputId, argIdx = NULL) {
     ReactData(
-      type = "input", id = inputId, ancestor = argIdx
+      type = "input", id = inputId, accessor = argIdx
     )
   }
 )

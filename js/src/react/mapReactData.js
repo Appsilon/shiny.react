@@ -85,10 +85,10 @@ dataMappers.element = ({ module, name, props: propsData }) => {
 // Used to implement `setInput()` and `triggerEvent()` R functions. In case of `triggerEvent()`,
 // we have `argIdx === null` and the returned function just sets the Shiny input to `TRUE`
 // on every call (this works thanks to `priority: 'event'`).
-dataMappers.input = ({ id, argIdx, ancestor }) => (
+dataMappers.input = ({ id, argIdx, accessor }) => (
   (...args) => {
     let value = argIdx === null || argIdx === undefined ? true : args[argIdx];
-    value = ancestor === null || ancestor === undefined ? value : eval("args" + ancestor);
+    value = accessor === null || accessor === undefined ? value : eval("args" + accessor);
     Shiny.setInputValue(id, value, { priority: 'event' });
   }
 );
