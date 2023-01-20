@@ -161,6 +161,14 @@ triggerEvent <- function(inputId) {
   )
 }
 
+setInput_usage <- function() {
+  message("Usage of `setInput()`: see ?shiny.react::setInput for more information")
+  message()
+  message("  setInput(<inputId string>) :: equivalent as setInput(inputId, 1)")
+  message("  setInput(<inputId string>, <integer with an index>) :: index in R (starting at 1)")
+  message("  setInput(<inputId string>, <ancestor string>)")
+}
+
 #' Set input
 #'
 #' Creates a handler which can be used for `onChange` and similar props of 'React' components
@@ -176,11 +184,7 @@ triggerEvent <- function(inputId) {
 methods::setGeneric(
   "setInput",
   function(inputId, argIdx = 1) {
-    message("Usage of `setInput()`: see ?shiny.react::setInput for more information")
-    message()
-    message("  setInput(<inputId string>) :: equivalent as setInput(inputId, 1)")
-    message("  setInput(<inputId string>, <R index for argument to use>)")
-    message("  setInput(<inputId string>, <ancestor string>)")
+    setInput_usage()
     stop("Arguments not supported")
   }
 )
@@ -203,6 +207,12 @@ methods::setMethod(
   "setInput",
   signature(inputId="character", argIdx="numeric"),
   function(inputId, argIdx = 1) {
+    if (argIdx < 1) {
+      setInput_usage()
+      stop("Arguments not supported :: index is invalid")
+    } else if (argIdx - floor(argIdx) != 0) {
+      setInput()
+    }
     ReactData(
       type = "input", id = inputId, argIdx = argIdx - 1
     )
