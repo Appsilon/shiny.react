@@ -167,12 +167,59 @@ triggerEvent <- function(inputId) {
 #' to set the value of a 'Shiny' input to one of the arguments passed to the handler.
 #'
 #' @param inputId 'Shiny' input ID to set the value on.
-#' @param argIdx Index of the argument to use as value.
+#' @param argIdx Index (numeric) or ancestor (string) of the argument to use as value.
 #' @return A `ReactData` object which can be passed as a prop to 'React' components.
 #'
-#' @export
-setInput <- function(inputId, argIdx = 1) {
-  ReactData(
-    type = "input", id = inputId, argIdx = argIdx - 1
-  )
-}
+#' @examples
+#' setInput()
+#' setInput("some_id")
+methods::setGeneric(
+  "setInput",
+  function(inputId, argIdx = 1) {
+    message("Usage of `setInput()`: see ?shiny.react::setInput for more information")
+    message()
+    message("  setInput(<inputId string>) :: equivalent as setInput(inputId, 1)")
+    message("  setInput(<inputId string>, <R index for argument to use>)")
+    message("  setInput(<inputId string>, <ancestor string>)")
+    stop("Arguments not supported")
+  }
+)
+
+#' @describeIn setInput Uses as index `argIdx = 1`
+#' @examples
+#' setInput("some_id", 1)
+methods::setMethod(
+  "setInput",
+  signature(inputId="character", argIdx="missing"),
+  function(inputId) {
+    setInput(inputId, 1)
+  }
+)
+
+#' @describeIn setInput Gets the value from index in argIdx
+#' @examples
+#' setInput("some_id", 2)
+methods::setMethod(
+  "setInput",
+  signature(inputId="character", argIdx="numeric"),
+  function(inputId, argIdx = 1) {
+    ReactData(
+      type = "input", id = inputId, argIdx = argIdx - 1
+    )
+  }
+)
+
+#' @describeIn setInput Gets value via ancestor, for instance,
+#' the equivalent for a checkbox with `argIdx = 1` is
+#' `argIdx = "[0].target.checked"`
+#' @examples
+#' setInput("some_id", ".target.value")
+methods::setMethod(
+  "setInput",
+  signature(inputId="character", argIdx="character"),
+  function(inputId, argIdx = NULL) {
+    ReactData(
+      type = "input", id = inputId, ancestor = argIdx
+    )
+  }
+)

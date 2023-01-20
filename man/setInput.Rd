@@ -2,14 +2,23 @@
 % Please edit documentation in R/react.R
 \name{setInput}
 \alias{setInput}
+\alias{setInput,character,missing-method}
+\alias{setInput,character,numeric-method}
+\alias{setInput,character,character-method}
 \title{Set input}
 \usage{
 setInput(inputId, argIdx = 1)
+
+\S4method{setInput}{character,missing}(inputId)
+
+\S4method{setInput}{character,numeric}(inputId, argIdx = 1)
+
+\S4method{setInput}{character,character}(inputId, argIdx = NULL)
 }
 \arguments{
 \item{inputId}{'Shiny' input ID to set the value on.}
 
-\item{argIdx}{Index of the argument to use as value.}
+\item{argIdx}{Index (numeric) or ancestor (string) of the argument to use as value.}
 }
 \value{
 A \code{ReactData} object which can be passed as a prop to 'React' components.
@@ -17,4 +26,22 @@ A \code{ReactData} object which can be passed as a prop to 'React' components.
 \description{
 Creates a handler which can be used for \code{onChange} and similar props of 'React' components
 to set the value of a 'Shiny' input to one of the arguments passed to the handler.
+}
+\section{Methods (by class)}{
+\itemize{
+\item \code{setInput(inputId = character, argIdx = missing)}: Uses as index \code{argIdx = 1}
+
+\item \code{setInput(inputId = character, argIdx = numeric)}: Gets the value from index in argIdx
+
+\item \code{setInput(inputId = character, argIdx = character)}: Gets value via ancestor, for instance,
+the equivalent for a checkbox with \code{argIdx = 1} is
+\code{argIdx = "[0].target.checked"}
+
+}}
+\examples{
+setInput()
+setInput("some_id")
+setInput("some_id", 1)
+setInput("some_id", 2)
+setInput("some_id", ".target.value")
 }
