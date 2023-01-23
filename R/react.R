@@ -184,7 +184,7 @@ setInputUsage <- function() {
 methods::setGeneric(
   "setInput",
   function(inputId, argIdx = 1) {
-    setInput_usage()
+    setInputUsage()
     stop("Arguments not supported")
   }
 )
@@ -208,7 +208,7 @@ methods::setMethod(
   signature(inputId = "character", argIdx = "numeric"),
   function(inputId, argIdx = 1) {
     if (argIdx < 1) {
-      setInput_usage()
+      setInputUsage()
       stop("Arguments not supported :: index is invalid")
     } else if (argIdx - floor(argIdx) != 0) {
       setInput()
