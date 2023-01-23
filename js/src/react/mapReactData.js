@@ -88,7 +88,7 @@ dataMappers.element = ({ module, name, props: propsData }) => {
 dataMappers.input = ({ id, argIdx, accessor }) => (
   (...args) => {
     let value = argIdx === null || argIdx === undefined ? true : args[argIdx];
-    value = accessor === null || accessor === undefined ? value : eval("args" + accessor);
+    value = accessor === null || accessor === undefined ? value : eval(`${args}accessor`); // eslint-disable-line no-eval
     Shiny.setInputValue(id, value, { priority: 'event' });
   }
 );
