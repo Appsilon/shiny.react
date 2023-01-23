@@ -161,6 +161,10 @@ triggerEvent <- function(inputId) {
   )
 }
 
+#' @title usage for function setInput
+#'
+#' @description  Prints a description of valid parameters for the `setInput`
+#' function
 setInputUsage <- function() {
   message("Usage of `setInput()`: see ?shiny.react::setInput for more information")
   message()
@@ -178,8 +182,8 @@ setInputUsage <- function() {
 #' @param argIdx Index (numeric) or accessor (string) of the argument to use as value.
 #' @return A `ReactData` object which can be passed as a prop to 'React' components.
 #'
+#' @export
 #' @examples
-#' setInput()
 #' setInput("some_id")
 methods::setGeneric(
   "setInput",
@@ -190,6 +194,7 @@ methods::setGeneric(
 )
 
 #' @describeIn setInput Uses as index `argIdx = 1`
+#' @export
 #' @examples
 #' setInput("some_id", 1)
 methods::setMethod(
@@ -201,6 +206,7 @@ methods::setMethod(
 )
 
 #' @describeIn setInput Gets the value from index in argIdx
+#' @export
 #' @examples
 #' setInput("some_id", 2)
 methods::setMethod(
@@ -222,6 +228,7 @@ methods::setMethod(
 #' @describeIn setInput Gets value via accessor, for instance,
 #' the equivalent for a checkbox with `argIdx = 1` is
 #' `argIdx = "[0].target.checked"`
+#' @export
 #' @examples
 #' setInput("some_id", ".target.value")
 methods::setMethod(

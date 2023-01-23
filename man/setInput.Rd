@@ -39,7 +39,6 @@ the equivalent for a checkbox with \code{argIdx = 1} is
 
 }}
 \examples{
-setInput()
 setInput("some_id")
 setInput("some_id", 1)
 setInput("some_id", 2)
