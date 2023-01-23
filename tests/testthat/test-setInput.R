@@ -35,4 +35,3 @@ test_that("setInput :: returns correct information with string as argIdx", {
   validInput(result, NULL)
   expect_identical(result$accessor, "[0].target.checked")
 })
-
