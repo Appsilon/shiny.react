@@ -1,6 +1,6 @@
+library(testthat)
 
-
-valid_input <- function(obj, argIdx) {
+validInput <- function(obj, argIdx) {
   expect_equal(obj$type, "input")
   expect_equal(obj$argIdx, argIdx)
   expect_s3_class(obj, "ReactData")
@@ -8,16 +8,16 @@ valid_input <- function(obj, argIdx) {
 
 test_that("setInput :: returns correct information without argIdx", {
   result <- setInput("some_id")
-  valid_input(result, 0)
+  validInput(result, 0)
 })
 
 
 test_that("setInput :: returns correct information with valid integer argIdx", {
   result <- setInput("some_id", 2)
-  valid_input(result, 1)
+  validInput(result, 1)
 
   result <- setInput("some_id", 1)
-  valid_input(result, 0)
+  validInput(result, 0)
 })
 
 test_that("setInput :: returns correct information with invalid float argIdx", {
@@ -32,7 +32,7 @@ test_that("setInput :: returns correct information with invalid integer argIdx",
 
 test_that("setInput :: returns correct information with string as argIdx", {
   result <- setInput("some_id", "[0].target.checked")
-  valid_input(result, NULL)
+  validInput(result, NULL)
   expect_identical(result$accessor, "[0].target.checked")
 })
 

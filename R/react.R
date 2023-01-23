@@ -161,7 +161,7 @@ triggerEvent <- function(inputId) {
   )
 }
 
-setInput_usage <- function() {
+setInputUsage <- function() {
   message("Usage of `setInput()`: see ?shiny.react::setInput for more information")
   message()
   message("  setInput(<inputId string>) :: equivalent as setInput(inputId, 1)")
@@ -194,7 +194,7 @@ methods::setGeneric(
 #' setInput("some_id", 1)
 methods::setMethod(
   "setInput",
-  signature(inputId="character", argIdx="missing"),
+  signature(inputId = "character", argIdx = "missing"),
   function(inputId) {
     setInput(inputId, 1)
   }
@@ -205,7 +205,7 @@ methods::setMethod(
 #' setInput("some_id", 2)
 methods::setMethod(
   "setInput",
-  signature(inputId="character", argIdx="numeric"),
+  signature(inputId = "character", argIdx = "numeric"),
   function(inputId, argIdx = 1) {
     if (argIdx < 1) {
       setInput_usage()
@@ -226,7 +226,7 @@ methods::setMethod(
 #' setInput("some_id", ".target.value")
 methods::setMethod(
   "setInput",
-  signature(inputId="character", argIdx="character"),
+  signature(inputId = "character", argIdx = "character"),
   function(inputId, argIdx = NULL) {
     ReactData(
       type = "input", id = inputId, accessor = argIdx
