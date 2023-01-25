@@ -11050,22 +11050,33 @@ dataMappers.element = function (_ref7) {
   }
 
   return element;
-}; // Used to implement `setInput()` and `triggerEvent()` R functions. In case of `triggerEvent()`,
-// we have `argIdx === null` and the returned function just sets the Shiny input to `TRUE`
+}; // Used to implement `triggerEvent()` R function.
+// The returned function just sets the Shiny input to `TRUE`
 // on every call (this works thanks to `priority: 'event'`).
 
 
-dataMappers.input = function (_ref8) {
-  var id = _ref8.id,
-      argIdx = _ref8.argIdx,
-      accessor = _ref8.accessor;
+dataMappers.event = function (_ref8) {
+  var id = _ref8.id;
   return function () {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(id, true, {
+      priority: 'event'
+    });
+  };
+}; // Used to implement `setInput()` R function.
 
-    var value = argIdx === null || argIdx === undefined ? true : args[argIdx];
-    value = accessor === null || accessor === undefined ? value : eval("".concat(args, "accessor")); // eslint-disable-line no-eval
+
+dataMappers.input = function (_ref9) {
+  var id = _ref9.id,
+      js_accessor = _ref9.js_accessor;
+  return function () {
+    //
+    var value = true;
+
+    if (js_accessor !== undefined) {
+      // Needs to use arguments inside eval string, otherwise webpack
+      // won't translate args => arguments
+      value = eval("arguments".concat(js_accessor)); // eslint-disable-line no-eval
+    }
 
     _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(id, value, {
       priority: 'event'

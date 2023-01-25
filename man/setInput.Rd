@@ -7,7 +7,7 @@
 \alias{setInput,character,character-method}
 \title{Set input}
 \usage{
-setInput(inputId, argIdx = 1)
+setInput(inputId, argIdx)
 
 \S4method{setInput}{character,missing}(inputId)
 
@@ -18,14 +18,28 @@ setInput(inputId, argIdx = 1)
 \arguments{
 \item{inputId}{'Shiny' input ID to set the value on.}
 
-\item{argIdx}{Index (numeric) or accessor (string) of the argument to use as value.}
+\item{argIdx}{Index (numeric) or accessor (string) of the argument to use as
+value.}
 }
 \value{
-A \code{ReactData} object which can be passed as a prop to 'React' components.
+A \code{ReactData} object which can be passed as a prop to 'React'
+components.
 }
 \description{
-Creates a handler which can be used for \code{onChange} and similar props of 'React' components
-to set the value of a 'Shiny' input to one of the arguments passed to the handler.
+Creates a handler which can be used for \code{onChange} and similar
+props of 'React' components to set the value of a 'Shiny' input to one of
+the arguments passed to the handler.
+
+The argument \code{argIdx} can be empty (assumes \code{argIdx = 1}) or take one of the
+following types:
+\itemize{
+\item A valid JS accessor string to be applied to the object
+(example: \code{accessor = "[0].target.checked"})
+\item A valid JS 0-based index (that unlike R it starts at 0)
+}
+
+As an example, calling \code{setInput("some_index", 0)} is equivalent to
+\code{setInput("some_index", "[0]")}
 }
 \section{Methods (by class)}{
 \itemize{

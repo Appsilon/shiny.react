@@ -15,7 +15,7 @@ export default function mapReactData(data) {
 
 function mapValues(object, func) {
   return Object.fromEntries(Object.entries(object).map(
-    ([key, val]) => [key, func(val)],
+    ([key, val]) => [key, func(val)]
   ));
 }
 
@@ -82,13 +82,25 @@ dataMappers.element = ({ module, name, props: propsData }) => {
   return element;
 };
 
-// Used to implement `setInput()` and `triggerEvent()` R functions. In case of `triggerEvent()`,
-// we have `argIdx === null` and the returned function just sets the Shiny input to `TRUE`
+// Used to implement `triggerEvent()` R function.
+// The returned function just sets the Shiny input to `TRUE`
 // on every call (this works thanks to `priority: 'event'`).
-dataMappers.input = ({ id, argIdx, accessor }) => (
+dataMappers.event = ({id}) => (
   (...args) => {
-    let value = argIdx === null || argIdx === undefined ? true : args[argIdx];
-    value = accessor === null || accessor === undefined ? value : eval(`${args}accessor`); // eslint-disable-line no-eval
+    Shiny.setInputValue(id, true, { priority: 'event' });
+  }
+);
+
+// Used to implement `setInput()` R function.
+dataMappers.input = ({ id, js_accessor }) => (
+  (...args) => {
+    //
+    let value = true;
+    if (js_accessor !== undefined) {
+      // Needs to use arguments inside eval string, otherwise webpack
+      // won't translate args => arguments
+      value = eval(`arguments${js_accessor}`); // eslint-disable-line no-eval
+    }
     Shiny.setInputValue(id, value, { priority: 'event' });
   }
 );
