@@ -7,19 +7,19 @@
 \alias{setInput,character,character-method}
 \title{Set input}
 \usage{
-setInput(inputId, argIdx)
+setInput(inputId, jsAccessor)
 
 \S4method{setInput}{character,missing}(inputId)
 
-\S4method{setInput}{character,numeric}(inputId, argIdx = 1)
+\S4method{setInput}{character,numeric}(inputId, jsAccessor = 1)
 
-\S4method{setInput}{character,character}(inputId, argIdx = NULL)
+\S4method{setInput}{character,character}(inputId, jsAccessor = NULL)
 }
 \arguments{
 \item{inputId}{'Shiny' input ID to set the value on.}
 
-\item{argIdx}{Index (numeric) or accessor (string) of the argument to use as
-value.}
+\item{jsAccessor}{Index (numeric 0-based index) or accessor (javascript string) of the argument
+to use as value.}
 }
 \value{
 A \code{ReactData} object which can be passed as a prop to 'React'
@@ -30,12 +30,12 @@ Creates a handler which can be used for \code{onChange} and similar
 props of 'React' components to set the value of a 'Shiny' input to one of
 the arguments passed to the handler.
 
-The argument \code{argIdx} can be empty (assumes \code{argIdx = 1}) or take one of the
-following types:
+The argument \code{jsAccessor} can be empty (assumes \code{jsAccessor = 1}) or
+take one of the following types:
 \itemize{
-\item A valid JS accessor string to be applied to the object
-(example: \code{accessor = "[0].target.checked"})
-\item A valid JS 0-based index (that unlike R it starts at 0)
+\item A valid javscript accessor string to be applied to the object
+(example: \code{jsAccessor = "[0].target.checked"})
+\item A valid javscript 0-based index (that unlike R it starts at 0)
 }
 
 As an example, calling \code{setInput("some_index", 0)} is equivalent to
@@ -43,13 +43,13 @@ As an example, calling \code{setInput("some_index", 0)} is equivalent to
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{setInput(inputId = character, argIdx = missing)}: Uses as index \code{argIdx = 1}
+\item \code{setInput(inputId = character, jsAccessor = missing)}: Uses as index \code{jsAccessor = 0}
 
-\item \code{setInput(inputId = character, argIdx = numeric)}: Gets the value from index in argIdx
+\item \code{setInput(inputId = character, jsAccessor = numeric)}: Gets the value from index in jsAccessor
 
-\item \code{setInput(inputId = character, argIdx = character)}: Gets value via accessor, for instance,
-the equivalent for a checkbox with \code{argIdx = 1} is
-\code{argIdx = "[0].target.checked"}
+\item \code{setInput(inputId = character, jsAccessor = character)}: Gets value via accessor, for instance,
+the equivalent for a checkbox with \code{jsAccessor = 0} is
+\code{jsAccessor = "[0].target.checked"}
 
 }}
 \examples{
@@ -57,4 +57,8 @@ setInput("some_id")
 setInput("some_id", 1)
 setInput("some_id", 2)
 setInput("some_id", ".target.value")
+
+setInput("some_id", "[0]")
+# which is equivalent to
+setInput("some_id", 0)
 }

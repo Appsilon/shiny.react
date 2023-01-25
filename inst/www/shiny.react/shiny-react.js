@@ -11067,15 +11067,15 @@ dataMappers.event = function (_ref8) {
 
 dataMappers.input = function (_ref9) {
   var id = _ref9.id,
-      js_accessor = _ref9.js_accessor;
+      jsAccessor = _ref9.jsAccessor;
   return function () {
     //
     var value = true;
 
-    if (js_accessor !== undefined) {
+    if (jsAccessor !== undefined) {
       // Needs to use arguments inside eval string, otherwise webpack
       // won't translate args => arguments
-      value = eval("arguments".concat(js_accessor)); // eslint-disable-line no-eval
+      value = eval("arguments".concat(jsAccessor)); // eslint-disable-line no-eval
     }
 
     _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(id, value, {

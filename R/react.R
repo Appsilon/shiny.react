@@ -167,18 +167,18 @@ triggerEvent <- function(inputId) {
 #' props of 'React' components to set the value of a 'Shiny' input to one of
 #' the arguments passed to the handler.
 #'
-#' The argument `js_accessor` can be empty (assumes `js_accessor = 1`) or
+#' The argument `jsAccessor` can be empty (assumes `jsAccessor = 1`) or
 #' take one of the following types:
 #'
 #' - A valid javscript accessor string to be applied to the object
-#' (example: `js_accessor = "[0].target.checked"`)
+#' (example: `jsAccessor = "[0].target.checked"`)
 #' - A valid javscript 0-based index (that unlike R it starts at 0)
 #'
 #' As an example, calling `setInput("some_index", 0)` is equivalent to
 #' `setInput("some_index", "[0]")`
 #'
 #' @param inputId 'Shiny' input ID to set the value on.
-#' @param js_accessor Index (numeric 0-based index) or accessor (javascript string) of the argument
+#' @param jsAccessor Index (numeric 0-based index) or accessor (javascript string) of the argument
 #' to use as value.
 #' @return A `ReactData` object which can be passed as a prop to 'React'
 #' components.
@@ -188,45 +188,45 @@ triggerEvent <- function(inputId) {
 #' setInput("some_id")
 methods::setGeneric(
   "setInput",
-  function(inputId, js_accessor) {
+  function(inputId, jsAccessor) {
     stop("Arguments not supported, see the documentation.")
   }
 )
 
-#' @describeIn setInput Uses as index `js_accessor = 0`
+#' @describeIn setInput Uses as index `jsAccessor = 0`
 #' @export
 #' @examples
 #' setInput("some_id", 1)
 methods::setMethod(
   "setInput",
-  signature(inputId = "character", js_accessor = "missing"),
+  signature(inputId = "character", jsAccessor = "missing"),
   function(inputId) {
     setInput(inputId, 1)
   }
 )
 
-#' @describeIn setInput Gets the value from index in js_accessor
+#' @describeIn setInput Gets the value from index in jsAccessor
 #' @export
 #' @examples
 #' setInput("some_id", 2)
 methods::setMethod(
   "setInput",
-  signature(inputId = "character", js_accessor = "numeric"),
-  function(inputId, js_accessor = 1) {
-    if (js_accessor < 0 || js_accessor - floor(js_accessor) != 0) {
-      stop(glue::glue("Arguments not supported :: index '{js_accessor}' is invalid"))
+  signature(inputId = "character", jsAccessor = "numeric"),
+  function(inputId, jsAccessor = 1) {
+    if (jsAccessor < 0 || jsAccessor - floor(jsAccessor) != 0) {
+      stop(glue::glue("Arguments not supported :: index '{jsAccessor}' is invalid"))
     }
     ReactData(
       type = "input",
       id = inputId,
-      js_accessor = as.character(glue::glue("[{js_accessor}]"))
+      jsAccessor = as.character(glue::glue("[{jsAccessor}]"))
     )
   }
 )
 
 #' @describeIn setInput Gets value via accessor, for instance,
-#' the equivalent for a checkbox with `js_accessor = 0` is
-#' `js_accessor = "[0].target.checked"`
+#' the equivalent for a checkbox with `jsAccessor = 0` is
+#' `jsAccessor = "[0].target.checked"`
 #' @export
 #' @examples
 #' setInput("some_id", ".target.value")
@@ -236,10 +236,10 @@ methods::setMethod(
 #' setInput("some_id", 0)
 methods::setMethod(
   "setInput",
-  signature(inputId = "character", js_accessor = "character"),
-  function(inputId, js_accessor = NULL) {
+  signature(inputId = "character", jsAccessor = "character"),
+  function(inputId, jsAccessor = NULL) {
     ReactData(
-      type = "input", id = inputId, js_accessor = js_accessor
+      type = "input", id = inputId, jsAccessor = jsAccessor
     )
   }
 )
