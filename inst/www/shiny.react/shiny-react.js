@@ -11069,6 +11069,7 @@ dataMappers.input = function (_ref9) {
   var id = _ref9.id,
       jsAccessor = _ref9.jsAccessor;
   return function () {
+    // used to be (...args) , see below
     //
     var value = true;
 

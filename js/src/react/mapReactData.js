@@ -15,7 +15,7 @@ export default function mapReactData(data) {
 
 function mapValues(object, func) {
   return Object.fromEntries(Object.entries(object).map(
-    ([key, val]) => [key, func(val)]
+    ([key, val]) => [key, func(val)],
   ));
 }
 
@@ -85,15 +85,15 @@ dataMappers.element = ({ module, name, props: propsData }) => {
 // Used to implement `triggerEvent()` R function.
 // The returned function just sets the Shiny input to `TRUE`
 // on every call (this works thanks to `priority: 'event'`).
-dataMappers.event = ({id}) => (
-  (...args) => {
+dataMappers.event = ({ id }) => (
+  () => {
     Shiny.setInputValue(id, true, { priority: 'event' });
   }
 );
 
 // Used to implement `setInput()` R function.
 dataMappers.input = ({ id, jsAccessor }) => (
-  (...args) => {
+  () => { // used to be (...args) , see below
     //
     let value = true;
     if (jsAccessor !== undefined) {

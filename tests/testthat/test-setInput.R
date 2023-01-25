@@ -1,3 +1,5 @@
+library(testthat)
+
 #
 # Function to check reactData object (this avoids having repeated code)
 validInput <- function(obj, id, jsAccessor) {
