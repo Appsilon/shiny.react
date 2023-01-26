@@ -167,7 +167,7 @@ triggerEvent <- function(inputId) {
 #' props of 'React' components to set the value of a 'Shiny' input to one of
 #' the arguments passed to the handler.
 #'
-#' The argument `jsAccessor` can be empty (assumes `jsAccessor = 1`) or
+#' The argument `jsAccessor` can be empty (assumes `jsAccessor = 0`) or
 #' take one of the following types:
 #'
 #' - A valid javscript accessor string to be applied to the object
@@ -184,8 +184,6 @@ triggerEvent <- function(inputId) {
 #' components.
 #'
 #' @export
-#' @examples
-#' setInput("some_id")
 methods::setGeneric(
   "setInput",
   function(inputId, jsAccessor) {
@@ -196,23 +194,26 @@ methods::setGeneric(
 #' @describeIn setInput Uses as index `jsAccessor = 0`
 #' @export
 #' @examples
-#' setInput("some_id", 1)
+#' # Same as `setInput("some_id", 0)`.
+#' setInput("some_id")
 methods::setMethod(
   "setInput",
   signature(inputId = "character", jsAccessor = "missing"),
   function(inputId) {
-    setInput(inputId, 1)
+    setInput(inputId, 0)
   }
 )
 
 #' @describeIn setInput Gets the value from index in jsAccessor
 #' @export
 #' @examples
-#' setInput("some_id", 2)
+#'
+#' # Equivalent to `(...args) => Shiny.setInputValue('some_id', args[1])` in JS.
+#' setInput("some_id", 1)
 methods::setMethod(
   "setInput",
   signature(inputId = "character", jsAccessor = "numeric"),
-  function(inputId, jsAccessor = 1) {
+  function(inputId, jsAccessor) {
     if (jsAccessor < 0 || jsAccessor - floor(jsAccessor) != 0) {
       stop(glue::glue("Arguments not supported :: index '{jsAccessor}' is invalid"))
     }
@@ -229,15 +230,16 @@ methods::setMethod(
 #' `jsAccessor = "[0].target.checked"`
 #' @export
 #' @examples
-#' setInput("some_id", ".target.value")
 #'
-#' setInput("some_id", "[0]")
-#' # which is equivalent to
-#' setInput("some_id", 0)
+#' # Same as `setInput("some_id", 1)`.
+#' setInput("some_id", "[1]")
+#'
+#' # Equivalent to `(...args) => Shiny.setInputValue('some_id', args[0].target.value)` in JS.
+#' setInput("some_id", "[0].target.value")
 methods::setMethod(
   "setInput",
   signature(inputId = "character", jsAccessor = "character"),
-  function(inputId, jsAccessor = NULL) {
+  function(inputId, jsAccessor) {
     ReactData(
       type = "input", id = inputId, jsAccessor = jsAccessor
     )
