@@ -194,7 +194,6 @@ methods::setGeneric(
 #' @describeIn setInput Uses as index `jsAccessor = 0`
 #' @export
 #' @examples
-#'
 #' # Same as `setInput("some_id", 0)`.
 #' setInput("some_id")
 methods::setMethod(

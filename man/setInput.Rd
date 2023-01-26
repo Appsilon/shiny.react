@@ -29,7 +29,8 @@ components.
 Creates a handler which can be used for \code{onChange} and similar
 props of 'React' components to set the value of a 'Shiny' input to one of
 the arguments passed to the handler.
-
+}
+\details{
 The argument \code{jsAccessor} can be empty (assumes \code{jsAccessor = 0}) or
 take one of the following types:
 \itemize{
@@ -53,7 +54,6 @@ the equivalent for a checkbox with \code{jsAccessor = 0} is
 
 }}
 \examples{
-
 # Same as `setInput("some_id", 0)`.
 setInput("some_id")
 
