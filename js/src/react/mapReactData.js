@@ -92,15 +92,9 @@ dataMappers.event = ({ id }) => (
 );
 
 // Used to implement `setInput()` R function.
-dataMappers.input = ({ id, jsAccessor }) => (
-  () => { // used to be (...args) , see below
-    //
-    let value = true;
-    if (jsAccessor !== undefined) {
-      // Needs to use arguments inside eval string, otherwise webpack
-      // won't translate args => arguments
-      value = eval(`arguments${jsAccessor}`); // eslint-disable-line no-eval
-    }
-    Shiny.setInputValue(id, value, { priority: 'event' });
-  }
-);
+dataMappers.input = ({ id, jsAccessor }) => {
+  const getValue = eval(`(args) => (args${jsAccessor})`); // eslint-disable-line no-eval
+  return (...args) => {
+    Shiny.setInputValue(id, getValue(args), { priority: 'event' });
+  };
+};

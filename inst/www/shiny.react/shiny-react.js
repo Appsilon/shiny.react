@@ -11068,18 +11068,14 @@ dataMappers.event = function (_ref8) {
 dataMappers.input = function (_ref9) {
   var id = _ref9.id,
       jsAccessor = _ref9.jsAccessor;
-  return function () {
-    // used to be (...args) , see below
-    //
-    var value = true;
+  var getValue = eval("(args) => (args".concat(jsAccessor, ")")); // eslint-disable-line no-eval
 
-    if (jsAccessor !== undefined) {
-      // Needs to use arguments inside eval string, otherwise webpack
-      // won't translate args => arguments
-      value = eval("arguments".concat(jsAccessor)); // eslint-disable-line no-eval
+  return function () {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
-    _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(id, value, {
+    _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(id, getValue(args), {
       priority: 'event'
     });
   };
