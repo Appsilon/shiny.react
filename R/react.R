@@ -161,9 +161,9 @@ triggerEvent <- function(inputId) {
   )
 }
 
-#' @title Set input
+#' Set input
 #'
-#' @description Creates a handler which can be used for `onChange` and similar
+#' Creates a handler which can be used for `onChange` and similar
 #' props of 'React' components to set the value of a 'Shiny' input to one of
 #' the arguments passed to the handler.
 #'
@@ -172,10 +172,10 @@ triggerEvent <- function(inputId) {
 #'
 #' - A valid javscript accessor string to be applied to the object
 #' (example: `jsAccessor = "[0].target.checked"`)
-#' - A valid javscript 0-based index (that unlike R it starts at 0)
+#' - A valid javascript 0-based index (that unlike R it starts at 0)
 #'
-#' As an example, calling `setInput("some_index", 0)` is equivalent to
-#' `setInput("some_index", "[0]")`
+#' As an example, calling `setInput("some_index", 1)` is equivalent to
+#' `setInput("some_index", "[1]")`
 #'
 #' @param inputId 'Shiny' input ID to set the value on.
 #' @param jsAccessor Index (numeric 0-based index) or accessor (javascript string) of the argument
@@ -194,6 +194,7 @@ methods::setGeneric(
 #' @describeIn setInput Uses as index `jsAccessor = 0`
 #' @export
 #' @examples
+#'
 #' # Same as `setInput("some_id", 0)`.
 #' setInput("some_id")
 methods::setMethod(

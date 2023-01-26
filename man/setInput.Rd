@@ -11,9 +11,9 @@ setInput(inputId, jsAccessor)
 
 \S4method{setInput}{character,missing}(inputId)
 
-\S4method{setInput}{character,numeric}(inputId, jsAccessor = 1)
+\S4method{setInput}{character,numeric}(inputId, jsAccessor)
 
-\S4method{setInput}{character,character}(inputId, jsAccessor = NULL)
+\S4method{setInput}{character,character}(inputId, jsAccessor)
 }
 \arguments{
 \item{inputId}{'Shiny' input ID to set the value on.}
@@ -30,16 +30,16 @@ Creates a handler which can be used for \code{onChange} and similar
 props of 'React' components to set the value of a 'Shiny' input to one of
 the arguments passed to the handler.
 
-The argument \code{jsAccessor} can be empty (assumes \code{jsAccessor = 1}) or
+The argument \code{jsAccessor} can be empty (assumes \code{jsAccessor = 0}) or
 take one of the following types:
 \itemize{
 \item A valid javscript accessor string to be applied to the object
 (example: \code{jsAccessor = "[0].target.checked"})
-\item A valid javscript 0-based index (that unlike R it starts at 0)
+\item A valid javascript 0-based index (that unlike R it starts at 0)
 }
 
-As an example, calling \code{setInput("some_index", 0)} is equivalent to
-\code{setInput("some_index", "[0]")}
+As an example, calling \code{setInput("some_index", 1)} is equivalent to
+\code{setInput("some_index", "[1]")}
 }
 \section{Methods (by class)}{
 \itemize{
@@ -53,12 +53,16 @@ the equivalent for a checkbox with \code{jsAccessor = 0} is
 
 }}
 \examples{
-setInput("some_id")
-setInput("some_id", 1)
-setInput("some_id", 2)
-setInput("some_id", ".target.value")
 
-setInput("some_id", "[0]")
-# which is equivalent to
-setInput("some_id", 0)
+# Same as `setInput("some_id", 0)`.
+setInput("some_id")
+
+# Equivalent to `(...args) => Shiny.setInputValue('some_id', args[1])` in JS.
+setInput("some_id", 1)
+
+# Same as `setInput("some_id", 1)`.
+setInput("some_id", "[1]")
+
+# Equivalent to `(...args) => Shiny.setInputValue('some_id', args[0].target.value)` in JS.
+setInput("some_id", "[0].target.value")
 }
