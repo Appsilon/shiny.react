@@ -18,7 +18,7 @@ setInput(inputId, jsAccessor)
 \arguments{
 \item{inputId}{'Shiny' input ID to set the value on.}
 
-\item{jsAccessor}{Index (numeric 0-based index) or accessor (javascript string) of the argument
+\item{jsAccessor}{Index (numeric 0-based index) or accessor (JavaScript string) of the argument
 to use as value.}
 }
 \value{
@@ -34,9 +34,9 @@ the arguments passed to the handler.
 The argument \code{jsAccessor} can be empty (assumes \code{jsAccessor = 0}) or
 take one of the following types:
 \itemize{
-\item A valid javscript accessor string to be applied to the object
-(example: \code{jsAccessor = "[0].target.checked"})
-\item A valid javascript 0-based index (that unlike R it starts at 0)
+\item A valid JavaScript accessor string to be applied to the object
+(example: \code{jsAccessor = "[0].target.checked"}).
+\item A valid JavaScript 0-based index.
 }
 
 As an example, calling \code{setInput("some_index", 1)} is equivalent to
@@ -46,11 +46,9 @@ As an example, calling \code{setInput("some_index", 1)} is equivalent to
 \itemize{
 \item \code{setInput(inputId = character, jsAccessor = missing)}: Uses as index \code{jsAccessor = 0}
 
-\item \code{setInput(inputId = character, jsAccessor = numeric)}: Gets the value from index in jsAccessor
+\item \code{setInput(inputId = character, jsAccessor = numeric)}: Gets the value via index (see examples).
 
-\item \code{setInput(inputId = character, jsAccessor = character)}: Gets value via accessor, for instance,
-the equivalent for a checkbox with \code{jsAccessor = 0} is
-\code{jsAccessor = "[0].target.checked"}
+\item \code{setInput(inputId = character, jsAccessor = character)}: Gets value via accessor (see examples).
 
 }}
 \examples{

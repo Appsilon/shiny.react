@@ -170,15 +170,15 @@ triggerEvent <- function(inputId) {
 #' The argument `jsAccessor` can be empty (assumes `jsAccessor = 0`) or
 #' take one of the following types:
 #'
-#' - A valid javscript accessor string to be applied to the object
-#' (example: `jsAccessor = "[0].target.checked"`)
-#' - A valid javascript 0-based index (that unlike R it starts at 0)
+#' - A valid JavaScript accessor string to be applied to the object
+#' (example: `jsAccessor = "[0].target.checked"`).
+#' - A valid JavaScript 0-based index.
 #'
 #' As an example, calling `setInput("some_index", 1)` is equivalent to
 #' `setInput("some_index", "[1]")`
 #'
 #' @param inputId 'Shiny' input ID to set the value on.
-#' @param jsAccessor Index (numeric 0-based index) or accessor (javascript string) of the argument
+#' @param jsAccessor Index (numeric 0-based index) or accessor (JavaScript string) of the argument
 #' to use as value.
 #' @return A `ReactData` object which can be passed as a prop to 'React'
 #' components.
@@ -204,7 +204,7 @@ methods::setMethod(
   }
 )
 
-#' @describeIn setInput Gets the value from index in jsAccessor
+#' @describeIn setInput Gets the value via index (see examples).
 #' @export
 #' @examples
 #'
@@ -225,9 +225,7 @@ methods::setMethod(
   }
 )
 
-#' @describeIn setInput Gets value via accessor, for instance,
-#' the equivalent for a checkbox with `jsAccessor = 0` is
-#' `jsAccessor = "[0].target.checked"`
+#' @describeIn setInput Gets value via accessor (see examples).
 #' @export
 #' @examples
 #'
