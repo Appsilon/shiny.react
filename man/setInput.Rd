@@ -2,19 +2,65 @@
 % Please edit documentation in R/react.R
 \name{setInput}
 \alias{setInput}
+\alias{setInput,character,missing-method}
+\alias{setInput,character,numeric-method}
+\alias{setInput,character,character-method}
 \title{Set input}
 \usage{
-setInput(inputId, argIdx = 1)
+setInput(inputId, jsAccessor)
+
+\S4method{setInput}{character,missing}(inputId)
+
+\S4method{setInput}{character,numeric}(inputId, jsAccessor)
+
+\S4method{setInput}{character,character}(inputId, jsAccessor)
 }
 \arguments{
 \item{inputId}{'Shiny' input ID to set the value on.}
 
-\item{argIdx}{Index of the argument to use as value.}
+\item{jsAccessor}{Index (numeric 0-based index) or accessor (JavaScript string) of the argument
+to use as value.}
 }
 \value{
-A \code{ReactData} object which can be passed as a prop to 'React' components.
+A \code{ReactData} object which can be passed as a prop to 'React'
+components.
 }
 \description{
-Creates a handler which can be used for \code{onChange} and similar props of 'React' components
-to set the value of a 'Shiny' input to one of the arguments passed to the handler.
+Creates a handler which can be used for \code{onChange} and similar
+props of 'React' components to set the value of a 'Shiny' input to one of
+the arguments passed to the handler.
+}
+\details{
+The argument \code{jsAccessor} can be empty (assumes \code{jsAccessor = 0}) or
+take one of the following types:
+\itemize{
+\item A valid JavaScript accessor string to be applied to the object
+(example: \code{jsAccessor = "[0].target.checked"}).
+\item A valid JavaScript 0-based index.
+}
+
+As an example, calling \code{setInput("some_index", 1)} is equivalent to
+\code{setInput("some_index", "[1]")}
+}
+\section{Methods (by class)}{
+\itemize{
+\item \code{setInput(inputId = character, jsAccessor = missing)}: Uses as index \code{jsAccessor = 0}
+
+\item \code{setInput(inputId = character, jsAccessor = numeric)}: Gets the value via index (see examples).
+
+\item \code{setInput(inputId = character, jsAccessor = character)}: Gets value via accessor (see examples).
+
+}}
+\examples{
+# Same as `setInput("some_id", 0)`.
+setInput("some_id")
+
+# Equivalent to `(...args) => Shiny.setInputValue('some_id', args[1])` in JS.
+setInput("some_id", 1)
+
+# Same as `setInput("some_id", 1)`.
+setInput("some_id", "[1]")
+
+# Equivalent to `(...args) => Shiny.setInputValue('some_id', args[0].target.value)` in JS.
+setInput("some_id", "[0].target.value")
 }

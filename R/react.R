@@ -157,22 +157,89 @@ JS <- function(...) { # nolint
 #' @export
 triggerEvent <- function(inputId) {
   ReactData(
-    type = "input", id = inputId, argIdx = NULL
+    type = "event", id = inputId
   )
 }
 
 #' Set input
 #'
-#' Creates a handler which can be used for `onChange` and similar props of 'React' components
-#' to set the value of a 'Shiny' input to one of the arguments passed to the handler.
+#' Creates a handler which can be used for `onChange` and similar
+#' props of 'React' components to set the value of a 'Shiny' input to one of
+#' the arguments passed to the handler.
+#'
+#' The argument `jsAccessor` can be empty (assumes `jsAccessor = 0`) or
+#' take one of the following types:
+#'
+#' - A valid JavaScript accessor string to be applied to the object
+#' (example: `jsAccessor = "[0].target.checked"`).
+#' - A valid JavaScript 0-based index.
+#'
+#' As an example, calling `setInput("some_index", 1)` is equivalent to
+#' `setInput("some_index", "[1]")`
 #'
 #' @param inputId 'Shiny' input ID to set the value on.
-#' @param argIdx Index of the argument to use as value.
-#' @return A `ReactData` object which can be passed as a prop to 'React' components.
+#' @param jsAccessor Index (numeric 0-based index) or accessor (JavaScript string) of the argument
+#' to use as value.
+#' @return A `ReactData` object which can be passed as a prop to 'React'
+#' components.
 #'
 #' @export
-setInput <- function(inputId, argIdx = 1) {
-  ReactData(
-    type = "input", id = inputId, argIdx = argIdx - 1
-  )
-}
+methods::setGeneric(
+  "setInput",
+  function(inputId, jsAccessor) {
+    stop("Arguments not supported, see the documentation.")
+  }
+)
+
+#' @describeIn setInput Uses as index `jsAccessor = 0`
+#' @export
+#' @examples
+#' # Same as `setInput("some_id", 0)`.
+#' setInput("some_id")
+methods::setMethod(
+  "setInput",
+  signature(inputId = "character", jsAccessor = "missing"),
+  function(inputId) {
+    setInput(inputId, 0)
+  }
+)
+
+#' @describeIn setInput Gets the value via index (see examples).
+#' @export
+#' @examples
+#'
+#' # Equivalent to `(...args) => Shiny.setInputValue('some_id', args[1])` in JS.
+#' setInput("some_id", 1)
+methods::setMethod(
+  "setInput",
+  signature(inputId = "character", jsAccessor = "numeric"),
+  function(inputId, jsAccessor) {
+    if (jsAccessor < 0 || jsAccessor - floor(jsAccessor) != 0) {
+      stop(glue::glue("Arguments not supported :: index '{jsAccessor}' is invalid"))
+    }
+    ReactData(
+      type = "input",
+      id = inputId,
+      jsAccessor = as.character(glue::glue("[{jsAccessor}]"))
+    )
+  }
+)
+
+#' @describeIn setInput Gets value via accessor (see examples).
+#' @export
+#' @examples
+#'
+#' # Same as `setInput("some_id", 1)`.
+#' setInput("some_id", "[1]")
+#'
+#' # Equivalent to `(...args) => Shiny.setInputValue('some_id', args[0].target.value)` in JS.
+#' setInput("some_id", "[0].target.value")
+methods::setMethod(
+  "setInput",
+  signature(inputId = "character", jsAccessor = "character"),
+  function(inputId, jsAccessor) {
+    ReactData(
+      type = "input", id = inputId, jsAccessor = jsAccessor
+    )
+  }
+)
