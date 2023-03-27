@@ -11,6 +11,15 @@ asReactData <- function(x) UseMethod("asReactData")
 asReactData.ReactData <- function(x) x
 
 #' @export
+asReactData.html <- function(x) {
+  ReactData(
+    type = "html",
+    value = dropDeps(x),
+    deps = getDeps(x)
+  )
+}
+
+#' @export
 asReactData.default <- function(x) {
   ReactData(
     type = "raw",

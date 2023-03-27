@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 
 import { needsBindingWrapper, ShinyBindingWrapper } from './shinyBindings';
 import { Shiny } from './Shiny';
@@ -42,6 +43,11 @@ function renameKey(object, from, to) {
   return object;
 }
 
+// This function should determine when to parse a string as HTML.
+function isHTML(str) {
+  return /<[a-z][\s\S]*>/i.test(str);
+}
+
 // There are a number of attributes that work differently between React and HTML. This function
 // does not provide full compatibility, but does a fairly good job. To some extent this relies
 // on the undocumented behavior of react: the tag / attribute names which are renamed in React
@@ -60,6 +66,9 @@ function prepareProps(elementName, propsData) {
     renameKey(props, 'value', 'defaultValue');
     renameKey(props, 'checked', 'defaultChecked');
   }
+  if (isHTML(props.children)) {
+    props.children = parse(props.children);
+  }
   if (typeof props.style === 'string') {
     props.style = styleStringToObject(props.style);
   }
@@ -67,6 +76,7 @@ function prepareProps(elementName, propsData) {
 }
 
 dataMappers.raw = ({ value }) => value;
+dataMappers.html = ({ value }) => parse(value);
 dataMappers.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
 dataMappers.array = ({ value }) => value.map(mapReactData);
 dataMappers.object = ({ value }) => mapValues(value, mapReactData);
