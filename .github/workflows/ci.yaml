@@ -49,3 +49,7 @@ jobs:
         if: always()
         run: yarn test
         working-directory: js
+
+      - name: Test coverage
+        run: |
+          Rscript -e 'covr::codecov()'
