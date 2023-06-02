@@ -25,6 +25,7 @@ Imports:
   rlang,
   shiny
 Suggests:
+  covr,
   knitr,
   leaflet,
   methods,
