@@ -158,18 +158,18 @@
 <h3 id="adding-liquid">Adding Liquid<a class="anchor" aria-label="anchor" href="#adding-liquid"></a>
 </h3>
 <p>In the <code>js</code> directory we use <code>yarn</code> to add the Liquid Oxygen library.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="ex">yarn</span> init --yes</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="ex">yarn</span> add @emdgroup-liquid/liquid@3.0.0</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="ex">yarn</span> init --yes</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="ex">yarn</span> add @emdgroup-liquid/liquid@3.0.0</span></code></pre></div>
 <p>In order to use react components we need to find where package exports are defined first. We need to look for export keyword with names of components. In case of this package, exports can be found in <code>@emdgroup-liquid/liquid/dist/react</code>.</p>
 <p>We will use a bundler to generate the <code>liquid.js</code> script from the following <code>js/src/index.js</code> file:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">const</span> Liquid <span class="op">=</span> <span class="at">require</span>(<span class="st">'@emdgroup-liquid/liquid/dist/react'</span>)<span class="op">;</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a></span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="at">require</span>(<span class="st">'@emdgroup-liquid/liquid/dist/css/liquid.css'</span>)<span class="op">;</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="va">window</span>.<span class="at">jsmodule</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>  ...<span class="va">window</span>.<span class="at">jsmodule</span><span class="op">,</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a>  <span class="st">'@emdgroup-liquid/liquid'</span><span class="op">:</span> Liquid</span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">const</span> Liquid <span class="op">=</span> <span class="pp">require</span>(<span class="st">'@emdgroup-liquid/liquid/dist/react'</span>)<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="pp">require</span>(<span class="st">'@emdgroup-liquid/liquid/dist/css/liquid.css'</span>)<span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="bu">window</span><span class="op">.</span><span class="at">jsmodule</span> <span class="op">=</span> {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>  <span class="op">...</span><span class="bu">window</span><span class="op">.</span><span class="at">jsmodule</span><span class="op">,</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>  <span class="st">'@emdgroup-liquid/liquid'</span><span class="op">:</span> Liquid</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>}<span class="op">;</span></span></code></pre></div>
 <p>This script will make the Liquid Oxygen library available as <code>jsmodule[@emdgroup-liquid/liquid]</code> on the browser. It will also load the necessary CSS.</p>
 </div>
 <div class="section level3">
@@ -177,53 +177,53 @@
 </h3>
 <p>We will use <a href="https://webpack.js.org/" class="external-link">webpack</a> to build the <code>liquid.js</code> file.</p>
 <p>There is a handy <a href="https://createapp.dev/webpack" class="external-link">online tool</a> which we can use to generate a configuration for that webpack. Let’s just pick CSS from the Styling section and copy the the script to <code>js/webpack.config.js</code>. We also add dev dependencies as suggested by the tool:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">yarn</span> add --dev webpack webpack-cli css-loader style-loader</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="ex">yarn</span> add --dev webpack webpack-cli css-loader style-loader</span></code></pre></div>
 <p>Now let’s tweak the config a bit. We change the output to <code>inst/www/liquid.js</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1"></a>output<span class="op">:</span> <span class="op">{</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="dt">path</span><span class="op">:</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">'..'</span><span class="op">,</span> <span class="st">'inst'</span><span class="op">,</span> <span class="st">'www'</span>)<span class="op">,</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="dt">filename</span><span class="op">:</span> <span class="st">'liquid.js'</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>output<span class="op">:</span> {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>  <span class="dt">path</span><span class="op">:</span> path<span class="op">.</span><span class="fu">join</span>(<span class="bu">__dirname</span><span class="op">,</span> <span class="st">'..'</span><span class="op">,</span> <span class="st">'inst'</span><span class="op">,</span> <span class="st">'www'</span>)<span class="op">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>  <span class="dt">filename</span><span class="op">:</span> <span class="st">'liquid.js'</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>}</span></code></pre></div>
 <p>We add <a href="https://webpack.js.org/configuration/externals/" class="external-link"><code>externals</code></a> to let webpack know where to look for modules provided by shiny.react:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1"></a>externals<span class="op">:</span> <span class="op">{</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="st">'react'</span><span class="op">:</span> <span class="st">'jsmodule["react"]'</span><span class="op">,</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="st">'react-dom'</span><span class="op">:</span> <span class="st">'jsmodule["react-dom"]'</span><span class="op">,</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="st">'@/shiny.react'</span><span class="op">:</span> <span class="st">'jsmodule["@/shiny.react"]'</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>externals<span class="op">:</span> {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  <span class="st">'react'</span><span class="op">:</span> <span class="st">'jsmodule["react"]'</span><span class="op">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>  <span class="st">'react-dom'</span><span class="op">:</span> <span class="st">'jsmodule["react-dom"]'</span><span class="op">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>  <span class="st">'@/shiny.react'</span><span class="op">:</span> <span class="st">'jsmodule["@/shiny.react"]'</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>}</span></code></pre></div>
 <p>Our final <code>js/webpack.config.js</code> looks as follows:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">const</span> webpack <span class="op">=</span> <span class="at">require</span>(<span class="st">'webpack'</span>)<span class="op">;</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">const</span> path <span class="op">=</span> <span class="at">require</span>(<span class="st">'path'</span>)<span class="op">;</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="kw">const</span> config <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a>  <span class="dt">entry</span><span class="op">:</span> <span class="st">'./src/index.js'</span><span class="op">,</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a>  <span class="dt">output</span><span class="op">:</span> <span class="op">{</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a>    <span class="dt">path</span><span class="op">:</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">'..'</span><span class="op">,</span> <span class="st">'inst'</span><span class="op">,</span> <span class="st">'www'</span>)<span class="op">,</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a>    <span class="dt">filename</span><span class="op">:</span> <span class="st">'liquid.js'</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a>  <span class="op">},</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a>  <span class="dt">module</span><span class="op">:</span> <span class="op">{</span></span>
-<span id="cb11-11"><a href="#cb11-11"></a>    <span class="dt">rules</span><span class="op">:</span> [</span>
-<span id="cb11-12"><a href="#cb11-12"></a>      <span class="op">{</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a>        <span class="dt">test</span><span class="op">:</span> <span class="ss">/</span><span class="sc">\.</span><span class="ss">css</span><span class="sc">$</span><span class="ss">/</span><span class="op">,</span></span>
-<span id="cb11-14"><a href="#cb11-14"></a>        <span class="dt">use</span><span class="op">:</span> [</span>
-<span id="cb11-15"><a href="#cb11-15"></a>          <span class="st">'style-loader'</span><span class="op">,</span></span>
-<span id="cb11-16"><a href="#cb11-16"></a>          <span class="st">'css-loader'</span></span>
-<span id="cb11-17"><a href="#cb11-17"></a>        ]</span>
-<span id="cb11-18"><a href="#cb11-18"></a>      <span class="op">}</span></span>
-<span id="cb11-19"><a href="#cb11-19"></a>    ]</span>
-<span id="cb11-20"><a href="#cb11-20"></a>  <span class="op">},</span></span>
-<span id="cb11-21"><a href="#cb11-21"></a>  <span class="dt">externals</span><span class="op">:</span> <span class="op">{</span></span>
-<span id="cb11-22"><a href="#cb11-22"></a>    <span class="st">'react'</span><span class="op">:</span> <span class="st">'jsmodule["react"]'</span><span class="op">,</span></span>
-<span id="cb11-23"><a href="#cb11-23"></a>    <span class="st">'react-dom'</span><span class="op">:</span> <span class="st">'jsmodule["react-dom"]'</span><span class="op">,</span></span>
-<span id="cb11-24"><a href="#cb11-24"></a>    <span class="st">'@/shiny.react'</span><span class="op">:</span> <span class="st">'jsmodule["@/shiny.react"]'</span></span>
-<span id="cb11-25"><a href="#cb11-25"></a>  <span class="op">}</span></span>
-<span id="cb11-26"><a href="#cb11-26"></a><span class="op">};</span></span>
-<span id="cb11-27"><a href="#cb11-27"></a></span>
-<span id="cb11-28"><a href="#cb11-28"></a><span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> config<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="kw">const</span> webpack <span class="op">=</span> <span class="pp">require</span>(<span class="st">'webpack'</span>)<span class="op">;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="kw">const</span> path <span class="op">=</span> <span class="pp">require</span>(<span class="st">'path'</span>)<span class="op">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="kw">const</span> config <span class="op">=</span> {</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>  <span class="dt">entry</span><span class="op">:</span> <span class="st">'./src/index.js'</span><span class="op">,</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>  <span class="dt">output</span><span class="op">:</span> {</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a>    <span class="dt">path</span><span class="op">:</span> path<span class="op">.</span><span class="fu">join</span>(<span class="bu">__dirname</span><span class="op">,</span> <span class="st">'..'</span><span class="op">,</span> <span class="st">'inst'</span><span class="op">,</span> <span class="st">'www'</span>)<span class="op">,</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a>    <span class="dt">filename</span><span class="op">:</span> <span class="st">'liquid.js'</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a>  }<span class="op">,</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true"></a>  <span class="dt">module</span><span class="op">:</span> {</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true"></a>    <span class="dt">rules</span><span class="op">:</span> [</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true"></a>      {</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true"></a>        <span class="dt">test</span><span class="op">:</span> <span class="ss">/</span><span class="sc">\.</span><span class="ss">css</span><span class="sc">$</span><span class="ss">/</span><span class="op">,</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true"></a>        <span class="dt">use</span><span class="op">:</span> [</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true"></a>          <span class="st">'style-loader'</span><span class="op">,</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true"></a>          <span class="st">'css-loader'</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true"></a>        ]</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true"></a>      }</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true"></a>    ]</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true"></a>  }<span class="op">,</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true"></a>  <span class="dt">externals</span><span class="op">:</span> {</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true"></a>    <span class="st">'react'</span><span class="op">:</span> <span class="st">'jsmodule["react"]'</span><span class="op">,</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true"></a>    <span class="st">'react-dom'</span><span class="op">:</span> <span class="st">'jsmodule["react-dom"]'</span><span class="op">,</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true"></a>    <span class="st">'@/shiny.react'</span><span class="op">:</span> <span class="st">'jsmodule["@/shiny.react"]'</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true"></a>  }</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true"></a>}<span class="op">;</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true"></a></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true"></a>module<span class="op">.</span><span class="at">exports</span> <span class="op">=</span> config<span class="op">;</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="building-the-package">Building the package<a class="anchor" aria-label="anchor" href="#building-the-package"></a>
 </h3>
 <p>We are ready to build our package! First of all, we run webpack in the <code>js</code> directory:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="ex">yarn</span> webpack</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="ex">yarn</span> webpack</span></code></pre></div>
 <p>This will generate the <code>inst/www/webpack.js</code> bundle. We should also generate the NAMESPACE file:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -238,7 +238,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://appsilon.github.io/shiny.react/">shiny.react</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">liquid</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
 <span>  ui <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>    <span class="fu">LdButton</span><span class="op">(</span><span class="st">"Test Button"</span><span class="op">)</span>,</span>
 <span>    <span class="fu">LdLoading</span><span class="op">(</span><span class="op">)</span></span>
@@ -247,7 +247,7 @@
 <span><span class="op">)</span></span></code></pre></div>
 <p>Cool! Let’s try something more advanced:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
 <span>  ui <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>    <span class="fu">LdButton</span><span class="op">(</span></span>
 <span>      <span class="st">"Initiate loading"</span>,</span>
@@ -267,23 +267,23 @@
 </h3>
 <p>Even simple components can be cumbersome to use in Shiny, as evident in the last example. It is a good idea to create <code>.shinyInput</code> wrappers to simplify the life of your users.</p>
 <p>We change our <code>js/src/index.js</code> to the following:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">const</span> Liquid <span class="op">=</span> <span class="at">require</span>(<span class="st">'@emdgroup-liquid/liquid/dist/react'</span>)<span class="op">;</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="kw">const</span> <span class="op">{</span> InputAdapter <span class="op">}</span> <span class="op">=</span> <span class="at">require</span>(<span class="st">'@/shiny.react'</span>)</span>
-<span id="cb16-3"><a href="#cb16-3"></a></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="at">require</span>(<span class="st">'@emdgroup-liquid/liquid/dist/css/liquid.css'</span>)<span class="op">;</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a></span>
-<span id="cb16-6"><a href="#cb16-6"></a><span class="kw">const</span> LdSelect <span class="op">=</span> <span class="at">InputAdapter</span>(<span class="va">Liquid</span>.<span class="at">LdSelect</span><span class="op">,</span> (value<span class="op">,</span> setValue) <span class="kw">=&gt;</span> (<span class="op">{</span></span>
-<span id="cb16-7"><a href="#cb16-7"></a>  <span class="dt">onLdchange</span><span class="op">:</span> (event) <span class="kw">=&gt;</span> <span class="op">{</span></span>
-<span id="cb16-8"><a href="#cb16-8"></a>    <span class="at">setValue</span>(<span class="va">event</span>.<span class="at">detail</span>)<span class="op">;</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a>  <span class="op">},</span></span>
-<span id="cb16-10"><a href="#cb16-10"></a><span class="op">}</span>))<span class="op">;</span></span>
-<span id="cb16-11"><a href="#cb16-11"></a></span>
-<span id="cb16-12"><a href="#cb16-12"></a></span>
-<span id="cb16-13"><a href="#cb16-13"></a><span class="va">window</span>.<span class="at">jsmodule</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb16-14"><a href="#cb16-14"></a>  ...<span class="va">window</span>.<span class="at">jsmodule</span><span class="op">,</span></span>
-<span id="cb16-15"><a href="#cb16-15"></a>  <span class="st">'@emdgroup-liquid/liquid'</span><span class="op">:</span> Liquid<span class="op">,</span></span>
-<span id="cb16-16"><a href="#cb16-16"></a>  <span class="st">'@/liquid'</span><span class="op">:</span> <span class="op">{</span> LdSelect <span class="op">}</span></span>
-<span id="cb16-17"><a href="#cb16-17"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="kw">const</span> Liquid <span class="op">=</span> <span class="pp">require</span>(<span class="st">'@emdgroup-liquid/liquid/dist/react'</span>)<span class="op">;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="kw">const</span> { InputAdapter } <span class="op">=</span> <span class="pp">require</span>(<span class="st">'@/shiny.react'</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a><span class="pp">require</span>(<span class="st">'@emdgroup-liquid/liquid/dist/css/liquid.css'</span>)<span class="op">;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a><span class="kw">const</span> LdSelect <span class="op">=</span> <span class="fu">InputAdapter</span>(Liquid<span class="op">.</span><span class="at">LdSelect</span><span class="op">,</span> (value<span class="op">,</span> setValue) <span class="kw">=&gt;</span> ({</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a>  <span class="dt">onLdchange</span><span class="op">:</span> (<span class="bu">event</span>) <span class="kw">=&gt;</span> {</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true"></a>    <span class="fu">setValue</span>(<span class="bu">event</span><span class="op">.</span><span class="at">detail</span>)<span class="op">;</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true"></a>  }<span class="op">,</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true"></a>}))<span class="op">;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true"></a><span class="bu">window</span><span class="op">.</span><span class="at">jsmodule</span> <span class="op">=</span> {</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true"></a>  <span class="op">...</span><span class="bu">window</span><span class="op">.</span><span class="at">jsmodule</span><span class="op">,</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true"></a>  <span class="st">'@emdgroup-liquid/liquid'</span><span class="op">:</span> Liquid<span class="op">,</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true"></a>  <span class="st">'@/liquid'</span><span class="op">:</span> { LdSelect }</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true"></a>}<span class="op">;</span></span></code></pre></div>
 <p>In order to create an input that can be used in Shiny server we need to create the component with a hook that will set a value of Shiny input. We can use <code>InputAdapter</code> from <code>shiny.react</code> package to do it easily.</p>
 <p>The documentation states that Liquid components dispatch ldchange events, to change value of Shiny input we need to set a value when component changes its state. For React components we use onLdchange prop and we set the value using event.detail. This property contains an array of selected items from the dropdown. If the documentation provides information which event field contains value of input use the one from documentation. If it doesn’t you can set a breakpoint in the browser to investigate what fields does event object have and use the appropriate one.</p>
 <p>We also add these lines to <code>R/components.R</code>:</p>
@@ -309,7 +309,7 @@
 <span><span class="va">LdSelect</span> <span class="op">&lt;-</span> <span class="fu">component</span><span class="op">(</span><span class="st">"LdSelect"</span><span class="op">)</span></span></code></pre></div>
 <p>After rebuilding and reinstalling the package we can now rewrite the last Shiny app example as:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
 <span>  ui <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span>
 <span>    <span class="fu">LdSelect.shinyInput</span><span class="op">(</span></span>
 <span>      placeholder <span class="op">=</span> <span class="st">"Pick a fruit"</span>,</span>
@@ -319,10 +319,10 @@
 <span>      <span class="fu">LdOption</span><span class="op">(</span><span class="st">"Orange"</span><span class="op">)</span>,</span>
 <span>      <span class="fu">LdOption</span><span class="op">(</span><span class="st">"Strawberry"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textOutput.html" class="external-link">textOutput</a></span><span class="op">(</span><span class="st">"selectedFruit"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">textOutput</a></span><span class="op">(</span><span class="st">"selectedFruit"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">output</span><span class="op">$</span><span class="va">selectedFruit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">selectedFruit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>      <span class="va">input</span><span class="op">$</span><span class="va">fruit</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>

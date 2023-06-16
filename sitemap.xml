@@ -7,6 +7,9 @@
     <loc>https://appsilon.github.io/shiny.react/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://appsilon.github.io/shiny.react/PULL_REQUEST_TEMPLATE.html</loc>
+  </url>
+  <url>
     <loc>https://appsilon.github.io/shiny.react/articles/index.html</loc>
   </url>
   <url>
@@ -20,9 +23,6 @@
   </url>
   <url>
     <loc>https://appsilon.github.io/shiny.react/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://appsilon.github.io/shiny.react/pull_request_template.html</loc>
   </url>
   <url>
     <loc>https://appsilon.github.io/shiny.react/reference/JS.html</loc>
