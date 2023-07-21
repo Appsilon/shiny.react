@@ -6,17 +6,15 @@ export default {
     path: join(__dirname, '..', 'inst', 'www', 'shiny.react'),
     filename: 'shiny-react.js',
   },
-  resolve: { extensions: ['.js', '.jsx'] },
+  resolve: { extensions: ['.js', '.jsx', '.jsx', '.tsx', '.ts'] },
   module: {
     rules: [
-      {
-        test: /\.(js|jsx)$/,
-        use: ['babel-loader'],
-      },
+      // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
+      { test: /\.tsx?$/, loader: "ts-loader" },
+      { test: /\.(js|jsx)$/, use: ['babel-loader'] },
     ],
   },
   externals: {
-    '@/shiny': 'Shiny',
     'react': 'React',
     'react-dom': 'ReactDOM',
   },

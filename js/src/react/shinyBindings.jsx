@@ -1,4 +1,3 @@
-import Shiny from '@/shiny';
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
 
@@ -23,9 +22,9 @@ export function ShinyBindingWrapper({ children }) {
   const ref = useRef();
   useEffect(() => {
     const wrapper = ref.current;
-    Shiny.initializeInputs(wrapper);
-    Shiny.bindAll(wrapper);
-    return () => Shiny.unbindAll(wrapper);
+    window.Shiny.initializeInputs(wrapper);
+    window.Shiny.bindAll(wrapper);
+    return () => window.Shiny.unbindAll(wrapper);
   }, []);
 
   return (
