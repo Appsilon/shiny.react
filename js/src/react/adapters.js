@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
-import isShiny from './isShiny';
+import { Shiny, isShiny } from './Shiny';
 import mapReactData from './mapReactData';
 
 export { throttle, debounce } from 'lodash';
@@ -15,7 +15,7 @@ export { throttle, debounce } from 'lodash';
 const updateHandlers = {};
 
 if (isShiny()) {
-  window.Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
+  Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
     if (inputId in updateHandlers) {
       updateHandlers[inputId](mapReactData(data));
     } else throw new Error(`Attempted to update non-existent React input '${inputId}'`);
@@ -49,7 +49,7 @@ function useValue(inputId, defaultValue, rateLimit) {
   const [value, setValue] = useState(defaultValue);
   const ref = useRef();
   useEffect(() => {
-    const setInputValue = (v) => window.Shiny.setInputValue(inputId, v);
+    const setInputValue = (v) => Shiny.setInputValue(inputId, v);
     if (rateLimit === undefined) {
       ref.current = setInputValue;
       // No cleanup effect

@@ -10624,7 +10624,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _isShiny__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./isShiny */ "./src/react/isShiny.ts");
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
 /* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
@@ -10663,8 +10663,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var updateHandlers = {};
 
-if ((0,_isShiny__WEBPACK_IMPORTED_MODULE_2__["default"])()) {
-  window.Shiny.addCustomMessageHandler('updateReactInput', function (_ref) {
+if ((0,_Shiny__WEBPACK_IMPORTED_MODULE_2__.isShiny)()) {
+  _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.addCustomMessageHandler('updateReactInput', function (_ref) {
     var inputId = _ref.inputId,
         data = _ref.data;
 
@@ -10708,7 +10708,7 @@ function useValue(inputId, defaultValue, rateLimit) {
   var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)();
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var setInputValue = function setInputValue(v) {
-      return window.Shiny.setInputValue(inputId, v);
+      return _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.setInputValue(inputId, v);
     };
 
     if (rateLimit === undefined) {
@@ -10826,14 +10826,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _onceShinyInitialized__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./onceShinyInitialized */ "./src/react/onceShinyInitialized.js");
 /* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
-/* harmony import */ var _isShiny__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./isShiny */ "./src/react/isShiny.ts");
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
 
 
 
 
 
-if ((0,_isShiny__WEBPACK_IMPORTED_MODULE_3__["default"])()) {
-  var binding = new window.Shiny.OutputBinding();
+if ((0,_Shiny__WEBPACK_IMPORTED_MODULE_3__.isShiny)()) {
+  var binding = new _Shiny__WEBPACK_IMPORTED_MODULE_3__.Shiny.OutputBinding();
 
   binding.find = function (scope) {
     return scope.find('.react-container');
@@ -10842,11 +10842,11 @@ if ((0,_isShiny__WEBPACK_IMPORTED_MODULE_3__["default"])()) {
   binding.renderValue = function (container, _ref) {
     var data = _ref.data,
         deps = _ref.deps;
-    window.Shiny.renderDependencies(deps);
+    _Shiny__WEBPACK_IMPORTED_MODULE_3__.Shiny.renderDependencies(deps);
     react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__["default"])(data), container);
   };
 
-  window.Shiny.outputBindings.register(binding);
+  _Shiny__WEBPACK_IMPORTED_MODULE_3__.Shiny.outputBindings.register(binding);
 }
 
 function unmountContainersAtNode(node) {
@@ -10926,6 +10926,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _shinyBindings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shinyBindings */ "./src/react/shinyBindings.jsx");
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -10937,6 +10938,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -11059,7 +11061,7 @@ dataMappers.element = function (_ref7) {
 dataMappers.event = function (_ref8) {
   var id = _ref8.id;
   return function () {
-    window.Shiny.setInputValue(id, true, {
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.setInputValue(id, true, {
       priority: 'event'
     });
   };
@@ -11076,7 +11078,7 @@ dataMappers.input = function (_ref9) {
       args[_key] = arguments[_key];
     }
 
-    window.Shiny.setInputValue(id, getValue(args), {
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.setInputValue(id, getValue(args), {
       priority: 'event'
     });
   };
@@ -11095,12 +11097,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ onceShinyInitialized)
 /* harmony export */ });
-/* harmony import */ var _isShiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isShiny */ "./src/react/isShiny.ts");
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
  // Shiny initializes some functions after a delay:
 // https://github.com/rstudio/shiny/blob/cda59da698eba1deda20ba09ca8b7f0b0b149f87/srcts/src/shiny/index.ts#L101
 
 function shinyInitialized() {
-  return (0,_isShiny__WEBPACK_IMPORTED_MODULE_0__["default"])() ? window.Shiny.setInputValue !== undefined : true;
+  return (0,_Shiny__WEBPACK_IMPORTED_MODULE_0__.isShiny)() ? _Shiny__WEBPACK_IMPORTED_MODULE_0__.Shiny.setInputValue !== undefined : true;
 } // Run `callback` and keep retrying with exponential backoff until it returns true.
 
 
@@ -11149,6 +11151,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
+
 
 
 var regex = new RegExp([// `shiny::actionButton()` and `shiny::actionLink()`.
@@ -11165,10 +11169,10 @@ function ShinyBindingWrapper(_ref) {
   var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)();
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var wrapper = ref.current;
-    window.Shiny.initializeInputs(wrapper);
-    window.Shiny.bindAll(wrapper);
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.initializeInputs(wrapper);
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.bindAll(wrapper);
     return function () {
-      return window.Shiny.unbindAll(wrapper);
+      return _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.unbindAll(wrapper);
     };
   }, []);
   return (
@@ -11476,20 +11480,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/react/isShiny.ts":
-/*!******************************!*\
-  !*** ./src/react/isShiny.ts ***!
-  \******************************/
+/***/ "./src/react/Shiny.ts":
+/*!****************************!*\
+  !*** ./src/react/Shiny.ts ***!
+  \****************************/
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isShiny = exports.Shiny = void 0;
 function isShiny() {
-    console.log(!!window.Shiny);
     return !!window.Shiny;
 }
-exports["default"] = isShiny;
+exports.isShiny = isShiny;
+const Shiny = window.Shiny;
+exports.Shiny = Shiny;
 
 
 /***/ }),
