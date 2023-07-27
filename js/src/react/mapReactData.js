@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { needsBindingWrapper, ShinyBindingWrapper } from './shinyBindings';
+import { Shiny } from './Shiny';
 
 const dataMappers = {};
 
@@ -86,7 +87,7 @@ dataMappers.element = ({ module, name, props: propsData }) => {
 // on every call (this works thanks to `priority: 'event'`).
 dataMappers.event = ({ id }) => (
   () => {
-    window.Shiny.setInputValue(id, true, { priority: 'event' });
+    Shiny.setInputValue(id, true, { priority: 'event' });
   }
 );
 
@@ -94,6 +95,6 @@ dataMappers.event = ({ id }) => (
 dataMappers.input = ({ id, jsAccessor }) => {
   const getValue = eval(`(args) => (args${jsAccessor})`); // eslint-disable-line no-eval
   return (...args) => {
-    window.Shiny.setInputValue(id, getValue(args), { priority: 'event' });
+    Shiny.setInputValue(id, getValue(args), { priority: 'event' });
   };
 };

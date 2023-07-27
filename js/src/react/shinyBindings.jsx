@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
+import { Shiny } from './Shiny';
 
 const regex = new RegExp([
   // `shiny::actionButton()` and `shiny::actionLink()`.
@@ -22,9 +23,9 @@ export function ShinyBindingWrapper({ children }) {
   const ref = useRef();
   useEffect(() => {
     const wrapper = ref.current;
-    window.Shiny.initializeInputs(wrapper);
-    window.Shiny.bindAll(wrapper);
-    return () => window.Shiny.unbindAll(wrapper);
+    Shiny.initializeInputs(wrapper);
+    Shiny.bindAll(wrapper);
+    return () => Shiny.unbindAll(wrapper);
   }, []);
 
   return (

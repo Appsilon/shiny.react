@@ -1,16 +1,16 @@
 import ReactDOM from 'react-dom';
 import onceShinyInitialized from './onceShinyInitialized';
 import mapReactData from './mapReactData';
-import isShiny from './isShiny';
+import { Shiny, isShiny } from './Shiny';
 
 if (isShiny()) {
-  const binding = new window.Shiny.OutputBinding();
+  const binding = new Shiny.OutputBinding();
   binding.find = (scope) => scope.find('.react-container');
   binding.renderValue = (container, { data, deps }) => {
-    window.Shiny.renderDependencies(deps);
+    Shiny.renderDependencies(deps);
     ReactDOM.render(mapReactData(data), container);
   };
-  window.Shiny.outputBindings.register(binding);
+  Shiny.outputBindings.register(binding);
 }
 
 function unmountContainersAtNode(node) {
