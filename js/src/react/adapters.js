@@ -1,7 +1,6 @@
-import Shiny from '@/shiny';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
-
+import { Shiny, isShiny } from './Shiny';
 import mapReactData from './mapReactData';
 
 export { throttle, debounce } from 'lodash';
@@ -15,11 +14,13 @@ export { throttle, debounce } from 'lodash';
 
 const updateHandlers = {};
 
-Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
-  if (inputId in updateHandlers) {
-    updateHandlers[inputId](mapReactData(data));
-  } else throw new Error(`Attempted to update non-existent React input '${inputId}'`);
-});
+if (isShiny()) {
+  Shiny.addCustomMessageHandler('updateReactInput', ({ inputId, data }) => {
+    if (inputId in updateHandlers) {
+      updateHandlers[inputId](mapReactData(data));
+    } else throw new Error(`Attempted to update non-existent React input '${inputId}'`);
+  });
+}
 
 const withFirstCall = (first, rest) => {
   let firstCall = true;

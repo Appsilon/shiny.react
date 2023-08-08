@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "test": "jest",
-    "lint": "eslint --ext .js,.jsx src"
+    "lint": "eslint --ext .js,.jsx,ts,tsx src"
   },
   "babel": {
     "presets": [
@@ -15,9 +15,11 @@
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-react": "^7.12.10",
     "@babel/register": "^7.12.10",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.4",
-    "eslint": "7.24.0",
+    "eslint": "^8.45.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-import-resolver-webpack": "^0.13.0",
     "eslint-plugin-import": "^2.22.1",
@@ -28,8 +30,14 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@types/rstudio-shiny": "https://github.com/rstudio/shiny#v1.7.4",
     "jest": "^26.6.3",
     "lodash": "^4.17.21",
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "source-map-loader": "^4.0.1",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6"
   }
 }

@@ -1,6 +1,6 @@
-import Shiny from '@/shiny';
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
+import { Shiny } from './Shiny';
 
 const regex = new RegExp([
   // `shiny::actionButton()` and `shiny::actionLink()`.

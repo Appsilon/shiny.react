@@ -1,9 +1,9 @@
-import Shiny from '@/shiny';
+import { Shiny, isShiny } from './Shiny';
 
 // Shiny initializes some functions after a delay:
 // https://github.com/rstudio/shiny/blob/cda59da698eba1deda20ba09ca8b7f0b0b149f87/srcts/src/shiny/index.ts#L101
 function shinyInitialized() {
-  return Shiny.setInputValue !== undefined;
+  return isShiny() ? Shiny.setInputValue !== undefined : true;
 }
 
 // Run `callback` and keep retrying with exponential backoff until it returns true.

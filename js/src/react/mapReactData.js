@@ -1,7 +1,7 @@
-import Shiny from '@/shiny';
 import React from 'react';
 
 import { needsBindingWrapper, ShinyBindingWrapper } from './shinyBindings';
+import { Shiny } from './Shiny';
 
 const dataMappers = {};
 

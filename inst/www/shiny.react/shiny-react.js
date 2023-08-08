@@ -10620,12 +10620,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "debounce": () => (/* reexport safe */ lodash__WEBPACK_IMPORTED_MODULE_4__.debounce),
 /* harmony export */   "throttle": () => (/* reexport safe */ lodash__WEBPACK_IMPORTED_MODULE_4__.throttle)
 /* harmony export */ });
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
 /* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
@@ -10663,14 +10662,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 // in a controlled manner, which allows also for the value to be updated from R.
 
 var updateHandlers = {};
-_shiny__WEBPACK_IMPORTED_MODULE_0___default().addCustomMessageHandler('updateReactInput', function (_ref) {
-  var inputId = _ref.inputId,
-      data = _ref.data;
 
-  if (inputId in updateHandlers) {
-    updateHandlers[inputId]((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__["default"])(data));
-  } else throw new Error("Attempted to update non-existent React input '".concat(inputId, "'"));
-});
+if ((0,_Shiny__WEBPACK_IMPORTED_MODULE_2__.isShiny)()) {
+  _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.addCustomMessageHandler('updateReactInput', function (_ref) {
+    var inputId = _ref.inputId,
+        data = _ref.data;
+
+    if (inputId in updateHandlers) {
+      updateHandlers[inputId]((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__["default"])(data));
+    } else throw new Error("Attempted to update non-existent React input '".concat(inputId, "'"));
+  });
+}
 
 var withFirstCall = function withFirstCall(first, rest) {
   var firstCall = true;
@@ -10698,15 +10700,15 @@ var withFirstCall = function withFirstCall(first, rest) {
 
 
 function useValue(inputId, defaultValue, rateLimit) {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(defaultValue),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultValue),
       _useState2 = _slicedToArray(_useState, 2),
       value = _useState2[0],
       setValue = _useState2[1];
 
-  var ref = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)();
-  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)();
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var setInputValue = function setInputValue(v) {
-      return _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(inputId, v);
+      return _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.setInputValue(inputId, v);
     };
 
     if (rateLimit === undefined) {
@@ -10719,19 +10721,19 @@ function useValue(inputId, defaultValue, rateLimit) {
     ref.current = withFirstCall(setInputValue, setInputValueRateLimited);
     return setInputValueRateLimited.flush;
   }, [inputId]);
-  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     ref.current(value);
   }, [inputId, value]);
   return [value, setValue];
 }
 
 function useUpdatedProps(inputId, setValue) {
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(),
       _useState4 = _slicedToArray(_useState3, 2),
       updatedProps = _useState4[0],
       setUpdatedProps = _useState4[1];
 
-  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var updateHandler = function updateHandler(props) {
       var value = props.value,
           newProps = _objectWithoutProperties(props, ["value"]);
@@ -10769,12 +10771,12 @@ function InputAdapter(Component, valueProps, rateLimit) {
     }, otherProps), updatedProps);
 
     props = _objectSpread(_objectSpread({}, valueProps(value, setValue, props)), props);
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement(Component, props);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(Component, props);
   }
 
   Adapter.propTypes = {
-    inputId: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string.isRequired),
-    value: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().any.isRequired) // eslint-disable-line react/forbid-prop-types
+    inputId: (prop_types__WEBPACK_IMPORTED_MODULE_0___default().string.isRequired),
+    value: (prop_types__WEBPACK_IMPORTED_MODULE_0___default().any.isRequired) // eslint-disable-line react/forbid-prop-types
 
   };
   return Adapter;
@@ -10798,11 +10800,11 @@ function ButtonAdapter(Component) {
       }
     }, otherProps), updatedProps);
 
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement(Component, props);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(Component, props);
   }
 
   Adapter.propTypes = {
-    inputId: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string.isRequired)
+    inputId: (prop_types__WEBPACK_IMPORTED_MODULE_0___default().string.isRequired)
   };
   return Adapter;
 }
@@ -10820,39 +10822,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ findAndRenderReactData)
 /* harmony export */ });
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "react-dom");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _onceShinyInitialized__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./onceShinyInitialized */ "./src/react/onceShinyInitialized.js");
-/* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-dom */ "react-dom");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _onceShinyInitialized__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./onceShinyInitialized */ "./src/react/onceShinyInitialized.js");
+/* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
 
 
 
 
-var binding = new (_shiny__WEBPACK_IMPORTED_MODULE_0___default().OutputBinding)();
 
-binding.find = function (scope) {
-  return scope.find('.react-container');
-};
+if ((0,_Shiny__WEBPACK_IMPORTED_MODULE_3__.isShiny)()) {
+  var binding = new _Shiny__WEBPACK_IMPORTED_MODULE_3__.Shiny.OutputBinding();
 
-binding.renderValue = function (container, _ref) {
-  var data = _ref.data,
-      deps = _ref.deps;
-  _shiny__WEBPACK_IMPORTED_MODULE_0___default().renderDependencies(deps);
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__["default"])(data), container);
-};
+  binding.find = function (scope) {
+    return scope.find('.react-container');
+  };
 
-_shiny__WEBPACK_IMPORTED_MODULE_0___default().outputBindings.register(binding);
+  binding.renderValue = function (container, _ref) {
+    var data = _ref.data,
+        deps = _ref.deps;
+    _Shiny__WEBPACK_IMPORTED_MODULE_3__.Shiny.renderDependencies(deps);
+    react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__["default"])(data), container);
+  };
+
+  _Shiny__WEBPACK_IMPORTED_MODULE_3__.Shiny.outputBindings.register(binding);
+}
 
 function unmountContainersAtNode(node) {
   if (node instanceof Element) {
     [].forEach.call(node.getElementsByClassName('react-container'), function (container) {
-      react_dom__WEBPACK_IMPORTED_MODULE_1___default().unmountComponentAtNode(container);
+      react_dom__WEBPACK_IMPORTED_MODULE_0___default().unmountComponentAtNode(container);
     }); // The getElementsByClassName() method only returns descendants - check the node itself too.
 
     if (node.classList.contains('react-container')) {
-      react_dom__WEBPACK_IMPORTED_MODULE_1___default().unmountComponentAtNode(node);
+      react_dom__WEBPACK_IMPORTED_MODULE_0___default().unmountComponentAtNode(node);
     }
   }
 }
@@ -10869,14 +10873,14 @@ new MutationObserver(cleanupRemovedNodes).observe(document, {
   subtree: true
 });
 function findAndRenderReactData() {
-  (0,_onceShinyInitialized__WEBPACK_IMPORTED_MODULE_2__["default"])(function () {
+  (0,_onceShinyInitialized__WEBPACK_IMPORTED_MODULE_1__["default"])(function () {
     [].forEach.call(document.getElementsByClassName('react-data'), function (dataElement) {
       // The script tag with the JSON data is nested in the container which we render to. This will
       // replace the container contents and thus remove the script tag, which is desireable (we only
       // need to render the data once).
       var data = JSON.parse(dataElement.innerHTML);
       var container = dataElement.parentElement;
-      react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_3__["default"])(data), container);
+      react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__["default"])(data), container);
     });
   });
 }
@@ -10919,11 +10923,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ mapReactData)
 /* harmony export */ });
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _shinyBindings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shinyBindings */ "./src/react/shinyBindings.jsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shinyBindings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shinyBindings */ "./src/react/shinyBindings.jsx");
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -11043,10 +11046,10 @@ dataMappers.element = function (_ref7) {
       propsData = _ref7.props;
   var component = module ? window.jsmodule[module][name] : name;
   var props = prepareProps(name, propsData);
-  var element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(component, props);
+  var element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(component, props);
 
-  if ((0,_shinyBindings__WEBPACK_IMPORTED_MODULE_2__.needsBindingWrapper)(props.className)) {
-    element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_shinyBindings__WEBPACK_IMPORTED_MODULE_2__.ShinyBindingWrapper, {}, element);
+  if ((0,_shinyBindings__WEBPACK_IMPORTED_MODULE_1__.needsBindingWrapper)(props.className)) {
+    element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shinyBindings__WEBPACK_IMPORTED_MODULE_1__.ShinyBindingWrapper, {}, element);
   }
 
   return element;
@@ -11058,7 +11061,7 @@ dataMappers.element = function (_ref7) {
 dataMappers.event = function (_ref8) {
   var id = _ref8.id;
   return function () {
-    _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(id, true, {
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.setInputValue(id, true, {
       priority: 'event'
     });
   };
@@ -11075,7 +11078,7 @@ dataMappers.input = function (_ref9) {
       args[_key] = arguments[_key];
     }
 
-    _shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue(id, getValue(args), {
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.setInputValue(id, getValue(args), {
       priority: 'event'
     });
   };
@@ -11094,13 +11097,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ onceShinyInitialized)
 /* harmony export */ });
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
  // Shiny initializes some functions after a delay:
 // https://github.com/rstudio/shiny/blob/cda59da698eba1deda20ba09ca8b7f0b0b149f87/srcts/src/shiny/index.ts#L101
 
 function shinyInitialized() {
-  return (_shiny__WEBPACK_IMPORTED_MODULE_0___default().setInputValue) !== undefined;
+  return (0,_Shiny__WEBPACK_IMPORTED_MODULE_0__.isShiny)() ? _Shiny__WEBPACK_IMPORTED_MODULE_0__.Shiny.setInputValue !== undefined : true;
 } // Run `callback` and keep retrying with exponential backoff until it returns true.
 
 
@@ -11145,12 +11147,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ShinyBindingWrapper": () => (/* binding */ ShinyBindingWrapper),
 /* harmony export */   "needsBindingWrapper": () => (/* binding */ needsBindingWrapper)
 /* harmony export */ });
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/shiny */ "@/shiny");
-/* harmony import */ var _shiny__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shiny__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
 
 
 
@@ -11165,26 +11166,26 @@ function needsBindingWrapper(className) {
 }
 function ShinyBindingWrapper(_ref) {
   var children = _ref.children;
-  var ref = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)();
-  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)();
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var wrapper = ref.current;
-    _shiny__WEBPACK_IMPORTED_MODULE_0___default().initializeInputs(wrapper);
-    _shiny__WEBPACK_IMPORTED_MODULE_0___default().bindAll(wrapper);
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.initializeInputs(wrapper);
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.bindAll(wrapper);
     return function () {
-      return _shiny__WEBPACK_IMPORTED_MODULE_0___default().unbindAll(wrapper);
+      return _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.unbindAll(wrapper);
     };
   }, []);
   return (
     /*#__PURE__*/
     // Mark with a CSS class for HTML readability.
-    react__WEBPACK_IMPORTED_MODULE_2___default().createElement("div", {
+    react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", {
       ref: ref,
       className: "shiny-binding-wrapper"
     }, children)
   );
 }
 ShinyBindingWrapper.propTypes = {
-  children: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().node)
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_0___default().node)
 };
 ShinyBindingWrapper.defaultProps = {
   children: null
@@ -11209,7 +11210,6 @@ window.jsmodule = _objectSpread(_objectSpread({}, window.jsmodule), {}, {
   'prop-types': __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js"),
   'react': __webpack_require__(/*! react */ "react"),
   'react-dom': __webpack_require__(/*! react-dom */ "react-dom"),
-  '@/shiny': __webpack_require__(/*! @/shiny */ "@/shiny"),
   '@/shiny.react': __webpack_require__(/*! ./react */ "./src/react/index.js"),
   '@/shiny.react/test-components': __webpack_require__(/*! ./test-components */ "./src/test-components/index.js")
 });
@@ -11480,6 +11480,26 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/react/Shiny.ts":
+/*!****************************!*\
+  !*** ./src/react/Shiny.ts ***!
+  \****************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isShiny = exports.Shiny = void 0;
+function isShiny() {
+    return !!window.Shiny;
+}
+exports.isShiny = isShiny;
+const Shiny = window.Shiny;
+exports.Shiny = Shiny;
+
+
+/***/ }),
+
 /***/ "react":
 /*!************************!*\
   !*** external "React" ***!
@@ -11499,17 +11519,6 @@ module.exports = React;
 
 "use strict";
 module.exports = ReactDOM;
-
-/***/ }),
-
-/***/ "@/shiny":
-/*!************************!*\
-  !*** external "Shiny" ***!
-  \************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = Shiny;
 
 /***/ })
 
@@ -11609,12 +11618,13 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+var exports = __webpack_exports__;
 /*!**********************!*\
-  !*** ./src/index.js ***!
+  !*** ./src/index.ts ***!
   \**********************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _setupModules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./setupModules */ "./src/setupModules.js");
-/* harmony import */ var _setupModules__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_setupModules__WEBPACK_IMPORTED_MODULE_0__);
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__webpack_require__(/*! ./setupModules */ "./src/setupModules.js");
 
 })();
 
