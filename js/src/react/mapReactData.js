@@ -1,5 +1,4 @@
 import React from 'react';
-// eslint-disable-next-line import/no-unresolved
 import parse from 'html-react-parser';
 
 import { needsBindingWrapper, ShinyBindingWrapper } from './shinyBindings';
