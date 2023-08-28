@@ -1479,6 +1479,7 @@ var canTextBeChildOfNode = utilities.canTextBeChildOfNode;
  * @param {DomElement[]} nodes - DOM nodes.
  * @param {object} [options={}] - Options.
  * @param {Function} [options.replace] - Replacer.
+ * @param {Function} [options.transform] - Transform.
  * @param {object} [options.library] - Library (React, Preact, etc.).
  * @returns - String or JSX element(s).
  */
@@ -1493,6 +1494,7 @@ function domToReact(nodes, options) {
   var node;
   var isWhitespace;
   var hasReplace = typeof options.replace === 'function';
+  var transform = options.transform || utilities.returnFirstArg;
   var replaceElement;
   var props;
   var children;
@@ -1513,7 +1515,7 @@ function domToReact(nodes, options) {
           });
         }
 
-        result.push(replaceElement);
+        result.push(transform(replaceElement, node, i));
         continue;
       }
     }
@@ -1535,7 +1537,7 @@ function domToReact(nodes, options) {
       // in its parent so add it to the results
 
 
-      result.push(node.data);
+      result.push(transform(node.data, node, i));
       continue;
     }
 
@@ -1585,7 +1587,7 @@ function domToReact(nodes, options) {
       props.key = i;
     }
 
-    result.push(createElement(node.name, props, children));
+    result.push(transform(createElement(node.name, props, children), node, i));
   }
 
   return result.length === 1 ? result[0] : result;
@@ -1630,14 +1632,12 @@ function invertObject(obj, override) {
     throw new TypeError('First argument must be an object');
   }
 
-  var key;
-  var value;
   var isOverridePresent = typeof override === 'function';
   var overrides = {};
   var result = {};
 
-  for (key in obj) {
-    value = obj[key];
+  for (var key in obj) {
+    var value = obj[key];
 
     if (isOverridePresent) {
       overrides = override(key, value);
@@ -1666,32 +1666,26 @@ function invertObject(obj, override) {
  */
 
 
+var RESERVED_SVG_MATHML_ELEMENTS = new Set(['annotation-xml', 'color-profile', 'font-face', 'font-face-src', 'font-face-uri', 'font-face-format', 'font-face-name', 'missing-glyph']);
+
 function isCustomComponent(tagName, props) {
   if (tagName.indexOf('-') === -1) {
     return props && typeof props.is === 'string';
+  } // These are reserved SVG and MathML elements.
+  // We don't mind this whitelist too much because we expect it to never grow.
+  // The alternative is to track the namespace in a few places which is convoluted.
+  // https://w3c.github.io/webcomponents/spec/custom/#custom-elements-core-concepts
+
+
+  if (RESERVED_SVG_MATHML_ELEMENTS.has(tagName)) {
+    return false;
   }
 
-  switch (tagName) {
-    // These are reserved SVG and MathML elements.
-    // We don't mind this whitelist too much because we expect it to never grow.
-    // The alternative is to track the namespace in a few places which is convoluted.
-    // https://w3c.github.io/webcomponents/spec/custom/#custom-elements-core-concepts
-    case 'annotation-xml':
-    case 'color-profile':
-    case 'font-face':
-    case 'font-face-src':
-    case 'font-face-uri':
-    case 'font-face-format':
-    case 'font-face-name':
-    case 'missing-glyph':
-      return false;
+  return true;
+} // styleToJSOptions
 
-    default:
-      return true;
-  }
-}
 
-var styleToJSOptions = {
+var STYLE_TO_JS_OPTIONS = {
   reactCompat: true
 };
 /**
@@ -1707,7 +1701,7 @@ function setStyleProp(style, props) {
   }
 
   try {
-    props.style = styleToJS(style, styleToJSOptions);
+    props.style = styleToJS(style, STYLE_TO_JS_OPTIONS);
   } catch (err) {
     props.style = {};
   }
@@ -1721,7 +1715,7 @@ function setStyleProp(style, props) {
 var PRESERVE_CUSTOM_ATTRIBUTES = React.version.split('.')[0] >= 16; // Taken from
 // https://github.com/facebook/react/blob/cae635054e17a6f107a39d328649137b83f25972/packages/react-dom/src/client/validateDOMNesting.js#L213
 
-var elementsWithNoTextChildren = new Set(['tr', 'tbody', 'thead', 'tfoot', 'colgroup', 'table', 'head', 'html', 'frameset']);
+var ELEMENTS_WITH_NO_TEXT_CHILDREN = new Set(['tr', 'tbody', 'thead', 'tfoot', 'colgroup', 'table', 'head', 'html', 'frameset']);
 /**
  * Checks if the given node can contain text nodes
  *
@@ -1730,16 +1724,21 @@ var elementsWithNoTextChildren = new Set(['tr', 'tbody', 'thead', 'tfoot', 'colg
  */
 
 function canTextBeChildOfNode(node) {
-  return !elementsWithNoTextChildren.has(node.name);
+  return !ELEMENTS_WITH_NO_TEXT_CHILDREN.has(node.name);
+}
+
+function returnFirstArg(arg) {
+  return arg;
 }
 
 module.exports = {
   PRESERVE_CUSTOM_ATTRIBUTES: PRESERVE_CUSTOM_ATTRIBUTES,
+  ELEMENTS_WITH_NO_TEXT_CHILDREN: ELEMENTS_WITH_NO_TEXT_CHILDREN,
   invertObject: invertObject,
   isCustomComponent: isCustomComponent,
   setStyleProp: setStyleProp,
   canTextBeChildOfNode: canTextBeChildOfNode,
-  elementsWithNoTextChildren: elementsWithNoTextChildren
+  returnFirstArg: returnFirstArg
 };
 
 /***/ }),
