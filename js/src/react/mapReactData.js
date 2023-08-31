@@ -43,11 +43,6 @@ function renameKey(object, from, to) {
   return object;
 }
 
-// This function should determine when to parse a string as HTML.
-function isHTML(str) {
-  return /<[a-z][\s\S]*>/i.test(str);
-}
-
 // There are a number of attributes that work differently between React and HTML. This function
 // does not provide full compatibility, but does a fairly good job. To some extent this relies
 // on the undocumented behavior of react: the tag / attribute names which are renamed in React
@@ -65,9 +60,6 @@ function prepareProps(elementName, propsData) {
   if (['input', 'select', 'textarea'].includes(elementName)) {
     renameKey(props, 'value', 'defaultValue');
     renameKey(props, 'checked', 'defaultChecked');
-  }
-  if (isHTML(props.children)) {
-    props.children = parse(props.children);
   }
   if (typeof props.style === 'string') {
     props.style = styleStringToObject(props.style);
