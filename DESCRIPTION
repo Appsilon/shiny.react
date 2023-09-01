@@ -33,4 +33,5 @@ Suggests:
   rcmdcheck,
   rmarkdown,
   styler,
-  testthat
+  testthat,
+  shinytest2
