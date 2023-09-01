@@ -34,4 +34,6 @@ Suggests:
   rmarkdown,
   styler,
   testthat,
-  shinytest2
+  shinytest2,
+  chromote,
+  withr
