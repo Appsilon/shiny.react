@@ -10770,7 +10770,7 @@ function InputAdapter(Component, valueProps, rateLimit) {
       id: inputId
     }, otherProps), updatedProps);
 
-    props = _objectSpread(_objectSpread({}, valueProps(value, setValue, props)), props);
+    props = _objectSpread(_objectSpread({}, props), valueProps(value, setValue, props));
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(Component, props);
   }
 
