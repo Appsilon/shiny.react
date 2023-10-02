@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 
 import { needsBindingWrapper, ShinyBindingWrapper } from './shinyBindings';
 import { Shiny } from './Shiny';
@@ -67,6 +68,7 @@ function prepareProps(elementName, propsData) {
 }
 
 dataMappers.raw = ({ value }) => value;
+dataMappers.html = ({ value }) => parse(value);
 dataMappers.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-eval
 dataMappers.array = ({ value }) => value.map(mapReactData);
 dataMappers.object = ({ value }) => mapValues(value, mapReactData);

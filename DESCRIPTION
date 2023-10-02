@@ -25,12 +25,15 @@ Imports:
   rlang,
   shiny
 Suggests:
+  chromote,
   covr,
   knitr,
   leaflet,
-  methods,
   lintr (>= 3.0.0),
+  methods,
   rcmdcheck,
   rmarkdown,
+  shinytest2,
   styler,
-  testthat
+  testthat,
+  withr
