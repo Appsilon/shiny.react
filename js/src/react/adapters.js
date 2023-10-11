@@ -89,7 +89,7 @@ export function InputAdapter(Component, valueProps, rateLimit) {
     const [value, setValue] = useValue(inputId, defaultValue, rateLimit);
     const updatedProps = useUpdatedProps(inputId, setValue);
     let props = { id: inputId, ...otherProps, ...updatedProps };
-    props = { ...valueProps(value, setValue, props), ...props };
+    props = { ...props, ...valueProps(value, setValue, props) };
     return React.createElement(Component, props);
   }
   Adapter.propTypes = {
