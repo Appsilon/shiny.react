@@ -3,6 +3,7 @@
 .Rhistory
 .Rproj.user
 .Ruserdata
+.DS_Store
 
 # R CMD CHECK output
 /check/
