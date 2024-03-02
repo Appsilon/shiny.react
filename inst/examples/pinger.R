@@ -9,8 +9,8 @@ shinyApp(
   ),
   server = function(input, output) {
     output$ui <- renderReact(
-      Box(style = list(backgroundColor = input$color),
-        Pinger()
+      shiny.react:::Box(style = list(backgroundColor = input$color),
+        shiny.react:::Pinger()
       )
     )
   }

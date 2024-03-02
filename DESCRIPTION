@@ -1,6 +1,6 @@
 Package: shiny.react
 Title: Tools for Using React in Shiny
-Version: 0.3.0
+Version: 0.4.0
 Authors@R:
   c(
     person("Kamil", "Żyła", role = c("aut", "cre"), email = "opensource+kamil@appsilon.com"),
@@ -14,7 +14,7 @@ Description:
 License: LGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 VignetteBuilder: knitr
 Imports:
   glue,

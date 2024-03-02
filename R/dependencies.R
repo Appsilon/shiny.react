@@ -7,7 +7,7 @@
 shinyReactDependency <- function() {
   htmltools::htmlDependency(
     name = "shiny.react",
-    version = "0.1.0",
+    version = "0.4.0",
     package = "shiny.react",
     src = "www/shiny.react",
     script = "shiny-react.js"
@@ -46,8 +46,8 @@ reactDependency <- function(useCdn = FALSE) {
     glue::glue("react-dom.{fileVersionInfix}.js")
   )
   cdnPaths <- c(
-    glue::glue("react@17.0.1/umd/react.{fileVersionInfix}.js"),
-    glue::glue("react-dom@17.0.1/umd/react-dom.{fileVersionInfix}.js")
+    glue::glue("react@{reactVersion()}/umd/react.{fileVersionInfix}.js"),
+    glue::glue("react-dom@{reactVersion()}/umd/react-dom.{fileVersionInfix}.js")
   )
 
   depSources <- if (useCdn) {
@@ -69,7 +69,7 @@ reactDependency <- function(useCdn = FALSE) {
 
 #' @keywords internal
 reactVersion <- function() {
-  "17.0.1"
+  "18.2.0"
 }
 
 allShinyReactDependencies <- function() {

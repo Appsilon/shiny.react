@@ -1,3 +1,4 @@
+library(shiny)
 library(shiny.react)
 
 centerStyle <- "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
@@ -9,7 +10,7 @@ shinyApp(
   ),
   server = function(input, output) {
     output$ui <- renderUI({
-      if (input$render) Box(
+      if (input$render) shiny.react:::Box(
         checkboxInput("renderNested", label = "Render nested UI?"),
         uiOutput("nested")
       )
@@ -17,12 +18,12 @@ shinyApp(
     output$nested <- renderUI({
       if (input$renderNested) div(
         p("Note how Bootstrap was added only just now."),
-        Box(
+        shiny.react:::Box(
           bootstrapLib(),
           h4("Counter"),
-          Counter(defaultValue = 42, onChange = setInput("counter")),
+          shiny.react:::Counter(defaultValue = 42, onChange = setInput("counter")),
           h4("Pinger"),
-          Pinger(),
+          shiny.react:::Pinger(),
         )
       )
     })
