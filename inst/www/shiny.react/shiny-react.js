@@ -13807,8 +13807,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ findAndRenderReactData)
 /* harmony export */ });
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-dom */ "react-dom");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-dom/client */ "react-dom/client");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom_client__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _onceShinyInitialized__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./onceShinyInitialized */ "./src/react/onceShinyInitialized.js");
 /* harmony import */ var _mapReactData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mapReactData */ "./src/react/mapReactData.js");
 /* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
@@ -13816,6 +13816,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var rootPropertyName = '__reactRootContainer$';
 
 if ((0,_Shiny__WEBPACK_IMPORTED_MODULE_3__.isShiny)()) {
   var binding = new _Shiny__WEBPACK_IMPORTED_MODULE_3__.Shiny.OutputBinding();
@@ -13828,7 +13829,12 @@ if ((0,_Shiny__WEBPACK_IMPORTED_MODULE_3__.isShiny)()) {
     var data = _ref.data,
         deps = _ref.deps;
     _Shiny__WEBPACK_IMPORTED_MODULE_3__.Shiny.renderDependencies(deps);
-    react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__["default"])(data), container);
+
+    if (!container[rootPropertyName]) {
+      container[rootPropertyName] = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_0__.createRoot)(container);
+    }
+
+    container[rootPropertyName].render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__["default"])(data));
   };
 
   _Shiny__WEBPACK_IMPORTED_MODULE_3__.Shiny.outputBindings.register(binding);
@@ -13837,11 +13843,15 @@ if ((0,_Shiny__WEBPACK_IMPORTED_MODULE_3__.isShiny)()) {
 function unmountContainersAtNode(node) {
   if (node instanceof Element) {
     [].forEach.call(node.getElementsByClassName('react-container'), function (container) {
-      react_dom__WEBPACK_IMPORTED_MODULE_0___default().unmountComponentAtNode(container);
-    }); // The getElementsByClassName() method only returns descendants - check the node itself too.
+      if (container[rootPropertyName]) {
+        container[rootPropertyName].unmount();
+        delete container[rootPropertyName]; // Clean up after unmounting
+      }
+    });
 
-    if (node.classList.contains('react-container')) {
-      react_dom__WEBPACK_IMPORTED_MODULE_0___default().unmountComponentAtNode(node);
+    if (node.classList.contains('react-container') && node[rootPropertyName]) {
+      node[rootPropertyName].unmount();
+      delete node[rootPropertyName]; // Clean up after unmounting
     }
   }
 }
@@ -13860,12 +13870,14 @@ new MutationObserver(cleanupRemovedNodes).observe(document, {
 function findAndRenderReactData() {
   (0,_onceShinyInitialized__WEBPACK_IMPORTED_MODULE_1__["default"])(function () {
     [].forEach.call(document.getElementsByClassName('react-data'), function (dataElement) {
-      // The script tag with the JSON data is nested in the container which we render to. This will
-      // replace the container contents and thus remove the script tag, which is desireable (we only
-      // need to render the data once).
       var data = JSON.parse(dataElement.innerHTML);
       var container = dataElement.parentElement;
-      react_dom__WEBPACK_IMPORTED_MODULE_0___default().render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__["default"])(data), container);
+
+      if (!container[rootPropertyName]) {
+        container[rootPropertyName] = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_0__.createRoot)(container);
+      }
+
+      container[rootPropertyName].render((0,_mapReactData__WEBPACK_IMPORTED_MODULE_2__["default"])(data));
     });
   });
 }
@@ -14201,7 +14213,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 window.jsmodule = _objectSpread(_objectSpread({}, window.jsmodule), {}, {
   'prop-types': __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js"),
   'react': __webpack_require__(/*! react */ "react"),
-  'react-dom': __webpack_require__(/*! react-dom */ "react-dom"),
+  'react-dom': __webpack_require__(/*! react-dom/client */ "react-dom/client"),
   '@/shiny.react': __webpack_require__(/*! ./react */ "./src/react/index.js"),
   '@/shiny.react/test-components': __webpack_require__(/*! ./test-components */ "./src/test-components/index.js")
 });
@@ -14503,7 +14515,7 @@ module.exports = React;
 
 /***/ }),
 
-/***/ "react-dom":
+/***/ "react-dom/client":
 /*!***************************!*\
   !*** external "ReactDOM" ***!
   \***************************/

@@ -1,14 +1,19 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import onceShinyInitialized from './onceShinyInitialized';
 import mapReactData from './mapReactData';
 import { Shiny, isShiny } from './Shiny';
+
+const rootPropertyName = '__reactRootContainer$';
 
 if (isShiny()) {
   const binding = new Shiny.OutputBinding();
   binding.find = (scope) => scope.find('.react-container');
   binding.renderValue = (container, { data, deps }) => {
     Shiny.renderDependencies(deps);
-    ReactDOM.render(mapReactData(data), container);
+    if (!container[rootPropertyName]) {
+      container[rootPropertyName] = createRoot(container);
+    }
+    container[rootPropertyName].render(mapReactData(data));
   };
   Shiny.outputBindings.register(binding);
 }
@@ -16,11 +21,14 @@ if (isShiny()) {
 function unmountContainersAtNode(node) {
   if (node instanceof Element) {
     [].forEach.call(node.getElementsByClassName('react-container'), (container) => {
-      ReactDOM.unmountComponentAtNode(container);
+      if (container[rootPropertyName]) {
+        container[rootPropertyName].unmount();
+        delete container[rootPropertyName]; // Clean up after unmounting
+      }
     });
-    // The getElementsByClassName() method only returns descendants - check the node itself too.
-    if (node.classList.contains('react-container')) {
-      ReactDOM.unmountComponentAtNode(node);
+    if (node.classList.contains('react-container') && node[rootPropertyName]) {
+      node[rootPropertyName].unmount();
+      delete node[rootPropertyName]; // Clean up after unmounting
     }
   }
 }
@@ -36,12 +44,13 @@ new MutationObserver(cleanupRemovedNodes).observe(document, { childList: true, s
 export default function findAndRenderReactData() {
   onceShinyInitialized(() => {
     [].forEach.call(document.getElementsByClassName('react-data'), (dataElement) => {
-      // The script tag with the JSON data is nested in the container which we render to. This will
-      // replace the container contents and thus remove the script tag, which is desireable (we only
-      // need to render the data once).
       const data = JSON.parse(dataElement.innerHTML);
       const container = dataElement.parentElement;
-      ReactDOM.render(mapReactData(data), container);
+      if (!container[rootPropertyName]) {
+        container[rootPropertyName] = createRoot(container);
+      }
+      container[rootPropertyName].render(mapReactData(data));
     });
   });
 }
+
