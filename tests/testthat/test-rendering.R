@@ -52,6 +52,7 @@ describe("rendering with htmltools::HTML", {
   })
 
   it("doesn't render HTML strings in React context without `htmltools::HTML`", {
+    set.seed(1)
     skip_on_cran()
 
     # Arrange
@@ -73,7 +74,7 @@ describe("rendering with htmltools::HTML", {
     # The container div has been rendered as HTML, but the span is escaped
     expect_equal(
       htmlContainer,
-      '<div class="react-container">&lt;span id="test"&gt;Hello&lt;span style="font-weight: bold;"&gt; World&lt;/span&gt;&lt;/span&gt;</div>' #nolint
+      '<div class="react-container" data-react-id="gjoxfxyrqbferjumszju">&lt;span id="test"&gt;Hello&lt;span style="font-weight: bold;"&gt; World&lt;/span&gt;&lt;/span&gt;</div>' #nolint
     )
   })
 })

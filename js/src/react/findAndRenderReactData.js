@@ -1,26 +1,43 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import onceShinyInitialized from './onceShinyInitialized';
 import mapReactData from './mapReactData';
 import { Shiny, isShiny } from './Shiny';
+
+// ReactDOM.createRoot can be called only once on a container, it serves as a lookup of all created roots.
+// To unmount a component, we need the reference to the root from the lookup.
+// The key is a `data-react-id` which uniquely identifies the container.
+const roots = {};
 
 if (isShiny()) {
   const binding = new Shiny.OutputBinding();
   binding.find = (scope) => scope.find('.react-container');
   binding.renderValue = (container, { data, deps }) => {
     Shiny.renderDependencies(deps);
-    ReactDOM.render(mapReactData(data), container);
+    const id = container.getAttribute('data-react-id');
+    if (!roots[id]) {
+      roots[id] = ReactDOM.createRoot(container);
+    }
+    roots[id].render(mapReactData(data));
   };
-  Shiny.outputBindings.register(binding);
+  Shiny.outputBindings.register(binding, 'shiny.react');
+}
+
+function unmount(node) {
+  const id = node.getAttribute('data-react-id');
+  if (roots[id]) {
+    roots[id].unmount();
+    delete roots[id];
+  }
 }
 
 function unmountContainersAtNode(node) {
   if (node instanceof Element) {
     [].forEach.call(node.getElementsByClassName('react-container'), (container) => {
-      ReactDOM.unmountComponentAtNode(container);
+      unmount(container);
     });
     // The getElementsByClassName() method only returns descendants - check the node itself too.
     if (node.classList.contains('react-container')) {
-      ReactDOM.unmountComponentAtNode(node);
+      unmount(node);
     }
   }
 }
@@ -33,15 +50,11 @@ function cleanupRemovedNodes(mutations) {
 
 new MutationObserver(cleanupRemovedNodes).observe(document, { childList: true, subtree: true });
 
-export default function findAndRenderReactData() {
+export default function findAndRenderReactData(id) {
   onceShinyInitialized(() => {
-    [].forEach.call(document.getElementsByClassName('react-data'), (dataElement) => {
-      // The script tag with the JSON data is nested in the container which we render to. This will
-      // replace the container contents and thus remove the script tag, which is desireable (we only
-      // need to render the data once).
-      const data = JSON.parse(dataElement.innerHTML);
-      const container = dataElement.parentElement;
-      ReactDOM.render(mapReactData(data), container);
-    });
+    const container = document.querySelector(`[data-react-id=${id}]`);
+    const data = JSON.parse(container.querySelector('.react-data').innerHTML);
+    roots[id] = ReactDOM.createRoot(container);
+    roots[id].render(mapReactData(data));
   });
 }
