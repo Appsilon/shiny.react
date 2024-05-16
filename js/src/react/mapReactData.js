@@ -56,6 +56,7 @@ function renameKey(object, from, to) {
 function prepareProps(elementName, propsData) {
   const props = mapReactData(propsData);
   renameKey(props, 'class', 'className');
+  renameKey(props, 'for', 'htmlFor');
   // https://reactjs.org/docs/uncontrolled-components.html#default-values
   if (['input', 'select', 'textarea'].includes(elementName)) {
     renameKey(props, 'value', 'defaultValue');

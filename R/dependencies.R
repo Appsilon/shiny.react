@@ -46,8 +46,8 @@ reactDependency <- function(useCdn = FALSE) {
     glue::glue("react-dom.{fileVersionInfix}.js")
   )
   cdnPaths <- c(
-    glue::glue("react@17.0.1/umd/react.{fileVersionInfix}.js"),
-    glue::glue("react-dom@17.0.1/umd/react-dom.{fileVersionInfix}.js")
+    glue::glue("react@{reactVersion()}/umd/react.{fileVersionInfix}.js"),
+    glue::glue("react-dom@{reactVersion()}/umd/react-dom.{fileVersionInfix}.js")
   )
 
   depSources <- if (useCdn) {
@@ -69,7 +69,33 @@ reactDependency <- function(useCdn = FALSE) {
 
 #' @keywords internal
 reactVersion <- function() {
-  "17.0.1"
+  "18.3.1"
+}
+
+#' Upgrade React dependencies files
+#'
+#' It downloads the React and React DOM files from the UNPKG CDN and saves
+#' them as assets of the package for local sourcing of React dependencies.
+#'
+#' Update the version of React by changing the `reactVersion` function.
+#'
+#' For React versions > 19 see the new upgrade guide:
+#' https://react.dev/blog/2024/04/25/react-19-upgrade-guide#umd-builds-removed
+#' @noRd
+upgradeReact <- function(version = reactVersion()) {
+  cdnPaths <- c(
+    glue::glue("https://www.unpkg.com/react@{version}/umd/react.development.js"),
+    glue::glue("https://www.unpkg.com/react@{version}/umd/react.production.min.js"),
+    glue::glue("https://www.unpkg.com/react-dom@{version}/umd/react-dom.development.js"),
+    glue::glue("https://www.unpkg.com/react-dom@{version}/umd/react-dom.production.min.js")
+  )
+  lapply(cdnPaths, function(path) {
+    utils::download.file(
+      url = path,
+      destfile = file.path("inst/www/react", basename(path)),
+      mode = "w"
+    )
+  })
 }
 
 allShinyReactDependencies <- function() {

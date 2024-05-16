@@ -35,11 +35,17 @@ reactDataTag <- function(data) {
 }
 
 reactContainer <- function(..., data = NULL) {
-  tag <- htmltools::div(class = "react-container", allShinyReactDependencies(), ...)
+  id <- stringi::stri_rand_strings(1, 20, "[a-z]")
+  tag <- htmltools::div(
+    class = "react-container",
+    `data-react-id` = id,
+    allShinyReactDependencies(),
+    ...
+  )
   if (!is.null(data)) {
     tag <- htmltools::tagAppendChildren(tag,
       reactDataTag(data),
-      htmltools::tags$script("jsmodule['@/shiny.react'].findAndRenderReactData()")
+      htmltools::tags$script(glue::glue("jsmodule['@/shiny.react'].findAndRenderReactData('{id}')"))
     )
   }
   structure(tag, reactData = data)
