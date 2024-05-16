@@ -65,6 +65,11 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.0" id="shinyreact-040">shiny.react 0.4.0<a class="anchor" aria-label="anchor" href="#shinyreact-040"></a></h2>
+<ul><li>Upgrade React to 18.3.1:<ul><li>Replace deprecated React API. React 18 deprecates (React 19 removes) <code>ReactDOM.render</code> and <code>ReactDOM.unmountComponentAtNode</code>. <code>ReactDOM.createRoot</code> is used in place of those functions according to the <a href="https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-dom-apis" class="external-link">React 19 migration guide</a>.</li>
+<li>Changed rendering mechanism of React components. This change is motivated by the fact that it’s impossible to call <code>ReactDOM.createRoot</code> on a container more than one time while <code>ReactDOM.render</code> allowed that. A <code>data-react-id</code> attribute is used to find and render React roots in place iterating over all nodes with <code>.react-data</code> class.</li>
+</ul></li></ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="shinyreact-030">shiny.react 0.3.0<a class="anchor" aria-label="anchor" href="#shinyreact-030"></a></h2><p class="text-muted">CRAN release: 2022-12-25</p>
 <ol style="list-style-type: decimal"><li>Render React asynchronously and only once Shiny is fully initialized:<ul><li>
 <code><a href="../reference/reactOutput.html">reactOutput()</a></code> can now be nested.</li>
