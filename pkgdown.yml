@@ -3,7 +3,7 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   shiny-react: shiny-react.html
-last_built: 2024-05-16T13:40Z
+last_built: 2024-05-16T14:54Z
 urls:
   reference: https://appsilon.github.io/shiny.react/reference
   article: https://appsilon.github.io/shiny.react/articles
