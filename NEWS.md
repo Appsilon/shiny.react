@@ -2,7 +2,7 @@
 
 - Upgrade React to 18.3.1:
   - Replace deprecated React API. React 18 deprecates (React 19 removes) `ReactDOM.render` and `ReactDOM.unmountComponentAtNode`. `ReactDOM.createRoot` is used in place of those functions according to the [React 19 migration guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-dom-apis).
-  - Changed rendering mechanism of React components. This change is motivated by the fact that it's impossible to call `ReactDOM.createRoot` on a container more than one time while `ReactDOM.render` allowed that. A `data-react-id` attribute is used to find and render React roots in place iterating over all nodes with `.react-data` class.
+  - Changed rendering mechanism of React components. This change is motivated by the fact that it's impossible to call `ReactDOM.createRoot` on a container more than one time while `ReactDOM.render` allowed that. A `data-react-id` attribute is used to find and render React roots instead of iterating over all nodes with `.react-data` class.
 
 # shiny.react 0.3.0
 
