@@ -74,15 +74,15 @@ dataMappers.expr = ({ value }) => eval(`(${value})`); // eslint-disable-line no-
 dataMappers.array = ({ value }) => value.map(mapReactData);
 dataMappers.object = ({ value }) => mapValues(value, mapReactData);
 
-// eslint-disable-next-line react/prop-types
+// eslint-disable-next-line react/prop-types, react/display-name
 dataMappers.element = ({ module, name, props: propsData }) => {
   const component = module ? window.jsmodule[module][name] : name;
   const props = prepareProps(name, propsData);
-  let element = React.createElement(component, props);
+  // eslint-disable-next-line react/prop-types
   if (needsBindingWrapper(props.className)) {
-    element = React.createElement(ShinyBindingWrapper, {}, element);
+    return React.createElement(ShinyBindingWrapper, { component, props });
   }
-  return element;
+  return React.createElement(component, props);
 };
 
 // Used to implement `triggerEvent()` R function.

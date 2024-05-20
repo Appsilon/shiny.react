@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
 import { Shiny } from './Shiny';
 
-const regex = new RegExp([
+const shinyNodeClassRegex = new RegExp([
   // `shiny::actionButton()` and `shiny::actionLink()`.
   'action-button',
   // All Shiny inputs, e.g. `shiny::textInput()`.
@@ -16,30 +16,25 @@ const regex = new RegExp([
 ].join('|'));
 
 export function needsBindingWrapper(className) {
-  return regex.test(className);
+  return shinyNodeClassRegex.test(className);
 }
 
-export function ShinyBindingWrapper({ children }) {
+export function ShinyBindingWrapper({ component, props }) {
   const ref = useRef();
   useEffect(() => {
-    const wrapper = ref.current;
-    Shiny.initializeInputs(wrapper);
-    Shiny.bindAll(wrapper);
-    return () => Shiny.unbindAll(wrapper);
+    // The node that is of class matching `shinyNodeClassRegex`
+    const shinyNode = ref.current;
+    // Get the scope in which the Shiny input is located and initialize.
+    Shiny.initializeInputs(shinyNode.parent);
+    Shiny.bindAll(shinyNode.parent);
+    // When the component is unmounted, unbind the Shiny input.
+    return () => Shiny.unbindAll(shinyNode, true);
   }, []);
 
-  return (
-    // Mark with a CSS class for HTML readability.
-    <div ref={ref} className="shiny-binding-wrapper">
-      {children}
-    </div>
-  );
+  return React.createElement(component, { ...props, ref });
 }
 
 ShinyBindingWrapper.propTypes = {
-  children: PropTypes.node,
-};
-
-ShinyBindingWrapper.defaultProps = {
-  children: null,
+  component: PropTypes.node,
+  props: PropTypes.object,
 };

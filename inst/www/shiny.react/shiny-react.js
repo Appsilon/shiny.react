@@ -14081,7 +14081,7 @@ dataMappers.array = function (_ref6) {
 dataMappers.object = function (_ref7) {
   var value = _ref7.value;
   return mapValues(value, mapReactData);
-}; // eslint-disable-next-line react/prop-types
+}; // eslint-disable-next-line react/prop-types, react/display-name
 
 
 dataMappers.element = function (_ref8) {
@@ -14089,14 +14089,16 @@ dataMappers.element = function (_ref8) {
       name = _ref8.name,
       propsData = _ref8.props;
   var component = module ? window.jsmodule[module][name] : name;
-  var props = prepareProps(name, propsData);
-  var element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(component, props);
+  var props = prepareProps(name, propsData); // eslint-disable-next-line react/prop-types
 
   if ((0,_shinyBindings__WEBPACK_IMPORTED_MODULE_2__.needsBindingWrapper)(props.className)) {
-    element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shinyBindings__WEBPACK_IMPORTED_MODULE_2__.ShinyBindingWrapper, {}, element);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shinyBindings__WEBPACK_IMPORTED_MODULE_2__.ShinyBindingWrapper, {
+      component: component,
+      props: props
+    });
   }
 
-  return element;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(component, props);
 }; // Used to implement `triggerEvent()` R function.
 // The returned function just sets the Shiny input to `TRUE`
 // on every call (this works thanks to `priority: 'event'`).
@@ -14196,43 +14198,46 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Shiny__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Shiny */ "./src/react/Shiny.ts");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
-var regex = new RegExp([// `shiny::actionButton()` and `shiny::actionLink()`.
+
+var shinyNodeClassRegex = new RegExp([// `shiny::actionButton()` and `shiny::actionLink()`.
 'action-button', // All Shiny inputs, e.g. `shiny::textInput()`.
 'shiny-input-container', // All Shiny outputs, e.g. `shiny::textOutput()`.
 'shiny-\\w*-output', // Outputs created with the `htmlwidgets` package, e.g. `leaflet::leafletOutput()`.
 'html-widget-output', // `shiny.react::reactOutput()`.
 'react-container'].join('|'));
 function needsBindingWrapper(className) {
-  return regex.test(className);
+  return shinyNodeClassRegex.test(className);
 }
 function ShinyBindingWrapper(_ref) {
-  var children = _ref.children;
-  var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)();
+  var component = _ref.component,
+      props = _ref.props;
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    var wrapper = ref.current;
-    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.initializeInputs(wrapper);
-    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.bindAll(wrapper);
+    // The node that is of class mething `shinyNodeClassRegex`
+    var shinyNode = ref.current; // Get the scope in which the Shiny input is located and initialize.
+
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.initializeInputs(shinyNode.parent);
+    _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.bindAll(shinyNode.parent); // When the component is unmounted, unbind the Shiny input.
+
     return function () {
-      return _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.unbindAll(wrapper);
+      return _Shiny__WEBPACK_IMPORTED_MODULE_2__.Shiny.unbindAll(shinyNode, true);
     };
   }, []);
-  return (
-    /*#__PURE__*/
-    // Mark with a CSS class for HTML readability.
-    react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", {
-      ref: ref,
-      className: "shiny-binding-wrapper"
-    }, children)
-  );
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(component, _objectSpread(_objectSpread({}, props), {}, {
+    ref: ref
+  }));
 }
 ShinyBindingWrapper.propTypes = {
-  children: (prop_types__WEBPACK_IMPORTED_MODULE_0___default().node)
-};
-ShinyBindingWrapper.defaultProps = {
-  children: null
+  component: (prop_types__WEBPACK_IMPORTED_MODULE_0___default().node),
+  props: (prop_types__WEBPACK_IMPORTED_MODULE_0___default().object)
 };
 
 /***/ }),
