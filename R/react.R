@@ -182,6 +182,7 @@ triggerEvent <- function(inputId) {
 #' to use as value.
 #' @return A `ReactData` object which can be passed as a prop to 'React'
 #' components.
+#' @import methods
 #'
 #' @export
 methods::setGeneric(
